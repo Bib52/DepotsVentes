@@ -205,6 +205,24 @@ $app->delete('/api/products/{reference}', function ($request, $response, $args) 
     return $response;
 });
 
+//Supprimer le depot id
+$app->delete('/api/depots/{id}', function ($request, $response, $args) {
+    $idDepot = $args['id'];
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
+    require 'app/config.php';
+    require 'app/opendb.php';
+    $produit = mysql_query('SELECT * FROM depots WHERE id='.$idDepot);
+    $obj = mysql_fetch_object($produit);
+    if ($obj) {
+        $produit = mysql_query('DELETE FROM depots WHERE id='.$idDepot);
+        $response = $response->withStatus(200, 'Depot deleted');
+    } else {
+        $response = $response->withStatus(404, 'Depot inexistant');
+    }
+    return $response;
+});
+
 //Creer une vente
 $app->post('/api/sales', function ($request, $response) {
     $params = $request->getParsedBody();
@@ -221,7 +239,7 @@ $app->post('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Permet d ajouter des produits dans un depots ------>  OK
+//Ajouter des produits dans un depots ------>  OK
 $app->post('/api/depots/{id_depot}/products', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
     $params = $request->getParsedBody();
