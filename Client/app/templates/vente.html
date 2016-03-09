@@ -1,0 +1,39 @@
+<div class="col-md-offset-1 col-md-10">
+	<div class="well well-sm col-md-6">
+		<div ng-if="listObjet.objet.length>0">
+			<div class="col-md-12">
+				<strong class="col-md-4 text-muted"><i>Description</i></strong>
+				<strong class="col-md-4 text-muted"><i>Code Barre</i></strong>
+				<strong class="col-md-4 text-muted"><i>Prix</i></strong>
+			</div>
+			<div class="col-md-12" ng-repeat="obj in listObjet.objet">
+				<strong ng-hide="obj.isediting" class="col-md-4 bg-primary">{{obj.description}}</strong>
+				<strong ng-hide="obj.isediting" class="col-md-4 bg-primary">{{obj.reference}}</strong>
+				<strong ng-hide="obj.isediting" class="col-md-3 bg-primary">{{obj.prix}} €</strong>
+				<div class="text-right" ng-hide="obj.isediting">
+	            	<img ng-click="deleteObject(obj)" src="img/delete.png" style="width: 16px" alt="delete" />
+	            </div>
+			</div>
+			<div class="col-md-offset-8 col-md-4">
+				<strong class="text-danger">Totale : {{prixtotale}} €</strong>
+			</div>
+		</div>
+		<div>
+			<form class="col-md-10 col-md-offset-1" name="form" novalidate>
+				<div class="form-group col-md-8" ng-class="{ 'has-error': form.codbar.$touched && form.codbar.$invalid }">
+					<input class="col-md-12" type="text" placeholder="Code Barre" ng-model="objet.reference" name="codbar" required/>
+					<div class="help-block" ng-messages="form.codbar.$error" ng-if="form.codbar.$touched">
+				        <p ng-message="required">Vous devez entrer le Code Barre.</p>
+				    </div>
+				</div>
+				<input type="submit" class="col-md-4 btn btn-sm btn-info" value="Ajouter" ng-click="form.$valid && addObject()"/>
+			</form>
+		</div>
+	</div>
+	<div class="well well-sm col-md-6">
+		Paiement :
+	</div>
+	<div class="well well-sm col-md-12">
+		Formulaire coord acheteur (facultatif):
+	</div>
+</div>

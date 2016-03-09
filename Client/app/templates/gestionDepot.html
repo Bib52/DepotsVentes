@@ -1,0 +1,149 @@
+<div class="col-md-2 col-sm-3 col-xs-3">
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a ng-href="#/depot/new">Créer dépôt</a></li>
+                <li><a ng-href="#/depot/gestion" ng-click="isplay=false">Gérer dépôt</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="well well-lg col-md-8 col-sm-6 col-xs-6" ng-hide="isplay">
+    <form class="col-md-12">
+        <div class="form-group col-md-10">
+            <label class="col-md-4">Identifiant : </label>
+            <input class="col-md-8" type="text" ng-model="id" placeholder="Identifiant déposant" required/>
+        </div>
+        <input type="submit" class="col-md-2 btn btn-sm btn-info" value="Valider" ng-click="findDepot()"/>
+    </form>
+</div>
+
+<div class="col-md-8 col-sm-6 col-xs-6" ng-show="isplay">
+    <div class="col-md-12 text-right"><strong class="badge">Identifiant : {{depot.id}}</strong></div>
+    <div class="col-md-12 alert alert-info" ng-hide="editCoord">
+        <div class="col-md-4"><i>Nom : </i><strong>{{depot.nom}}</strong></div>
+        <div class="col-md-4"><i>Prenom : </i><strong>{{depot.prenom}}</strong></div>
+        <div class="col-md-3"><i>Téléphone : </i><strong>{{depot.telephone}}</strong></div>
+        <button ng-click="EditCoord()" class="btn btn-xs btn-success col-md-1">Modifier</button>
+        <div class="col-md-8"><i>Adresse : </i><strong>{{depot.adresse}}</strong></div>
+        <div class="col-md-4"><i>E-mail : </i><strong>{{depot.email}}</strong></div>
+    </div>
+    <div class="col-md-12 alert alert-info" ng-show="editCoord">
+        <form class="col-md-10 col-md-offset-1" name="formedit" novalidate>
+            <div class="form-group col-md-12" ng-class="{ 'has-error': formedit.nom.$touched && formedit.nom.$invalid }">
+                <label class="col-md-4">Nom <span class="text-danger" ng-if="!formedit.nom.$valid">*</span> : </label>
+                <input class="col-md-8" type="text" placeholder="Nom" ng-model="depot.nom" name="nom" required/>
+                <div class="help-block" ng-messages="formedit.nom.$error" ng-if="formedit.nom.$touched">
+                    <p ng-message="required">Vous devez entrer le nom.</p>
+                </div>
+            </div>
+            <div class="form-group col-md-12" ng-class="{ 'has-error': formedit.prenom.$touched && formedit.prenom.$invalid }">
+                <label class="col-md-4">Prénom <span class="text-danger" ng-if="!formedit.prenom.$valid">*</span> : </label>
+                <input class="col-md-8" type="text" placeholder="Prénom" ng-model="depot.prenom" name="prenom" required/>
+                <div class="help-block" ng-messages="formedit.prenom.$error" ng-if="formedit.prenom.$touched">
+                    <p ng-message="required">Vous devez entrer le prénom.</p>
+                </div>
+            </div> 
+            <div class="form-group col-md-12" ng-class="{ 'has-error': formedit.adresse.$touched && formedit.adresse.$invalid }">
+                <label class="col-md-4">Adresse <span class="text-danger" ng-if="!formedit.adresse.$valid">*</span> : </label>
+                <input class="col-md-8" type="text" placeholder="Adresse" ng-model="depot.adresse" name="adresse" required/>
+                <div class="help-block" ng-messages="formedit.adresse.$error" ng-if="formedit.adresse.$touched">
+                    <p ng-message="required">Vous devez entrer une adresse.</p>
+                </div>
+            </div>
+            <div class="form-group col-md-12" ng-class="{ 'has-error': formedit.email.$touched && formedit.email.$invalid }">
+                <label class="col-md-4">Email <span class="text-danger" ng-if="!formedit.email.$valid">*</span> : </label>
+                <input class="col-md-8" type="email" placeholder="exemple@gmail.com" ng-model="depot.email" name="email" required/>
+                <div class="help-block" ng-messages="formedit.email.$error" ng-if="formedit.email.$touched">
+                    <p ng-message="required">Vous devez entrer un email.</p>
+                    <p ng-message="email">Vous devez entrer un email valide.</p>
+                </div>
+            </div>
+            <div class="form-group col-md-12" ng-class="{ 'has-error': formedit.tel.$touched && formedit.tel.$invalid }">
+                <label class="col-md-4">Téléphone <span class="text-danger" ng-if="!formedit.tel.$valid">*</span> : </label>
+                <input class="col-md-8" type="tel" placeholder="Téléphone" pattern="^(?:0|\(?\+33\)?\s?|0033\s?)[1-79](?:[\.\-\s]?\d\d){4}$" maxlength="10" ng-model="depot.telephone" name="tel" required/>
+                <div class="help-block" ng-messages="formedit.tel.$error" ng-if="formedit.tel.$touched">
+                    <p ng-message="required">Vous devez entrer le numéro de téléphone.</p>
+                    <p ng-message="pattern">Vous devez entrer un numéro de téléphone valide.</p>
+                </div>
+            </div>
+            <input type="submit" class="col-md-2 col-md-offset-5 btn btn-sm btn-info" value="Valider" ng-click="formedit.$valid && updateCoord()"/>
+            <div class="help-block" ng-if="!formedit.$valid">
+                <p class="text-danger text-right">* : <i>Champs obligatoire</i></p>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-12 well well-sm">
+        <form class="col-md-10 col-md-offset-1" name="formadd" novalidate>
+            <div class="form-group col-md-12" ng-class="{ 'has-error': formadd.descr.$touched && formadd.descr.$invalid }">
+                <label class="col-md-4">Descriptif <span class="text-danger" ng-if="!formadd.descr.$valid">*</span> : </label>
+                <input class="col-md-8" type="text" placeholder="Descriptif" ng-model="objet.description" name="descr" required/>
+                <div class="help-block" ng-messages="formadd.descr.$error" ng-if="formadd.descr.$touched">
+                    <p ng-message="required">Vous devez entrer le descriptif.</p>
+                </div>
+            </div>
+            <div class="form-group col-md-12" ng-class="{ 'has-error': formadd.prix.$touched && formadd.prix.$invalid }">
+                <label class="col-md-4">Prix <span class="text-danger" ng-if="!formadd.prix.$valid">*</span> : </label>
+                <input class="col-md-8" type="text" min="0" placeholder="Prix" ng-model="objet.prix" ng-pattern="/^[0-9]+$/" name="prix" required/>
+                <div class="help-block" ng-messages="formadd.prix.$error" ng-if="formadd.prix.$touched">
+                    <p ng-message="required">Vous devez entrer le prix.</p>
+                    <p ng-message="pattern">Vous devez entrer un nombre valide.</p>
+                </div>
+            </div> 
+            <div class="form-group col-md-12" ng-class="{ 'has-error': formadd.codbar.$touched && formadd.codbar.$invalid }">
+                <label class="col-md-4">Code Barre <span class="text-danger" ng-if="!formadd.codbar.$valid">*</span> : </label>
+                <input class="col-md-8" type="text" placeholder="Code Barre" ng-model="objet.reference" name="codbar" required/>
+                <div class="help-block" ng-messages="formadd.codbar.$error" ng-if="formadd.codbar.$touched">
+                    <p ng-message="required">Vous devez entrer un code barre.</p>
+                    <p class="error" ng-if="error">Référence déjà utilisée</p>
+                </div>
+            </div>
+            <input type="submit" class="col-md-2 col-md-offset-5 btn btn-sm btn-info" value="Ajouter" ng-click="formadd.$valid && addObject()"/>
+            <div class="help-block" ng-if="!formadd.$valid">
+                <p class="text-danger text-right">* : <i>Champs obligatoire</i></p>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-12 well well-sm" ng-if="products.length>0">
+        <strong class="col-md-12 text-center">Récapitulatif</strong>
+        <div class="col-md-12">
+            <strong class="col-md-4 text-muted"><i>Description</i></strong>
+            <strong class="col-md-4 text-muted"><i>Code Barre</i></strong>
+            <strong class="col-md-4 text-muted"><i>Prix</i></strong>
+        </div>
+        <div class="col-md-12" ng-repeat="obj in products">
+            <strong ng-hide="obj.isediting" class="col-md-4 bg-primary">{{obj.description}}</strong>
+            <strong ng-hide="obj.isediting" class="col-md-4 bg-primary">{{obj.reference}}</strong>
+            <strong ng-hide="obj.isediting" class="col-md-3 bg-primary">{{obj.prix}} €</strong>
+            <div class="text-right" ng-hide="obj.isediting">
+                <img ng-click="editObject(obj)" src="img/edit.png" style="width: 16px" alt="edit" />
+                <img ng-click="deleteObject(obj)" src="img/delete.png" style="width: 16px" alt="delete" />
+            </div>
+            <form class="col-md-12" ng-show="obj.isediting" name="editobj" novalidate>
+                <div class="form-group col-md-4" ng-class="{ 'has-error': editobj.descr.$touched && editobj.descr.$invalid }">
+                    <input class="col-md-12" type="text" placeholder="Descriptif" ng-model="obj.description" name="descr" required/>
+                    <div class="help-block" ng-messages="editobj.descr.$error" ng-if="editobj.descr.$touched">
+                        <p ng-message="required">Vous devez entrer le descriptif.</p>
+                    </div>
+                </div>
+                <div class="form-group col-md-4" ng-class="{ 'has-error': editobj.codbar.$touched && editobj.codbar.$invalid }">
+                    <input class="col-md-12" type="text" placeholder="Code Barre" ng-model="obj.reference" name="codbar" required/>
+                    <div class="help-block" ng-messages="editobj.codbar.$error" ng-if="editobj.codbar.$touched">
+                        <p ng-message="required">Vous devez entrer un code barre.</p>
+                        <p class="error" ng-if="error">Référence déjà utilisée</p>
+                    </div>
+                </div>
+                <div class="form-group col-md-3" ng-class="{ 'has-error': editobj.prix.$touched && editobj.prix.$invalid }">
+                    <input class="col-md-12" type="text" placeholder="Prix" ng-model="obj.prix" ng-pattern="/^[0-9]+$/" name="prix" required/>
+                    <div class="help-block" ng-messages="editobj.prix.$error" ng-if="editobj.prix.$touched">
+                        <p ng-message="required">Vous devez entrer le prix.</p>
+                        <p ng-message="pattern">Vous devez entrer un nombre valide.</p>
+                    </div>
+                </div>
+                <input type="submit" class="col-md-1 btn btn-sm btn-warning" value="Valider" ng-click="editobj.$valid && updObject(obj)"/>
+            </form>
+        </div>
+    </div>
+</div>

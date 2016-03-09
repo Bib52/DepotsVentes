@@ -1,0 +1,32 @@
+<div class="col-md-2 col-sm-3 col-xs-3">
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="navbar-collapse collapse sidebar-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a ng-href="#/admin/config">Configuration</a></li>
+                <li><a ng-href="#/admin/tableauBord">Tableau de Bord</a></li>
+                <li><a ng-href="#/admin/gestionStaff">Gérer Staff</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="well well-lg col-md-8 col-sm-6 col-xs-6">
+    <form class="col-md-10 col-md-offset-1 col-sm-12">
+        <div class="form-group col-md-12 col-sm-12">
+            <label class="col-md-6 col-sm-6">Commission sur acheteur (en %) : </label>
+            <input class="col-md-6 col-sm-6" type="number" placeholder="Commission acheteur" min="0" max="100"/>
+        </div>
+        <div class="form-group col-md-12 col-sm-12">
+            <label class="col-md-6 col-sm-6">Commission sur déposant (en %) : </label>
+            <input class="col-md-6 col-sm-6" type="number" placeholder="Commission déposant"/>
+        </div>
+        <div class="form-group col-md-12 col-sm-12">
+            <label class="col-md-6 col-sm-6">Mode de paiement : </label>
+            <input type="checkbox" name="cb" value="cb">Carte Bleue</input>
+            <input type="checkbox" name="espece" value="espece">Espèce</input>
+            <input type="checkbox" name="cheque" value="cheque">Chèque</input>
+        </div>
+        <input type="submit" class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 btn btn-sm btn-info"
+               value="Valider"/>
+    </form>
+</div>
