@@ -1,16 +1,11 @@
 <?php
-
 //Recuperer le depot id ------>  OK
 $app->get('/api/depots/{id}', function ($request, $response, $args) {
-    $host='';
-    $userdb='root';
-    $pass='';
-    $dbname='depotsventes';
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    $connectdb=mysql_connect($host, $userdb, $pass);
-    $db=mysql_select_db($dbname);
+    require 'app/config.php';
+    require 'app/opendb.php';
     $depot = mysql_query('SELECT * FROM depots WHERE id='.$id);
     $obj = mysql_fetch_object($depot);
     if ($obj) {
@@ -23,33 +18,25 @@ $app->get('/api/depots/{id}', function ($request, $response, $args) {
 });
 
 //Recuperer la vente id ------>  OK
-$app->get('/api/sells/{id}', function ($request, $response, $args) {
-    $host='';
-    $userdb='root';
-    $pass='';
-    $dbname='depotsventes';
+$app->get('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    $connectdb=mysql_connect($host, $userdb, $pass);
-    $db=mysql_select_db($dbname);
+    require 'app/config.php';
+    require 'app/opendb.php';
     $vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
     $obj = mysql_fetch_object($vente);
     if ($obj) {
         $response = $response->write(json_encode($obj));
         $response = $response->withHeader('Content-Type', 'application/json');
     } else {
-        $response = $response->withStatus(404, 'Depot inexistant');
+        $response = $response->withStatus(404, 'Vente inexistante');
     }
     return $response;
 });
 
 //Creer un depot ------>  OK
 $app->post('/api/depots', function ($request, $response) {
-    $host='';
-    $userdb='root';
-    $pass='';
-    $dbname='depotsventes';
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -60,8 +47,8 @@ $app->post('/api/depots', function ($request, $response) {
         && !empty($params['adresse'])
         && !empty($params['telephone'])
     ) {
-        $connectdb=mysql_connect($host, $userdb, $pass);
-        $db=mysql_select_db($dbname);
+        require 'app/config.php';
+        require 'app/opendb.php';
         $find = mysql_query('SELECT * FROM depots WHERE email="'.$params['email'].'"');
         $obj = mysql_fetch_object($find);
         if(!$obj){
@@ -92,21 +79,90 @@ $app->post('/api/depots', function ($request, $response) {
     return $response;
 });
 
+//Modifier le dépot id
+$app->put('/api/depots/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $params = $request->getParsedBody();
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
+
+    if (!empty($params['nom'])
+        && !empty($params['prenom'])
+        && !empty($params['email'])
+        && !empty($params['adresse'])
+        && !empty($params['telephone'])
+    ) {
+        require 'app/config.php';
+        require 'app/opendb.php';
+        $findDepot = mysql_query('SELECT * FROM depots WHERE id="'.$id.'"');
+        $res = mysql_fetch_object($findDepot);
+        if ($res)
+        {
+            $findEmail = mysql_query('SELECT * FROM depots WHERE email="'.$params['email'].'"');
+            $obj = mysql_fetch_object($findEmail);
+            if($params['email'] !== $res->email && !$obj){
+                $sql = "UPDATE depots SET nom='".$params['nom']."',
+                                    prenom='".$params['prenom']."',
+                                    email='".$params['email']."',
+                                    adresse='".$params['adresse']."',
+                                    telephone='".$params['telephone']."' 
+                                    WHERE id='".$id."'"; 
+                $update = mysql_query($sql);
+                if($update){
+                    $response = $response->withStatus(201, 'Product updated');
+                    $response = $response->withHeader('Content-Type', 'application/json');
+                    $find = mysql_query('SELECT * FROM depots WHERE id="'.$id.'"');
+                    $depot = mysql_fetch_object($find);
+                    $response = $response->write(json_encode($depot));
+                }
+                else{
+                    echo'error update';
+                }
+            }
+            elseif($params['email'] == $res->email){
+                $sql = "UPDATE depots SET nom='".$params['nom']."',
+                                    prenom='".$params['prenom']."',
+                                    adresse='".$params['adresse']."',
+                                    telephone='".$params['telephone']."' 
+                                    WHERE id='".$id."'"; 
+                $update = mysql_query($sql);
+                if($update){
+                    $response = $response->withStatus(201, 'Product updated');
+                    $response = $response->withHeader('Content-Type', 'application/json');
+                    $find = mysql_query('SELECT * FROM depots WHERE id="'.$id.'"');
+                    $depot = mysql_fetch_object($find);
+                    $response = $response->write(json_encode($depot));
+                }
+                else{
+                    echo'error update';
+                }
+            }
+            else {
+                $response = $response->withStatus(400, 'email already use');
+            }
+        }
+        else{
+            $response = $response->withStatus(400, 'Depot inexistant');
+        }
+    } else {
+        $response = $response->withStatus(400, 'Invalid parameters');
+    }
+    return $response;
+});
+
 //Recuperer tous les produits ------>  OK
 $app->get('/api/products', function ($request, $response, $args) {
-    $host='';
-    $userdb='root';
-    $pass='';
-    $dbname='depotsventes';
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    $connectdb=mysql_connect($host, $userdb, $pass);
-    $db=mysql_select_db($dbname);
+    require 'app/config.php';
+    require 'app/opendb.php';
     $produits = mysql_query('SELECT * FROM produits');
     if(mysql_num_rows($produits) !== 0) {
         while ($row = mysql_fetch_assoc($produits)) {
-            $response = $response->write(json_encode($row));
+            $tab[] = $row;
         }
+        $response = $response->write(json_encode($tab));
     } else {
         $response = $response->withStatus(404, 'Aucun produit enregistre');
     }
@@ -115,15 +171,11 @@ $app->get('/api/products', function ($request, $response, $args) {
 
 //Recuperer le produit ref ------>  OK
 $app->get('/api/products/{reference}', function ($request, $response, $args) {
-    $host='';
-    $userdb='root';
-    $pass='';
-    $dbname='depotsventes';
     $reference = $args['reference'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    $connectdb=mysql_connect($host, $userdb, $pass);
-    $db=mysql_select_db($dbname);
+    require 'app/config.php';
+    require 'app/opendb.php';
     $produit = mysql_query('SELECT * FROM produits WHERE reference='.$reference);
     $obj = mysql_fetch_object($produit);
     if ($obj) {
@@ -137,15 +189,11 @@ $app->get('/api/products/{reference}', function ($request, $response, $args) {
 
 //Supprimer le produit ref ------>  OK
 $app->delete('/api/products/{reference}', function ($request, $response, $args) {
-    $host='';
-    $userdb='root';
-    $pass='';
-    $dbname='depotsventes';
     $reference = $args['reference'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    $connectdb=mysql_connect($host, $userdb, $pass);
-    $db=mysql_select_db($dbname);
+    require 'app/config.php';
+    require 'app/opendb.php';
     $produit = mysql_query('SELECT * FROM produits WHERE reference='.$reference);
     $obj = mysql_fetch_object($produit);
     if ($obj) {
@@ -158,13 +206,15 @@ $app->delete('/api/products/{reference}', function ($request, $response, $args) 
 });
 
 //Creer une vente
-$app->post('/api/sells', function ($request, $response) {
+$app->post('/api/sales', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
-    $collection = (new MongoClient())->depotsventes->sells;
-    $result = $collection->insert(['products' => []]);
+    require 'app/config.php';
+    require 'app/opendb.php';
+    // $collection = (new MongoClient())->depotsventes->sells;
+    // $result = $collection->insert(['products' => []]);
     $response = $response->withStatus(201, 'Product created');
     $response = $response->withHeader('Content-Type', 'application/json');
     $response = $response->write(json_encode($result));
@@ -173,10 +223,6 @@ $app->post('/api/sells', function ($request, $response) {
 
 //Permet d ajouter des produits dans un depots ------>  OK
 $app->post('/api/depots/{id_depot}/products', function ($request, $response, $args) {
-    $host='';
-    $userdb='root';
-    $pass='';
-    $dbname='depotsventes';
     $idDepot = $args['id_depot'];
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -186,8 +232,8 @@ $app->post('/api/depots/{id_depot}/products', function ($request, $response, $ar
         && !empty($params['prix'])
         && !empty($params['description'])
     ) {    
-        $connectdb=mysql_connect($host, $userdb, $pass);
-        $db=mysql_select_db($dbname);
+        require 'app/config.php';
+        require 'app/opendb.php';
         $find = mysql_query('SELECT * FROM depots WHERE id="'.$idDepot.'"');
         $obj = mysql_fetch_object($find);
         if(! empty($obj)){
@@ -223,27 +269,50 @@ $app->post('/api/depots/{id_depot}/products', function ($request, $response, $ar
     return $response;
 });
 
-//Permet d ajouter des produits dans une vente (non-implementer)
-$app->post('/api/sells/{id_sell}/products', function ($request, $response) {
+//Supprimer le produit id du depot id_depot ------>  OK
+$app->delete('/api/depots/{id_depot}/products/{reference}', function ($request, $response, $args) {
+    $idDepot = $args['id_depot'];
+    $refProduct = $args['reference'];
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
+    require 'app/config.php';
+    require 'app/opendb.php';
+    $depot = mysql_query('SELECT * FROM depots WHERE id='.$idDepot);
+    $findDepot = mysql_fetch_object($depot);
+    if($findDepot){
+        $produit = mysql_query('SELECT * FROM produits WHERE reference='.$refProduct);
+        $obj = mysql_fetch_object($produit);
+        if ($obj) {
+            $produit = mysql_query('DELETE FROM produits WHERE reference='.$refProduct);
+            $response = $response->withStatus(200, 'Product deleted');
+        } else {
+            $response = $response->withStatus(404, 'Reference produit inexistante');
+        }
+    } else{
+        $response = $response->withStatus(400, 'Depot inexitant');    
+    }
+    return $response;
+});
+
+//Ajouter des produits dans une vente
+$app->post('/api/sales/{id_sale}/products', function ($request, $response, $args) {
+    $idSale = $args['id_sale'];
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
-    $collection = (new MongoClient())->depotsventes->sells;
+    require 'app/config.php';
+    require 'app/opendb.php';
     return $response;
 });
 
-//Permet de recuperer les produits d un depots -----> OK
+//Recuperer les produits d un depots -----> OK
 $app->get('/api/depots/{id_depot}/products', function ($request, $response, $args) {
-    $host='';
-    $userdb='root';
-    $pass='';
-    $dbname='depotsventes';
     $idDepot = $args['id_depot'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    $connectdb=mysql_connect($host, $userdb, $pass);
-    $db=mysql_select_db($dbname);
+    require 'app/config.php';
+    require 'app/opendb.php';
     $produits = mysql_query('SELECT * FROM produits WHERE id_depot='.$idDepot);
     $depot = mysql_query('SELECT * FROM depots WHERE id='.$idDepot);
     if(mysql_num_rows($produits) !== 0)
@@ -259,13 +328,26 @@ $app->get('/api/depots/{id_depot}/products', function ($request, $response, $arg
     return $response;
 });
 
-
-//Permet de recup les produits d une vente (non-implementer)
-$app->get('/api/sells/{id_sell}/products', function ($request, $response) {
+//Recuperer les produits d'une vente
+$app->get('/api/sales/{id_sale}/products', function ($request, $response, $args) {
+    $idSale = $args['id_sale'];
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    $collection = (new MongoClient())->depotsventes->sells;
+    require 'app/config.php';
+    require 'app/opendb.php';
+    $vente = mysql_query('SELECT * FROM ventes WHERE id ='.$idSale);
+    $produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$idSale);
+    if(mysql_num_rows($produits) !== 0)
+    {
+        while ($row = mysql_fetch_assoc($produits)) {
+            $tab[] = $row;
+        }
+        $response = $response->write(json_encode($tab));
+    } 
+    if(mysql_num_rows($vente)==0) {
+        $response = $response->withStatus(404, 'Vente inexistante');
+    }
     return $response;
 });

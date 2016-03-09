@@ -18,40 +18,43 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                     $scope.isplay = true;
                                 },
                                 function(err) {
+                                    $scope.error = err;
                                     console.log(err);
                                     console.log("email deja utilisé");
                                 });
         };
 
         $scope.updateCoord = function () {
-            console.log("modifie");
-            console.log($scope.depot);
-            /*new Depot({nom: $scope.depot.nom, 
+            new Depot({nom: $scope.depot.nom, 
                         prenom: $scope.depot.prenom, 
                         email: $scope.depot.email, 
                         adresse: $scope.depot.adresse, 
                         telephone: $scope.depot.telephone})
-                    .$update({id: $scope.depot.id},
-                function(){
+                .$update({id: $scope.depot.id},
+                function(data){
+                    console.log(data);
                     $scope.editCoord = false;
-            });*/
-            $scope.editCoord = false;
+                },
+                function(err) {
+                    $scope.error = err;
+                    console.log("email deja utilisé");
+                });
         }
 
         $scope.addObject = function(){
             var product = new Products({reference: $scope.objet.reference,
                                     prix: $scope.objet.prix,
-                                    description: $scope.objet.description, idDepot: $scope.depot.id});
-            product.$save(function(){
-                $scope.products = Products.query({idDepot: $scope.depot.id}, function(data) {
-                $scope.products.push(product);
-                console.log($scope.products);
-                $scope.objet="";
+                                    description: $scope.objet.description, 
+                                    idDepot: $scope.depot.id});
+            product.$save(function(data) {
+                    console.log(data);
+                    $scope.products.push(data);
+                    $scope.objet="";
+                }, 
+                function(err){
+                    $scope.error = err;
+                    console.log($scope.error);
                 });
-            }, function(err){
-                $scope.error = err;
-                console.log($scope.error);
-            });
         }
 
         $scope.deleteObject = function(obj){
@@ -69,6 +72,19 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         }
 
         $scope.updObject = function(objet){
+            /*new Products({reference: $scope.objet.reference,
+                                    prix: $scope.objet.prix,
+                                    description: $scope.objet.description, 
+                                    idDepot: $scope.depot.id})
+                .$update({idDepot: $scope.depot.id, reference: $scope.objet.reference},
+                function(data){
+                    console.log(data);
+                    objet.isediting=false;
+                },
+                function(err) {
+                    $scope.error = err;
+                    console.log($scope.error);
+                });*/
             console.log($scope.products);
             objet.isediting=false;
         }
