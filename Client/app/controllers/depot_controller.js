@@ -2,6 +2,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
     function ($scope, $location, $http, Depot, Products) {
         
         $scope.editCoord = false;
+        $scope.products = [];
 
         $scope.EditCoord = function () {
             $scope.editCoord = true;
@@ -49,7 +50,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             product.$save(function(data) {
                     console.log(data);
                     $scope.products.push(data);
-                    $scope.objet="";
+                    $scope.objet=""; 
                 }, 
                 function(err){
                     $scope.error = err;
@@ -58,7 +59,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         }
 
         $scope.deleteObject = function(obj){
-            Products.delete({reference: obj.reference, idDepot: obj.idDepot});
+            Products.delete({reference: obj.reference, idDepot: obj.id_depot});
             for(i in $scope.products){
                 if($scope.products[i] === obj){
                     $scope.products.splice(i, 1);

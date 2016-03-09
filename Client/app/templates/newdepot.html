@@ -135,6 +135,7 @@
                 <input class="col-md-8" type="text" placeholder="Code Barre" ng-model="objet.reference" name="codbar" required/>
                 <div class="help-block" ng-messages="formadd.codbar.$error" ng-if="formadd.codbar.$touched">
                     <p ng-message="required">Vous devez entrer un code barre.</p>
+                    <p class="error" ng-if="error">Référence déjà utilisée.</p>
                 </div>
             </div>
             <input type="submit" class="col-md-2 col-md-offset-5 btn btn-sm btn-info" value="Ajouter" ng-click="formadd.$valid && addObject()"/>
@@ -169,6 +170,7 @@
                     <input class="col-md-12" type="text" placeholder="Code Barre" ng-model="obj.reference" name="codbar" required/>
                     <div class="help-block" ng-messages="editobj.codbar.$error" ng-if="editobj.codbar.$touched">
                         <p ng-message="required">Vous devez entrer un code barre.</p>
+                        <p class="error" ng-if="error">Référence déjà utilisée.</p>
                     </div>
                 </div>
                 <div class="form-group col-md-3" ng-class="{ 'has-error': editobj.prix.$touched && editobj.prix.$invalid }">
