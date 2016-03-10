@@ -14,7 +14,7 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
                 console.log($scope.produit);
                 $scope.listObjet.objet.push($scope.produit);
 				$scope.objet="";
-				$scope.prixtotale+=$scope.produit.prix;
+				$scope.prixtotale+=parseFloat($scope.produit.prix);
             });	
 			}
 
