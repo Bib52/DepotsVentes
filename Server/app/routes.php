@@ -336,7 +336,7 @@ $app->post('/api/sales', function ($request, $response) {
     // $result = $collection->insert(['products' => []]);
     $response = $response->withStatus(201, 'Vente created');
     $response = $response->withHeader('Content-Type', 'application/json');
-    $response = $response->write(json_encode($result));
+    // $response = $response->write(json_encode($result));
     require 'app/closedb.php';
     return $response;
 });
@@ -388,6 +388,24 @@ $app->get('/api/sales/{id}', function ($request, $response, $args) {
     require 'app/config.php';
     require 'app/opendb.php';
     $vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
+    $obj = mysql_fetch_object($vente);
+    if ($obj) {
+        $response = $response->write(json_encode($obj));
+        $response = $response->withHeader('Content-Type', 'application/json');
+    } else {
+        $response = $response->withStatus(404, 'Vente inexistante');
+    }
+    require 'app/closedb.php';
+    return $response;
+});
+
+//Recuperer toute les ventes ------>  OK 
+$app->get('/api/sales', function ($request, $response) {
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
+    require 'app/config.php';
+    require 'app/opendb.php';
+    $vente = mysql_query('SELECT * FROM ventes');
     $obj = mysql_fetch_object($vente);
     if ($obj) {
         $response = $response->write(json_encode($obj));
