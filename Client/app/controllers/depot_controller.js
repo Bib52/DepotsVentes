@@ -1,5 +1,5 @@
-angular.module("DepotVente").controller('DepotController', ['$scope', '$location', '$http', 'Depot', 'Products',
-    function ($scope, $location, $http, Depot, Products) {
+angular.module("DepotVente").controller('DepotController', ['$scope', '$location', 'Depot', 'DepotProducts',
+    function ($scope, $location, Depot, DepotProducts) {
         
         $scope.editCoord = false;
         $scope.products = [];
@@ -43,7 +43,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         }
 
         $scope.addObject = function(){
-            var product = new Products({reference: $scope.objet.reference,
+            var product = new DepotProducts({reference: $scope.objet.reference,
                                     prix: $scope.objet.prix,
                                     description: $scope.objet.description, 
                                     idDepot: $scope.depot.id});
@@ -59,7 +59,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         }
 
         $scope.deleteObject = function(obj){
-            Products.delete({reference: obj.reference, idDepot: obj.id_depot});
+            DepotProducts.delete({ref: obj.reference, idDepot: obj.id_depot});
             for(i in $scope.products){
                 if($scope.products[i] === obj){
                     $scope.products.splice(i, 1);
@@ -73,11 +73,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         }
 
         $scope.updObject = function(objet){
-            /*new Products({reference: $scope.objet.reference,
-                                    prix: $scope.objet.prix,
-                                    description: $scope.objet.description, 
-                                    idDepot: $scope.depot.id})
-                .$update({idDepot: $scope.depot.id, reference: $scope.objet.reference},
+                new DepotProducts({prix: objet.prix,
+                                description: objet.description})
+                .$update({idDepot: objet.id_depot, ref: objet.reference},
                 function(data){
                     console.log(data);
                     objet.isediting=false;
@@ -85,9 +83,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 function(err) {
                     $scope.error = err;
                     console.log($scope.error);
-                });*/
-            console.log($scope.products);
-            objet.isediting=false;
+                });
         }
 
         $scope.findDepot = function(){
@@ -97,11 +93,27 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                 },
                                 function(err) {
                                     console.log(err);
+                                    $scope.error = err;
                                     console.log("Dépôt inexistant");
                                 });
-            $scope.products = Products.query({idDepot: $scope.id}, function() {
+            $scope.products = DepotProducts.query({idDepot: $scope.id}, function() {
                 console.log($scope.products);
             });
-            
+        }
+
+        $scope.deleteDepot = function(){
+            if(confirm("Voulez-vous supprimer le dépôt ainsi que ces poduits ?"))
+            {
+                Depot.delete({id: $scope.id},
+                            function() {
+                                console.log($scope.depot);
+                                $location.path("/depot/new")
+                            },
+                            function(err) {
+                                console.log(err);
+                                $scope.error = err;
+                                console.log("Dépôt inexistant");
+                            });
+            }
         }
 }]);

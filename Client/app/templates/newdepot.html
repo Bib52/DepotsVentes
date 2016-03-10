@@ -57,7 +57,10 @@
 </div>
 
 <div class="col-md-8 col-sm-6 col-xs-6" ng-show="isplay">
-    <div class="col-md-12 text-right"><strong class="badge">Identifiant : {{depot.id}}</strong></div>
+    <div class="col-md-12 text-right">
+        <strong class="badge">Identifiant : {{depot.id}}</strong>
+        <button ng-click="deleteDepot()" class="btn btn-xs btn-danger col-md-offset-8 col-md-2">Suppr Depot</button>
+    </div>
     <div class="col-md-12 alert alert-info" ng-hide="editCoord">
         <div class="col-md-4"><i>Nom : </i><strong>{{depot.nom}}</strong></div>
         <div class="col-md-4"><i>Prenom : </i><strong>{{depot.prenom}}</strong></div>
@@ -147,40 +150,33 @@
     <div class="col-md-12 well well-sm" ng-if="products.length>0">
         <strong class="col-md-12 text-center">Récapitulatif</strong>
         <div class="col-md-12">
-            <strong class="col-md-4 text-muted"><i>Description</i></strong>
             <strong class="col-md-4 text-muted"><i>Code Barre</i></strong>
+            <strong class="col-md-4 text-muted"><i>Description</i></strong>
             <strong class="col-md-4 text-muted"><i>Prix</i></strong>
         </div>
         <div class="col-md-12" ng-repeat="obj in products">
+            <strong class="col-md-4 bg-primary">{{obj.reference}}</strong>
             <strong ng-hide="obj.isediting" class="col-md-4 bg-primary">{{obj.description}}</strong>
-            <strong ng-hide="obj.isediting" class="col-md-4 bg-primary">{{obj.reference}}</strong>
             <strong ng-hide="obj.isediting" class="col-md-3 bg-primary">{{obj.prix}} €</strong>
             <div class="text-right" ng-hide="obj.isediting">
                 <img ng-click="editObject(obj)" src="img/edit.png" style="width: 16px" alt="edit" />
                 <img ng-click="deleteObject(obj)" src="img/delete.png" style="width: 16px" alt="delete" />
             </div>
-            <form class="col-md-12" ng-show="obj.isediting" name="editobj" novalidate>
-                <div class="form-group col-md-4" ng-class="{ 'has-error': editobj.descr.$touched && editobj.descr.$invalid }">
+            <form class="col-md-8" ng-show="obj.isediting" name="editobj" novalidate>   
+                <div class="form-group col-md-5" ng-class="{ 'has-error': editobj.descr.$touched && editobj.descr.$invalid }">
                     <input class="col-md-12" type="text" placeholder="Descriptif" ng-model="obj.description" name="descr" required/>
                     <div class="help-block" ng-messages="editobj.descr.$error" ng-if="editobj.descr.$touched">
                         <p ng-message="required">Vous devez entrer le descriptif.</p>
                     </div>
                 </div>
-                <div class="form-group col-md-4" ng-class="{ 'has-error': editobj.codbar.$touched && editobj.codbar.$invalid }">
-                    <input class="col-md-12" type="text" placeholder="Code Barre" ng-model="obj.reference" name="codbar" required/>
-                    <div class="help-block" ng-messages="editobj.codbar.$error" ng-if="editobj.codbar.$touched">
-                        <p ng-message="required">Vous devez entrer un code barre.</p>
-                        <p class="error" ng-if="error">Référence déjà utilisée.</p>
-                    </div>
-                </div>
-                <div class="form-group col-md-3" ng-class="{ 'has-error': editobj.prix.$touched && editobj.prix.$invalid }">
-                    <input class="col-md-12" type="text" placeholder="Prix" ng-pattern="/^[0-9]+$/" ng-model="obj.prix" name="prix" required/>
+                <div class="form-group col-md-5" ng-class="{ 'has-error': editobj.prix.$touched && editobj.prix.$invalid }">
+                    <input class="col-md-12" type="text" placeholder="Prix" ng-model="obj.prix" ng-pattern="/^[0-9]+$/" name="prix" required/>
                     <div class="help-block" ng-messages="editobj.prix.$error" ng-if="editobj.prix.$touched">
                         <p ng-message="required">Vous devez entrer le prix.</p>
-                        <p ng-message="pattern">Vous devez entrer un nombre positif valide.</p>
+                        <p ng-message="pattern">Vous devez entrer un nombre valide.</p>
                     </div>
                 </div>
-                <input type="submit" class="col-md-1 btn btn-sm btn-warning" value="Valider" ng-click="editobj.$valid && updObject(obj)"/>
+                <input type="submit" class="col-md-2 btn btn-sm btn-warning" value="Valider" ng-click="editobj.$valid && updObject(obj)"/>
             </form>
         </div>
     </div>
