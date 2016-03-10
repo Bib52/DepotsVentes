@@ -16,7 +16,12 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
                 		$scope.listObjet.objet.push($scope.produit);
 						$scope.objet="";
 						$scope.prixtotale+=parseFloat($scope.produit.prix);
-           		});	
+						$scope.error="";
+           			},
+           			function(err){
+           				console.log(err);
+           				$scope.error = err;
+           			});	
 			}
 
 			$scope.deleteObject = function(obj){
@@ -27,5 +32,9 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 			        	break;
 			    	}
 				}
+			}
+
+			$scope.validVente = function(){
+				console.log('vente validé');
 			}
 }]);

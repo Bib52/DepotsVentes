@@ -19,17 +19,19 @@
 			</div>
 		</div>
 		<div>
-			<form class="col-md-10 col-md-offset-1" name="form" novalidate>
-				<div class="form-group col-md-8" ng-class="{ 'has-error': form.codbar.$touched && form.codbar.$invalid }">
+			<form class="col-md-10 col-md-offset-1" name="formadd" novalidate>
+				<div class="form-group col-md-8" ng-class="{ 'has-error': formadd.codbar.$touched && formadd.codbar.$invalid }">
 					<input class="col-md-12" type="text" placeholder="Code Barre" ng-model="objet.reference" name="codbar" required/>
-					<div class="help-block" ng-messages="form.codbar.$error" ng-if="form.codbar.$touched">
+					<div class="help-block" ng-messages="formadd.codbar.$error" ng-if="formadd.codbar.$touched">
 				        <p ng-message="required">Vous devez entrer le Code Barre.</p>
+				        <p class="error" ng-if="error">Code Barre inexistant.</p>
 				    </div>
 				</div>
-				<input type="submit" class="col-md-4 btn btn-sm btn-info" value="Ajouter" ng-click="form.$valid && addObject()"/>
+				<input type="submit" class="col-md-4 btn btn-sm btn-info" value="Ajouter" ng-click="formadd.$valid && addObject()"/>
 			</form>
-			<button class="col-md-4 col-md-offset-4 btn btn-sm btn-info">Valider la vente</button>
 		</div>
+		<button class="col-md-4 col-md-offset-4 btn btn-sm btn-info" ng-click='validVente()'>Valider la vente</button>
+
 	</div>
 	<div class="well well-sm col-md-6">
 		<div class="form-group col-md-12">
