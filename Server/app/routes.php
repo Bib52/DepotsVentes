@@ -336,7 +336,7 @@ $app->post('/api/sales', function ($request, $response) {
     // $result = $collection->insert(['products' => []]);
     $response = $response->withStatus(201, 'Vente created');
     $response = $response->withHeader('Content-Type', 'application/json');
-    $response = $response->write(json_encode($result));
+    // $response = $response->write(json_encode($result));
     require 'app/closedb.php';
     return $response;
 });

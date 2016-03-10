@@ -9,13 +9,14 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 			$scope.prixtotale=0;
 
 			$scope.addObject = function(){
-				$scope.produit = Products.get({reference: $scope.objet.reference}, function() {
-                console.log("ajout objet");
-                console.log($scope.produit);
-                $scope.listObjet.objet.push($scope.produit);
-				$scope.objet="";
-				$scope.prixtotale+=$scope.produit.prix;
-            });	
+				$scope.produit = Products.get({reference: $scope.objet.reference}, 
+					function() {
+                		console.log("ajout objet");
+               			console.log($scope.produit);
+                		$scope.listObjet.objet.push($scope.produit);
+						$scope.objet="";
+						$scope.prixtotale+=$scope.produit.prix;
+            	});	
 			}
 
 			$scope.deleteObject = function(obj){
