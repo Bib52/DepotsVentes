@@ -12,8 +12,23 @@
 
 <div class="well well-lg col-md-8 col-sm-6 col-xs-6">
     <ul>
-        <li>Nombres de produits : {{nbrProducts}}</li>
-        <li>Nombres de dépôts : {{nbrDepots}}</li>
-        <li>Nombres de ventes : {{nbrVente}}</li>
+        <li><strong>Nombres de produits : <span class="text-danger">{{nbrProducts}}</span></strong></li>
+        <li><strong>Nombres de dépôts : <span class="text-danger">{{nbrDepots}}</span></strong></li>
+        <li><strong>Nombres de ventes : <span class="text-danger">{{nbrVente}}</span></strong></li>
+        <li><strong>Total des ventes <span class="small">(sans commission)</span> : <span class="text-danger">{{totalSC}} €</span></strong></li>
+        <li><strong>Total des ventes <span class="small">(avec commission)</span> : <span class="text-danger">{{totalAC}} €</span></strong></li>
     </ul>
+    <hr>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <i><strong class="text-info">Nombre d'objet en fonction de son état : </strong></i>
+            <canvas id="pie" class="chart chart-pie" chart-data="datapie" 
+            chart-labels="labelspie"></canvas>
+        </div>
+        <div class="col-md-6">
+            <i><strong class="text-info">Test : </strong></i>
+            <canvas id="line" class="col-md-6 chart chart-line" chart-data="dataline" chart-labels="labelsline" 
+            chart-legend="true" chart-series="seriesline" chart-click="onClick"></canvas>
+        </div>
+    </div>
 </div>

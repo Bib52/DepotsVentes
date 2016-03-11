@@ -35,6 +35,21 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 			}
 
 			$scope.validVente = function(){
+				$scope.payment=true;
+				//prix ac comission de 5%
+				$scope.prixtotaleAC=$scope.prixtotale+(5*$scope.prixtotale/100);
 				console.log('vente validé');
+				console.log($scope.listObjet);
+				console.log($scope.listObjet.objet);
+			}
+
+			$scope.generatePDF = function(){
+				console.log('generer pdf');
+				// var pdf = new JSPF('p','pt','a4');
+				// pdf.save('test.pdf');
+			}
+
+			$scope.annuleVente = function(){
+				console.log('annuler vente');
 			}
 }]);
