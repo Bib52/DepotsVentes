@@ -7,6 +7,9 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 				objet : []
 			};
 			$scope.prixtotale=0;
+			var hauteur = 0;
+			var prix = "";
+			$scope.type = "";
 
 			$scope.addObject = function(){	
 				$scope.produit = Products.get({reference: $scope.objet.reference}, 
@@ -35,15 +38,17 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 			}
 
 			$scope.validVente = function(){
-				$scope.payment=true;
-				//prix ac comission de 5%
-				$scope.prixtotaleAC=$scope.prixtotale+(5*$scope.prixtotale/100);
-				console.log('vente validé');
-				console.log($scope.listObjet);
-				console.log($scope.listObjet.objet);
+				if($scope.listObjet.objet.length > 0){
+					$scope.payment=true;
+					//prix ac comission de 5%
+					$scope.prixtotaleAC=$scope.prixtotale+(5*$scope.prixtotale/100);
+					console.log('vente validé');
+					console.log($scope.listObjet);
+					console.log($scope.listObjet.objet);
+				}
 			}
 
-			$scope.calculDate = function(){
+			var calculDate = function(){
 				var m = [
 					"Janvier", "Fevrier", "Mars",
 					"Avril", "Mai", "Juin", "Juillet",
@@ -59,8 +64,8 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 
 			$scope.generatePDF = function(){
 				console.log('generer pdf');
-				var date = $scope.calculDate();
-				console.log(date);
+				var date = calculDate();
+				console.log($scope.listObjet.objet[0]);
 				var facture = new jsPDF();
 				facture.text(20, 20, "Numero de facture : " /*ajout id vente*/);
 				facture.text(20, 30, "Date : " + date);
@@ -76,10 +81,35 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 				if($scope.vente.adresse){
 					facture.text(120, 48, $scope.vente.adresse);
 				}
+				if($scope.vente.ville){
+					facture.text(120, 56, $scope.vente.ville);
+				}
 				facture.setFontSize(22);
-				facture.text(20, 60, "Recapitulatif : ");
+				facture.text(20, 75, "Recapitulatif : ");
 				facture.setFontSize(16);
-				/* Parcours de $scope.listObjet */
+				facture.text(20, 85, "Reference");
+				facture.text(60, 85, "Description");
+				facture.text(170, 85, "Prix");
+
+				for(var i = 0; i < $scope.listObjet.objet.length; i++){
+					hauteur = 95+10*i;
+					var p = parseFloat($scope.listObjet.objet[i].prix);
+					prix = (p+(5*p/100)).toFixed(2).toString();
+					facture.text(20, hauteur, $scope.listObjet.objet[i].reference);
+					facture.text(60, hauteur, $scope.listObjet.objet[i].description);
+					facture.text(170, hauteur, prix);
+				}
+				facture.text(100, 225, "Total a payer : " + $scope.prixtotaleAC + " euros");
+				if($scope.vente.paiement === "1"){
+					$scope.type = "Liquide";
+				}
+				if($scope.vente.paiement === "2"){
+					$scope.type = "Carte Bancaire";
+				}
+				if($scope.vente.paiement === "3"){
+					$scope.type = "Cheque";
+				}
+				facture.text(100, 235, "Regle par : " + $scope.type);
 				facture.save('facture.pdf');
 			}
 
