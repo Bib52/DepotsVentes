@@ -105,7 +105,7 @@
             </div>
         </div>
         <button class="col-md-3 col-md-offset-2 btn btn-sm btn-danger" ng-show="display" ng-click='annuleVente()'>Annuler</button>
-		<button class="col-md-3 col-md-offset-2 btn btn-sm btn-success" ng-show="display" ng-click='form.$valid && generatePDF()'>Imprimer</button>
+		<button class="col-md-3 col-md-offset-2 btn btn-sm btn-success" ng-show="display" ng-click='paye.$valid && form.$valid && generatePDF()'>Imprimer</button>
         <div class="help-block" ng-if="!form.$valid">
             <p class="text-danger text-right">* : <i>Champs obligatoire</i></p>
         </div>

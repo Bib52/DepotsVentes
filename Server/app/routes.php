@@ -380,7 +380,7 @@ $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args)
     return $response;
 });
 
-//Recuperer la vente id ------>  OK (à faire recuperer les produits de la vente)
+//Recuperer la vente id : information acheteur ------>  OK
 $app->get('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -399,6 +399,54 @@ $app->get('/api/sales/{id}', function ($request, $response, $args) {
     return $response;
 });
 
+//Ajouter les informations de l'acheteur à la vente id ------>  OK
+$app->post('/api/sales/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $params = $request->getParsedBody();
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
+     if (!empty($params['nom'])
+        && !empty($params['prenom'])
+        && !empty($params['adresse'])
+        && !empty($params['ville'])
+        && !empty($params['email'])
+        && !empty($params['telephone'])
+    ) {    
+        require 'app/config.php';
+        require 'app/opendb.php';
+        $vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
+        $obj = mysql_fetch_object($vente);
+        if(! empty($obj)){
+            $sql = "INSERT INTO ventes (nom, prenom, adresse, ville, email, telephone, etat)
+                    VALUES ('".$params['nom']."','"
+                            .$params['prenom']."','"
+                            .$params['adresse']."','"
+                            .$params['ville']."','"
+                            .$params['email']."','"
+                            .$params['telephone'].",
+                            'En stock')";
+            $insert = mysql_query($sql);
+            if($insert){
+                $response = $response->withStatus(201, 'Vente created');
+                $response = $response->withHeader('Content-Type', 'application/json');
+                $find = mysql_query('SELECT * FROM ventes WHERE id='.$id);
+                $vente = mysql_fetch_object($find);
+                $response = $response->write(json_encode($vente));
+            }
+            else{
+                echo'error insertion';
+            }
+        } else {
+            $response = $response->withStatus(400, 'Vente inexitanet');
+        }
+        require 'app/closedb.php';
+    } else {
+        $response = $response->withStatus(400, 'Invalid parameters');
+    }
+    return $response;
+});
+
 //Recuperer toute les ventes ------>  OK 
 $app->get('/api/sales', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -410,6 +458,27 @@ $app->get('/api/sales', function ($request, $response) {
     if ($obj) {
         $response = $response->write(json_encode($obj));
         $response = $response->withHeader('Content-Type', 'application/json');
+    } else {
+        $response = $response->withStatus(404, 'Vente inexistante');
+    }
+    require 'app/closedb.php';
+    return $response;
+});
+
+//Supprimer la vente id
+$app->delete('/api/sales/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
+    require 'app/config.php';
+    require 'app/opendb.php';
+    $vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
+    // remettre les produits avec id_vente=0 et etat=en stock
+    // $produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$id);
+    $obj = mysql_fetch_object($vente);
+    if ($obj) {
+        $v = mysql_query('DELETE FROM ventes WHERE id='.$id);
+        $response = $response->withStatus(200, 'Vente deleted');
     } else {
         $response = $response->withStatus(404, 'Vente inexistante');
     }
