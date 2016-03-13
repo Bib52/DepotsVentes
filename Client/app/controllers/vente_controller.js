@@ -1,5 +1,5 @@
-angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'Products',
-		function($scope, Vente, Products){
+angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'Products', '$route',
+		function($scope, Vente, Products, $route){
 			$scope.vente = new Vente();
 			$scope.vente.$save();
 			$scope.objet="";
@@ -117,5 +117,6 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 
 			$scope.annuleVente = function(){
 				console.log('annuler vente');
+				$route.reload();
 			}
 }]);
