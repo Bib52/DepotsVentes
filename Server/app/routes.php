@@ -332,11 +332,15 @@ $app->post('/api/sales', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
     require 'app/config.php';
     require 'app/opendb.php';
-    // $collection = (new MongoClient())->depotsventes->sells;
-    // $result = $collection->insert(['products' => []]);
-    $response = $response->withStatus(201, 'Vente created');
-    $response = $response->withHeader('Content-Type', 'application/json');
-    // $response = $response->write(json_encode($result));
+    $sql = "INSERT INTO ventes (nom, prenom, adresse, ville, email, telephone, etat)
+                    VALUES ('','','','','','', 'En cours')";
+    $insert = mysql_query($sql);
+    if($insert){
+        $response = $response->withStatus(201, 'Vente created');
+    }
+    else{
+        echo'error insertion';
+    } 
     require 'app/closedb.php';
     return $response;
 });
@@ -380,6 +384,30 @@ $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args)
     return $response;
 });
 
+//Supprimer un produit dans une vente
+$app->delete('/api/sales/{id_sale}/products/{id}', function ($request, $response, $args) {
+    $id_vente = $args['id_sale'];
+    $id = $args['id'];
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
+    require 'app/config.php';
+    require 'app/opendb.php';
+    $produit = mysql_query('SELECT * FROM produits WHERE reference="'.$id.'" AND id_vente="'.$id_vente.'"');
+    $obj = mysql_fetch_object($produit);
+    if ($obj) {
+        // remettre le produits avec id_vente=0 et etat=en stock
+        // $sql = "UPDATE produits SET etat='En stock',
+        //                             id_vente=0 
+        //                             WHERE id='".$id."'"; 
+        // $update = mysql_query($sql);
+        $response = $response->withStatus(200, 'Produit retiré de la vente');
+    } else {
+        $response = $response->withStatus(404, 'Produit inexistant');
+    }
+    require 'app/closedb.php';
+    return $response;
+});
+
 //Recuperer la vente id : information acheteur ------>  OK
 $app->get('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
@@ -418,17 +446,17 @@ $app->post('/api/sales/{id}', function ($request, $response, $args) {
         $vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
         $obj = mysql_fetch_object($vente);
         if(! empty($obj)){
-            $sql = "INSERT INTO ventes (nom, prenom, adresse, ville, email, telephone, etat)
-                    VALUES ('".$params['nom']."','"
-                            .$params['prenom']."','"
-                            .$params['adresse']."','"
-                            .$params['ville']."','"
-                            .$params['email']."','"
-                            .$params['telephone'].",
-                            'En stock')";
-            $insert = mysql_query($sql);
-            if($insert){
-                $response = $response->withStatus(201, 'Vente created');
+            
+            $sql = "UPDATE ventes SET nom='".$params['nom']."',
+                                    prenom='".$params['prenom']."',
+                                    adresse='".$params['adresse']."',
+                                    ville='".$params['ville']."',
+                                    email='".$params['email']."',
+                                    telephone='".$params['telephone']."'
+                                WHERE id='".$id."'"; 
+            $update = mysql_query($sql);
+            if($update){
+                $response = $response->withStatus(201, 'Vente updated');
                 $response = $response->withHeader('Content-Type', 'application/json');
                 $find = mysql_query('SELECT * FROM ventes WHERE id='.$id);
                 $vente = mysql_fetch_object($find);
@@ -454,12 +482,13 @@ $app->get('/api/sales', function ($request, $response) {
     require 'app/config.php';
     require 'app/opendb.php';
     $vente = mysql_query('SELECT * FROM ventes');
-    $obj = mysql_fetch_object($vente);
-    if ($obj) {
-        $response = $response->write(json_encode($obj));
-        $response = $response->withHeader('Content-Type', 'application/json');
+    if(mysql_num_rows($vente) !== 0) {
+        while ($row = mysql_fetch_assoc($vente)) {
+            $tab[] = $row;
+        }
+        $response = $response->write(json_encode($tab));
     } else {
-        $response = $response->withStatus(404, 'Vente inexistante');
+        $response = $response->withStatus(404, 'Aucun depot enregistre');
     }
     require 'app/closedb.php';
     return $response;
@@ -473,10 +502,14 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     require 'app/config.php';
     require 'app/opendb.php';
     $vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-    // remettre les produits avec id_vente=0 et etat=en stock
-    // $produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$id);
     $obj = mysql_fetch_object($vente);
     if ($obj) {
+        // remettre les produits avec id_vente=0 et etat=en stock
+        // $sql = "UPDATE produits SET etat='En stock',
+        //                             id_vente=0 
+        //                             WHERE id='".$id."'"; 
+        // $update = mysql_query($sql);
+        // $produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$id);
         $v = mysql_query('DELETE FROM ventes WHERE id='.$id);
         $response = $response->withStatus(200, 'Vente deleted');
     } else {
