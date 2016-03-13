@@ -67,7 +67,9 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 				var date = calculDate();
 				console.log($scope.listObjet.objet[0]);
 				var facture = new jsPDF();
-				facture.text(20, 20, "Numero de facture : " /*ajout id vente*/);
+				if($scope.display){
+					facture.text(20, 20, "Numero de facture : " /*ajout id vente*/);
+				}
 				facture.text(20, 30, "Date : " + date);
 				if($scope.vente.nom && $scope.vente.prenom){
 					facture.text(120, 40, $scope.vente.nom + " " + $scope.vente.prenom);
