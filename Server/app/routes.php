@@ -83,7 +83,7 @@ $app->post('/api/depots', function ($request, $response) {
     return $response;
 });
 
-//Modifier les information du desposant du dépot id
+//Modifier les information du desposant du dépot id ------>  OK
 $app->put('/api/depots/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -156,7 +156,7 @@ $app->put('/api/depots/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Supprimer le depot id (supprimer depot et produits du depot)
+//Supprimer le depot id (supprimer depot et produits du depot) ------>  OK
 $app->delete('/api/depots/{id}', function ($request, $response, $args) {
     $idDepot = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -324,7 +324,7 @@ $app->get('/api/depots/{id_depot}/products', function ($request, $response, $arg
 });
 
 /* ------------------------------VENTE------------------------------ */
-//Creer une vente
+//Creer une vente ------>  OK
 $app->post('/api/sales', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -353,7 +353,7 @@ $app->post('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Ajouter un produits dans une vente : produit (ref) dans la vente (id)
+//Ajouter un produits dans une vente : produit (ref) dans la vente (id) ------>  OK
 $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
     $ref = $args['ref'];
@@ -383,7 +383,7 @@ $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, 
     return $response;
 });
 
-//Recuperer les produits d'une vente
+//Recuperer les produits d'une vente ------>  OK
 $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
     $params = $request->getParsedBody();
@@ -408,7 +408,7 @@ $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args)
     return $response;
 });
 
-//Supprimer un produit dans une vente : produit (ref) de la vente (id)
+//Supprimer un produit dans une vente : produit (ref) de la vente (id) ------>  OK
 $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $id_vente = $args['id_sale'];
     $ref = $args['ref'];
@@ -518,7 +518,7 @@ $app->get('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Supprimer la vente id
+//Supprimer la vente id ------>  OK
 $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -537,6 +537,74 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
         $response = $response->withStatus(200, 'Vente deleted');
     } else {
         $response = $response->withStatus(404, 'Vente inexistante');
+    }
+    require 'app/closedb.php';
+    return $response;
+});
+
+/* ------------------------------PAIMENT------------------------------ */
+//Recuperer les modes de paiements ------>  A TESTER (creer table modepaiements)
+$app->get('/api/payments', function ($request, $response, $args) {
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
+    require 'app/config.php';
+    require 'app/opendb.php';
+    $modePaiment = mysql_query('SELECT * FROM modepaiements');
+    if(mysql_num_rows($modePaiment) !== 0) {
+        while ($row = mysql_fetch_assoc($modePaiment)) {
+            $tab[] = $row;
+        }
+        $response = $response->write(json_encode($tab));
+    } else {
+        $response = $response->withStatus(404, 'Aucun mode de paiement enregistre');
+    }
+    require 'app/closedb.php';
+    return $response;
+});
+
+//Ajouter un mode de paiement ------> A TESTER (creer table modepaiements)
+$app->post('/api/payments', function ($request, $response) {
+    $params = $request->getParsedBody();
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
+    if (!empty($params['nom'])
+    ) {    
+        require 'app/config.php';
+        require 'app/opendb.php';
+        $sql = "INSERT INTO modepaiements (nom)
+                    VALUES ('".$params['nom']."')";
+        $insert = mysql_query($sql);
+        if($insert){
+            $find = mysql_query("SELECT * FROM modepaiements WHERE nom=".$params['nom']);
+            $obj = mysql_fetch_object($find);
+            $response = $response->withStatus(201, 'Mode de paiement ajoute');
+            $response = $response->write(json_encode($obj));
+        }
+        else{
+            echo'error insertion';
+        }
+        require 'app/closedb.php';
+    } else {
+        $response = $response->withStatus(400, 'Invalid parameters');
+    }
+    return $response;
+});
+
+//Supprimer un mode de paiement ------> A TESTER (creer table modepaiements)
+$app->delete('/api/payments/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
+    require 'app/config.php';
+    require 'app/opendb.php';
+    $modePayment = mysql_query('SELECT * FROM modepaiements WHERE id='.$id);
+    $obj = mysql_fetch_object($modePayment);
+    if ($obj) {
+        $modePayment = mysql_query('DELETE FROM modepaiements WHERE id='.$id);
+        $response = $response->withStatus(200, 'Mode de paiement supprime');
+    } else {
+        $response = $response->withStatus(404, 'Mode de paiement inexistant');
     }
     require 'app/closedb.php';
     return $response;
