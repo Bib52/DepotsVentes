@@ -1,7 +1,7 @@
 angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'Products', '$route',
 		function($scope, Vente, Products, $route){
-			$scope.vente = new Vente();
-			$scope.vente.$save();
+			// $scope.vente = new Vente();
+			// $scope.vente.$save();
 			$scope.objet="";
 			$scope.listObjet = {
 				objet : []
@@ -11,6 +11,17 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 			var prix = "";
 			$scope.type = "";
 
+			$scope.createVente = function(){
+				$scope.vente = new Vente();
+            	$scope.vente.$save(function(data) {
+                                    console.log(data);
+                                    $scope.playVente=true;
+                                },
+                                function(err) {
+                                    $scope.error = err;
+                                    console.log(err);
+                                });
+			}
 			$scope.addObject = function(){	
 				$scope.produit = Products.get({reference: $scope.objet.reference}, 
 					function() {

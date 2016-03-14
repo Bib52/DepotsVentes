@@ -1,5 +1,8 @@
 <div class="col-md-offset-1 col-md-10">
-	<div class="well well-sm col-md-6">
+	<div class="col-md-12" ng-hide="playVente">
+		<button class="col-md-offset-5 col-md-2 btn btn-xl btn-success" ng-click="createVente()">Créer une vente</button>
+	</div>
+	<div class="well well-sm col-md-6" ng-show="playVente">
 		<div ng-if="listObjet.objet.length>0">
 			<div class="col-md-12">
 				<strong class="col-md-4 text-muted"><i>Description</i></strong>

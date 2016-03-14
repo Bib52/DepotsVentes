@@ -336,7 +336,15 @@ $app->post('/api/sales', function ($request, $response) {
                     VALUES ('','','','','','', 'En cours')";
     $insert = mysql_query($sql);
     if($insert){
+        $findID = mysql_query("SELECT MAX(id) FROM ventes");
+        while ($row = mysql_fetch_assoc($findID)) {
+            $tab[] = $row;
+            $res=($row['MAX(id)']);
+        }
+        $findALL = mysql_query("SELECT * FROM ventes WHERE id=".$res);
+        $obj = mysql_fetch_object($findALL);
         $response = $response->withStatus(201, 'Vente created');
+        $response = $response->write(json_encode($obj));
     }
     else{
         echo'error insertion';
