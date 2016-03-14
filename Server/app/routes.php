@@ -543,38 +543,58 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------PAIMENT VENTE------------------------------ */
-//Ajouter un paiement à une vente ------>  A COMPLETER (creer table paiements)
-// $app->post('/api/sales/{id_sale}/payments', function ($request, $response, args) {
-//     $idSale = $args['id_sale'];
-//     $params = $request->getParsedBody();
-//     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
-//     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
-//     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
-//     require 'app/config.php';
-//     require 'app/opendb.php';
-//     require 'app/closedb.php';
-//     return $response;
-// });
+// Ajouter un paiement à une vente ------>  A TESTER (creer table paiements)
+$app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
+    $id = $args['id_sale'];
+    $params = $request->getParsedBody();
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
+    if (!empty($params['prix'])
+    ) {    
+        require 'app/config.php';
+        require 'app/opendb.php';
+        $Vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
+        $obj = mysql_fetch_object($Vente);
+        if ($obj) {
+            $sql = "INSERT INTO paiements (prix)
+                    VALUES ('".$params['prix']."')";
+            $insert = mysql_query($sql);
+            if($insert){
+                $response = $response->withStatus(201, 'Mode de paiement ajoute');
+            }
+            else{
+                echo'error insertion';
+            }
+        } else {
+            $response = $response->withStatus(404, 'Vente inexistantd');
+        }
+        require 'app/closedb.php';
+    } else {
+        $response = $response->withStatus(400, 'Invalid parameters');
+    }
+    return $response;
+});
 
-//Supprimer un paiement ------>  A TESTER (creer table paiements)
-// $app->delete('/api/sales/{id_sale}/payments/{id}', function ($request, $response, args) {
-//     $idSale = $args['id_sale'];
-//     $idPayment = $args['id'];
-//     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
-//     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-//     require 'app/config.php';
-//     require 'app/opendb.php';
-//     $Payment = mysql_query('SELECT * FROM paiments WHERE id='.$idPayment);
-//     $obj = mysql_fetch_object($Payment);
-//     if ($obj) {
-//         $Payment = mysql_query('DELETE FROM paiments WHERE id='.$idPayment);
-//         $response = $response->withStatus(200, 'Paiement supprime');
-//     } else {
-//         $response = $response->withStatus(404, 'Paiement inexistant');
-//     }
-//     require 'app/closedb.php';
-//     return $response;
-// });
+// Supprimer un paiement ------>  A TESTER (creer table paiements)
+$app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
+    $id = $args['id_sale'];
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
+    require 'app/config.php';
+    require 'app/opendb.php';
+    $produit = mysql_query('SELECT * FROM paiements WHERE id='.$id);
+    $obj = mysql_fetch_object($produit);
+    if ($obj) {
+        $produit = mysql_query('DELETE FROM paiements WHERE id='.$id);
+        $response = $response->withStatus(200, 'Paiment supprime');
+    } else {
+        $response = $response->withStatus(404, 'Paiment inexistant');
+    }
+    require 'app/closedb.php';
+    return $response;
+});
+
 
 /* ------------------------------MODE DE PAIMENT------------------------------ */
 //Recuperer les modes de paiements ------>  A TESTER (creer table modepaiements)
@@ -757,7 +777,7 @@ $app->post('/api/staffs', function ($request, $response) {
 
 });
 
-// //Supprimer un membre du staff ------>  OK
+// //Supprimer un membre du staff ------>  A TESTER
 $app->delete('/api/staffs/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
