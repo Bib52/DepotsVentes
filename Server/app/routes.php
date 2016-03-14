@@ -416,14 +416,14 @@ $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $respons
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
     require 'app/config.php';
     require 'app/opendb.php';
-    $produit = mysql_query('SELECT * FROM produits WHERE reference="'.$id.'" AND id_vente="'.$id_vente.'"');
+    $produit = mysql_query('SELECT * FROM produits WHERE reference="'.$ref.'" AND id_vente="'.$id_vente.'"');
     $obj = mysql_fetch_object($produit);
     if ($obj) {
         // remettre le produits avec id_vente=0 et etat=en stock
-        // $sql = "UPDATE produits SET etat='En stock',
-        //                             id_vente=0 
-        //                             WHERE id='".$id."'"; 
-        // $update = mysql_query($sql);
+        $sql = "UPDATE produits SET etat='En stock',
+                                    id_vente=0 
+                                    WHERE reference='".$ref."'"; 
+        $update = mysql_query($sql);
         $response = $response->withStatus(200, 'Produit retiré de la vente');
     } else {
         $response = $response->withStatus(404, 'Produit inexistant');
@@ -529,10 +529,10 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     $obj = mysql_fetch_object($vente);
     if ($obj) {
         // remettre les produits avec id_vente=0 et etat=en stock
-        // $sql = "UPDATE produits SET etat='En stock',
-        //                             id_vente=0 
-        //                             WHERE id='".$id."'"; 
-        // $update = mysql_query($sql);
+        $sql = "UPDATE produits SET etat='En stock',
+                                    id_vente=0 
+                                    WHERE id_vente='".$id."'"; 
+        $update = mysql_query($sql);
         // $produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$id);
         $v = mysql_query('DELETE FROM ventes WHERE id='.$id);
         $response = $response->withStatus(200, 'Vente deleted');

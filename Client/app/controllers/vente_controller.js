@@ -1,5 +1,5 @@
-angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'Products', '$route', 'VenteProducts',
-		function($scope, Vente, Products, $route, VenteProducts){
+angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'Products', 'VenteProducts', '$route',
+		function($scope, Vente, Products, VenteProducts, $route){
 
 			$scope.objet="";
 			$scope.listObjet = {
@@ -22,17 +22,17 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
                                     console.log(err);
                                 });
 			}
-			
+
 			$scope.addObject = function(){
-				// new VenteProducts().$update({id_sale: $scope.venteid, ref: $scope.objet.reference},
-    //             function(data){
-    //             	console.log('mise a jour');
-    //                 console.log(data);
-    //             },
-    //             function(err) {
-    //                 $scope.error = err;
-    //                 console.log($scope.error);
-    //             });
+				new VenteProducts().$update({id_sale: $scope.venteid, ref: $scope.objet.reference},
+                function(data){
+                	console.log('mise a jour');
+                    console.log(data);
+                },
+                function(err) {
+                    $scope.error = err;
+                    console.log($scope.error);
+                });
 				$scope.produit = Products.get({reference: $scope.objet.reference}, 
 					function() {
                 		console.log("ajout objet");
@@ -49,7 +49,8 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 			}
 
 			$scope.deleteObject = function(obj){
-				// VenteProducts.delete({});
+				// console.log(obj.reference);
+				VenteProducts.delete({id_sale: $scope.venteid, ref: obj.reference});
 				for(i in $scope.listObjet.objet){
 			    	if($scope.listObjet.objet[i] === obj){
 			        	$scope.listObjet.objet.splice(i, 1);

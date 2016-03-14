@@ -73,17 +73,17 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         }
 
         $scope.updObject = function(objet){
-                new DepotProducts({prix: objet.prix,
-                                description: objet.description})
-                .$update({idDepot: objet.id_depot, ref: objet.reference},
-                function(data){
-                    console.log(data);
-                    objet.isediting=false;
-                },
-                function(err) {
-                    $scope.error = err;
-                    console.log($scope.error);
-                });
+            new DepotProducts({prix: objet.prix,
+                            description: objet.description})
+            .$update({idDepot: objet.id_depot, ref: objet.reference},
+            function(data){
+                console.log(data);
+                objet.isediting=false;
+            },
+            function(err) {
+                $scope.error = err;
+                console.log($scope.error);
+            });
         }
 
         $scope.findDepot = function(){
