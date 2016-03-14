@@ -36,7 +36,7 @@
 				<input type="submit" class="col-md-4 btn btn-sm btn-info" value="Ajouter" ng-click="formadd.$valid && addObject()"/>
 			</form>
 		</div>
-		<button class="col-md-3 col-md-offset-2 btn btn-sm btn-danger" ng-hide="display" ng-click='annuleVente()'>Annuler</button>
+		<button class="col-md-3 col-md-offset-2 btn btn-sm btn-danger"  ng-click='annuleVente()'>Annuler</button>
 		<button class="col-md-3 col-md-offset-2 btn btn-sm btn-success" ng-click='validVente()'>Valider la vente</button>
 
 	</div>
@@ -111,8 +111,9 @@
                 <p ng-message="pattern">Vous devez entrer un numéro de téléphone valide.</p>
             </div>
         </div>
-        <button class="col-md-3 col-md-offset-2 btn btn-sm btn-danger" ng-show="display" ng-click='annuleVente()'>Annuler</button>
-		<button class="col-md-3 col-md-offset-2 btn btn-sm btn-success" ng-show="display" ng-click='paye.$valid && form.$valid && generatePDF()'>Imprimer</button>
+        <button class="col-md-2 btn btn-sm btn-danger" ng-show="display" ng-click='annuleVente()'>Annuler</button>
+        <button class="col-md-2 col-md-offset-3 btn btn-sm btn-info" ng-show="display" ng-click='addAcheteur()'>Ajouter</button>
+		<button class="col-md-2 col-md-offset-3 btn btn-sm btn-success" ng-show="display" ng-click='paye.$valid && form.$valid && generatePDF()'>Imprimer</button>
         <div class="help-block" ng-if="!form.$valid">
             <p class="text-danger text-right">* : <i>Champs obligatoire</i></p>
         </div>

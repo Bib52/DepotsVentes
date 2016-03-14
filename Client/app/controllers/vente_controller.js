@@ -86,10 +86,9 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 				var date = calculDate();
 				console.log($scope.listObjet.objet[0]);
 				var facture = new jsPDF();
-				if($scope.display){
-					facture.text(20, 20, "Numero de facture : " /*ajout id vente*/);
-				}
-				facture.text(20, 30, "Date : " + date);
+				facture.setFont('Helvetica-Bold');
+				facture.text(20, 20, "Numero de facture : " + $scope.venteid);
+				facture.text(20, 25, "Date : " + date);
 				if($scope.vente.nom && $scope.vente.prenom){
 					facture.text(120, 40, $scope.vente.nom + " " + $scope.vente.prenom);
 				}
@@ -100,27 +99,29 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 					facture.text(120, 40, $scope.vente.nom);
 				}
 				if($scope.vente.adresse){
-					facture.text(120, 48, $scope.vente.adresse);
+					facture.text(120, 45, $scope.vente.adresse);
 				}
 				if($scope.vente.ville){
-					facture.text(120, 56, $scope.vente.ville);
+					facture.text(120, 50, $scope.vente.ville);
 				}
 				facture.setFontSize(22);
-				facture.text(20, 75, "Recapitulatif : ");
+				facture.setFontStyle("bold");
+				facture.text(20, 70, "Recapitulatif : ");
 				facture.setFontSize(16);
+				facture.setFontStyle("normal");
 				facture.text(20, 85, "Reference");
 				facture.text(60, 85, "Description");
 				facture.text(170, 85, "Prix");
-
 				for(var i = 0; i < $scope.listObjet.objet.length; i++){
-					hauteur = 95+10*i;
+					hauteur = 95+5*i;
 					var p = parseFloat($scope.listObjet.objet[i].prix);
 					prix = (p+(5*p/100)).toFixed(2).toString();
 					facture.text(20, hauteur, $scope.listObjet.objet[i].reference);
 					facture.text(60, hauteur, $scope.listObjet.objet[i].description);
 					facture.text(170, hauteur, prix);
 				}
-				facture.text(100, 225, "Total a payer : " + $scope.prixtotaleAC + " euros");
+				facture.setFontStyle("bold");
+				facture.text(120, hauteur+20, "Total a payer : " + $scope.prixtotaleAC + " euros");
 				if($scope.vente.paiement === "1"){
 					$scope.type = "Liquide";
 				}
@@ -130,10 +131,25 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 				if($scope.vente.paiement === "3"){
 					$scope.type = "Cheque";
 				}
-				facture.text(100, 235, "Regle par : " + $scope.type);
+				facture.text(120, hauteur+25, "Regle par : " + $scope.type);
 				facture.save('facture.pdf');
 			}
 
+			$scope.addAcheteur = function(){
+				new Vente({nom: $scope.vente.nom,
+						prenom: $scope.vente.prenom,
+						adresse: $scope.vente.adresse,
+						ville: $scope.vente.ville,
+						email: $scope.vente.email,
+						telephone: $scope.vente.telephone}).$update({id: $scope.venteid},
+				                function(data){
+				                    console.log(data);
+				                },
+				                function(err) {
+				                    $scope.error = err;
+				                    console.log($scope.error);
+				                });
+			}
 			$scope.annuleVente = function(){
 				Vente.delete({id: $scope.venteid});
 				$route.reload();
