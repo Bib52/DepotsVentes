@@ -1,7 +1,6 @@
 angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'Products', '$route', 'VenteProducts',
 		function($scope, Vente, Products, $route, VenteProducts){
-			// $scope.vente = new Vente();
-			// $scope.vente.$save();
+
 			$scope.objet="";
 			$scope.listObjet = {
 				objet : []
@@ -23,16 +22,17 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
                                     console.log(err);
                                 });
 			}
-			$scope.addObject = function(){	
-				// $scope.prodVente = new VenteProducts({idSale: $scope.venteid, reference: $scope.objet.reference});
-				// $scope.prodVente.$save(function(data) {
-				// 					console.log('mise a jour');
-    //                                 console.log(data);
-    //                             },
-    //                             function(err) {
-    //                                 $scope.error = err;
-    //                                 console.log(err);
-    //                             });
+			
+			$scope.addObject = function(){
+				// new VenteProducts().$update({id_sale: $scope.venteid, ref: $scope.objet.reference},
+    //             function(data){
+    //             	console.log('mise a jour');
+    //                 console.log(data);
+    //             },
+    //             function(err) {
+    //                 $scope.error = err;
+    //                 console.log($scope.error);
+    //             });
 				$scope.produit = Products.get({reference: $scope.objet.reference}, 
 					function() {
                 		console.log("ajout objet");
@@ -49,6 +49,7 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 			}
 
 			$scope.deleteObject = function(obj){
+				// VenteProducts.delete({});
 				for(i in $scope.listObjet.objet){
 			    	if($scope.listObjet.objet[i] === obj){
 			        	$scope.listObjet.objet.splice(i, 1);
@@ -137,7 +138,8 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 			}
 
 			$scope.annuleVente = function(){
-				console.log('annuler vente');
+				Vente.delete({id: $scope.venteid});
+				console.log('vente suppr');
 				$route.reload();
 			}
 }]);

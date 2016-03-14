@@ -354,13 +354,13 @@ $app->post('/api/sales', function ($request, $response) {
 });
 
 //Ajouter un produits dans une vente : produit (ref) dans la vente (id)
-$app->post('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
+$app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
     $ref = $args['ref'];
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
-    $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
     require 'app/config.php';
     require 'app/opendb.php';
     $findProduct = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
@@ -452,12 +452,12 @@ $app->get('/api/sales/{id}', function ($request, $response, $args) {
 });
 
 //Ajouter les informations de l'acheteur à la vente id ------>  OK
-$app->post('/api/sales/{id}', function ($request, $response, $args) {
+$app->put('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
-    $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
      if (!empty($params['nom'])
         && !empty($params['prenom'])
         && !empty($params['adresse'])
