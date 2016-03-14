@@ -1,5 +1,5 @@
-angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'Products', '$route',
-		function($scope, Vente, Products, $route){
+angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'Products', '$route', 'VenteProducts',
+		function($scope, Vente, Products, $route, VenteProducts){
 			// $scope.vente = new Vente();
 			// $scope.vente.$save();
 			$scope.objet="";
@@ -15,6 +15,7 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 				$scope.vente = new Vente();
             	$scope.vente.$save(function(data) {
                                     console.log(data);
+                                    $scope.venteid = data.id;
                                     $scope.playVente=true;
                                 },
                                 function(err) {
@@ -23,6 +24,15 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
                                 });
 			}
 			$scope.addObject = function(){	
+				// $scope.prodVente = new VenteProducts({idSale: $scope.venteid, reference: $scope.objet.reference});
+				// $scope.prodVente.$save(function(data) {
+				// 					console.log('mise a jour');
+    //                                 console.log(data);
+    //                             },
+    //                             function(err) {
+    //                                 $scope.error = err;
+    //                                 console.log(err);
+    //                             });
 				$scope.produit = Products.get({reference: $scope.objet.reference}, 
 					function() {
                 		console.log("ajout objet");

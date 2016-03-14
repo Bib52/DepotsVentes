@@ -353,16 +353,32 @@ $app->post('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Ajouter des produits dans une vente
-$app->post('/api/sales/{id_sale}/products', function ($request, $response, $args) {
+//Ajouter un produits dans une vente : produit (ref) dans la vente (id)
+$app->post('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
+    $ref = $args['ref'];
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
     require 'app/config.php';
     require 'app/opendb.php';
-    //requete insert produit dans vente, changer etat produit de "en stock" à "en cours de vente"
+    $findProduct = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
+    $obj = mysql_fetch_object($findProduct);
+    if ($obj) {
+        //requete update produit dans vente, changer etat produit de "en stock" à "en cours de vente"
+        $sql = "UPDATE produits SET etat='En cours de vente',
+                                    id_vente='".$idSale."' 
+                                    WHERE reference='".$ref."'"; 
+        $update = mysql_query($sql);
+        $find = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
+        $obj = mysql_fetch_object($find);
+        $response = $response->write(json_encode($obj));
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response = $response->withStatus(200, 'Produit ajoute de la vente');
+    } else {
+        $response = $response->withStatus(404, 'Reference produit inexistante');
+    }
     require 'app/closedb.php';
     return $response;
 });
@@ -392,10 +408,10 @@ $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args)
     return $response;
 });
 
-//Supprimer un produit dans une vente
-$app->delete('/api/sales/{id_sale}/products/{id}', function ($request, $response, $args) {
+//Supprimer un produit dans une vente : produit (ref) de la vente (id)
+$app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $id_vente = $args['id_sale'];
-    $id = $args['id'];
+    $ref = $args['ref'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
     require 'app/config.php';
