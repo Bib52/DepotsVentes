@@ -533,7 +533,6 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
                                     id_vente=0 
                                     WHERE id_vente='".$id."'"; 
         $update = mysql_query($sql);
-        // $produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$id);
         $v = mysql_query('DELETE FROM ventes WHERE id='.$id);
         $response = $response->withStatus(200, 'Vente deleted');
     } else {

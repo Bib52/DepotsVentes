@@ -25,31 +25,27 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 
 			$scope.addObject = function(){
 				new VenteProducts().$update({id_sale: $scope.venteid, ref: $scope.objet.reference},
-                function(data){
-                	console.log('mise a jour');
-                    console.log(data);
-                },
-                function(err) {
-                    $scope.error = err;
-                    console.log($scope.error);
-                });
+					                function(data){
+					                    console.log(data);
+					                },
+					                function(err) {
+					                    $scope.error = err;
+					                    console.log($scope.error);
+					                });
 				$scope.produit = Products.get({reference: $scope.objet.reference}, 
-					function() {
-                		console.log("ajout objet");
-                		console.log($scope.produit);
-                		$scope.listObjet.objet.push($scope.produit);
-						$scope.objet="";
-						$scope.prixtotale+=parseFloat($scope.produit.prix);
-						$scope.error="";
-           			},
-           			function(err){
-           				console.log(err);
-           				$scope.error = err;
-           			});	
+								function() {
+			                		$scope.listObjet.objet.push($scope.produit);
+									$scope.objet="";
+									$scope.prixtotale+=parseFloat($scope.produit.prix);
+									$scope.error="";
+			           			},
+			           			function(err){
+			           				console.log(err);
+			           				$scope.error = err;
+			           			});	
 			}
 
 			$scope.deleteObject = function(obj){
-				// console.log(obj.reference);
 				VenteProducts.delete({id_sale: $scope.venteid, ref: obj.reference});
 				for(i in $scope.listObjet.objet){
 			    	if($scope.listObjet.objet[i] === obj){
@@ -140,7 +136,6 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 
 			$scope.annuleVente = function(){
 				Vente.delete({id: $scope.venteid});
-				console.log('vente suppr');
 				$route.reload();
 			}
 }]);
