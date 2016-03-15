@@ -1,22 +1,20 @@
-# DepotsVentes #
+### Projet tuteuré : Application de gestion d'une bourse de dépôts/ventes ###
+### LP CISIIE 2015/2016 ###
 
-## LP CISIIE 2015/2016 ##
-## Projet tuteuré : Application de gestion d'une bourse de dépôts/ventes ##
-
-### Groupe : ###
+#### Groupe : ####
 * Bergeret Florian
 * Bounajra Mourad
 
-### Lien : ###
+#### Lien : ####
 * site github : http://fbergeret.github.io/DepotsVentes/
 
-### Installation : ##
-* Télécharger et le placer dans la racine de votre serveur web
-* Commande : composer install (dans DepotsVentes/Server/)
-* Créer base de données : créer un base de données (nom : depotsventes)
-* Importer base de données : importer le script depotsventes.sql dans la bdd créé
-* Configurer : dans le fichier DepotsVentes/Server/app/config.php, mettez vos informations
+#### Installation : ####
+* Télécharger le projet et le placer dans la racine de votre serveur web.
+* Commande : composer install (dans DepotsVentes/Server/).
+* Créer base de données : créer une base de données (nom : depotsventes).
+* Importer base de données : importer le script "DepotsVentes/Server/depotsventes.sql" dans la base de données créé.
+* Configurer : mettre vos informations dans le fichier "DepotsVentes/Server/app/config.php".
 * Tester : http://localhost/DepotsVentes/Client
 
-### Utilisation : ###
+#### Utilisation : ####
 
