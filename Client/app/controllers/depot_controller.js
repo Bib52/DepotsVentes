@@ -74,7 +74,8 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
 
         $scope.updObject = function(objet){
             new DepotProducts({prix: objet.prix,
-                            description: objet.description})
+                            description: objet.description,
+                            etat: objet.etat})
             .$update({idDepot: objet.id_depot, ref: objet.reference},
             function(data){
                 console.log(data);

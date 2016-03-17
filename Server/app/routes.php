@@ -1,21 +1,19 @@
 <?php
+Configuration::config();
+
 /* ------------------------------DEPOT------------------------------ */
 //Recuperer le depot id ------>  OK
 $app->get('/api/depots/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $depot = mysql_query('SELECT * FROM depots WHERE id='.$id);
-    $obj = mysql_fetch_object($depot);
-    if ($obj) {
-        $response = $response->write(json_encode($obj));
+    $depot=Depots::find($id);
+    if ($depot) {
+        $response = $response->write(json_encode($depot));
         $response = $response->withHeader('Content-Type', 'application/json');
     } else {
         $response = $response->withStatus(404, 'Depot inexistant');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -23,18 +21,13 @@ $app->get('/api/depots/{id}', function ($request, $response, $args) {
 $app->get('/api/depots', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $produits = mysql_query('SELECT * FROM depots');
-    if(mysql_num_rows($produits) !== 0) {
-        while ($row = mysql_fetch_assoc($produits)) {
-            $tab[] = $row;
-        }
-        $response = $response->write(json_encode($tab));
+    $depots=Depots::all();
+    if($depots) {
+        $response = $response->write(json_encode($depots));
+        $response = $response->withHeader('Content-Type', 'application/json');
     } else {
         $response = $response->withStatus(404, 'Aucun depot enregistre');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -261,6 +254,7 @@ $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $re
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
     if (!empty($params['prix'])
         && !empty($params['description'])
+        && !empty($params['etat'])
     ) {
         require 'app/config.php';
         require 'app/opendb.php';
@@ -272,7 +266,8 @@ $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $re
             $obj = mysql_fetch_object($findProduct);
             if($obj){
                 $sql = "UPDATE produits SET prix='".$params['prix']."',
-                                    description='".$params['description']."' 
+                                    description='".$params['description']."',
+                                    etat='".$params['etat']."' 
                                     WHERE reference='".$refProduct."'"; 
                 $update = mysql_query($sql);
                 if($update){
