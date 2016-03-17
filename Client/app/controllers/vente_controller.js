@@ -33,7 +33,8 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 					                    console.log($scope.error);
 					                });
 				$scope.produit = Products.get({reference: $scope.objet.reference}, 
-								function() {
+								function(data) {
+									console.log(data);
 			                		$scope.listObjet.objet.push($scope.produit);
 									$scope.objet="";
 									$scope.prixtotale+=parseFloat($scope.produit.prix);

@@ -8,9 +8,9 @@ $app->get('/api/depots/{id}', function ($request, $response, $args) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
     $depot=Depots::find($id);
-    if ($depot) {
-        $response = $response->write(json_encode($depot));
+    if (!empty($depot)) {
         $response = $response->withHeader('Content-Type', 'application/json');
+        $response = $response->write(json_encode($depot));
     } else {
         $response = $response->withStatus(404, 'Depot inexistant');
     }
@@ -22,9 +22,9 @@ $app->get('/api/depots', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
     $depots=Depots::all();
-    if($depots) {
-        $response = $response->write(json_encode($depots));
+    if(count($depots)>0) {
         $response = $response->withHeader('Content-Type', 'application/json');
+        $response = $response->write(json_encode($depots));
     } else {
         $response = $response->withStatus(404, 'Aucun depot enregistre');
     }
@@ -432,17 +432,13 @@ $app->get('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-    $obj = mysql_fetch_object($vente);
-    if ($obj) {
-        $response = $response->write(json_encode($obj));
+    $vente = Ventes::find($id);
+    if (!empty($vente)) {
+        $response = $response->write(json_encode($vente));
         $response = $response->withHeader('Content-Type', 'application/json');
     } else {
         $response = $response->withStatus(404, 'Vente inexistante');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -498,18 +494,13 @@ $app->put('/api/sales/{id}', function ($request, $response, $args) {
 $app->get('/api/sales', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $vente = mysql_query('SELECT * FROM ventes');
-    if(mysql_num_rows($vente) !== 0) {
-        while ($row = mysql_fetch_assoc($vente)) {
-            $tab[] = $row;
-        }
-        $response = $response->write(json_encode($tab));
+    $ventes = Ventes::all();
+    if(count($ventes) !== 0) {
+        $response = $response->write(json_encode($ventes));
+        $response = $response->withHeader('Content-Type', 'application/json');
     } else {
-        $response = $response->withStatus(404, 'Aucun depot enregistre');
+        $response = $response->withStatus(404, 'Aucune vente enregistre');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -694,18 +685,13 @@ $app->delete('/api/payments/{id}', function ($request, $response, $args) {
 $app->get('/api/products', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $produits = mysql_query('SELECT * FROM produits');
-    if(mysql_num_rows($produits) !== 0) {
-        while ($row = mysql_fetch_assoc($produits)) {
-            $tab[] = $row;
-        }
-        $response = $response->write(json_encode($tab));
+    $produits=Produits::all();
+    if(count($produits) !== 0) {
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response = $response->write(json_encode($produits));
     } else {
         $response = $response->withStatus(404, 'Aucun produit enregistre');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -714,17 +700,13 @@ $app->get('/api/products/{reference}', function ($request, $response, $args) {
     $reference = $args['reference'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $produit = mysql_query('SELECT * FROM produits WHERE reference='.$reference);
-    $obj = mysql_fetch_object($produit);
-    if ($obj) {
-        $response = $response->write(json_encode($obj));
+    $produit=Produits::where('reference', $reference)->first();
+    if (count($produit)>0) {
         $response = $response->withHeader('Content-Type', 'application/json');
+        $response = $response->write(json_encode($produit));
     } else {
         $response = $response->withStatus(404, 'Reference produit inexistante');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -752,18 +734,13 @@ $app->delete('/api/products/{reference}', function ($request, $response, $args) 
 $app->get('/api/staffs', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $produits = mysql_query('SELECT * FROM staff');
-    if(mysql_num_rows($produits) !== 0) {
-        while ($row = mysql_fetch_assoc($produits)) {
-            $tab[] = $row;
-        }
-        $response = $response->write(json_encode($tab));
+    $staff=Staff::all();
+    if(count($staff)>0) {
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response = $response->write(json_encode($staff));
     } else {
         $response = $response->withStatus(404, 'Aucun staff enregistre');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
