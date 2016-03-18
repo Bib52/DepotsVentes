@@ -43,33 +43,21 @@ $app->post('/api/depots', function ($request, $response) {
         && !empty($params['adresse'])
         && !empty($params['telephone'])
     ) {
-        require 'app/config.php';
-        require 'app/opendb.php';
-        $find = mysql_query('SELECT * FROM depots WHERE email="'.$params['email'].'"');
-        $obj = mysql_fetch_object($find);
-        if(!$obj){
-            $sql = "INSERT INTO depots (nom, prenom, email, adresse, telephone)
-                    VALUES ('".$params['nom']."','"
-                            .$params['prenom']."','"
-                            .$params['email']."','"
-                            .$params['adresse']."','"
-                            .$params['telephone']."')";
-            $insert = mysql_query($sql);
-            if($insert){
-                $response = $response->withStatus(201, 'Product created');
-                $response = $response->withHeader('Content-Type', 'application/json');
-                $find = mysql_query('SELECT * FROM depots WHERE email="'.$params['email'].'"');
-                $depot = mysql_fetch_object($find);
-                $response = $response->write(json_encode($depot));
-            }
-            else{
-                echo'error insertion';
-            }
+        $email=Depots::where('email', $params['email'])->first();
+        if(count($email)==0){
+            Depots::insert(array('nom' => $params['nom'],
+                                'prenom' => $params['prenom'],
+                                'email' => $params['email'],
+                                'adresse' => $params['adresse'],
+                                'telephone' => $params['telephone']));
+            $response = $response->withStatus(201, 'Depot created');
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $find=Depots::where('email', $params['email'])->first();
+            $response = $response->write(json_encode($find));
         }
         else {
             $response = $response->withStatus(400, 'email already use');
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -154,21 +142,16 @@ $app->delete('/api/depots/{id}', function ($request, $response, $args) {
     $idDepot = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $produit = mysql_query('SELECT * FROM depots WHERE id='.$idDepot);
-    $obj = mysql_fetch_object($produit);
-    if ($obj) {
-        $depot = mysql_query('DELETE FROM depots WHERE id='.$idDepot);
-        $produit = mysql_query('DELETE FROM produits WHERE id_depot='.$idDepot);
+    $depot=Depots::find($idDepot);
+    if (!empty($depot)) {
+        $depot->delete();
+        Produits::where('id_depot', "=", $idDepot)->delete();
         $response = $response->withStatus(200, 'Depot et produits supprimees');
     } else {
         $response = $response->withStatus(404, 'Depot inexistant');
     }
-    require 'app/closedb.php';
     return $response;
 });
-
 //Ajouter des produits dans un depots ------>  OK
 $app->post('/api/depots/{id_depot}/products', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
@@ -224,23 +207,18 @@ $app->delete('/api/depots/{id_depot}/products/{reference}', function ($request, 
     $refProduct = $args['reference'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $depot = mysql_query('SELECT * FROM depots WHERE id='.$idDepot);
-    $findDepot = mysql_fetch_object($depot);
-    if($findDepot){
-        $produit = mysql_query('SELECT * FROM produits WHERE reference='.$refProduct);
-        $obj = mysql_fetch_object($produit);
-        if ($obj) {
-            $produit = mysql_query('DELETE FROM produits WHERE reference='.$refProduct);
+    $depot = Depots::find($idDepot);
+    if(!empty($depot)){
+        $produit = Produits::where('reference','=',$refProduct)->where('id_depot','=',$idDepot)->get();
+        if (count($produit)>0) {
+            Produits::where('reference','=',$refProduct)->delete();
             $response = $response->withStatus(200, 'Product deleted');
         } else {
-            $response = $response->withStatus(404, 'Reference produit inexistante');
+            $response = $response->withStatus(404, 'Reference produit inexistante dans ce depot');
         }
     } else{
         $response = $response->withStatus(400, 'Depot inexitant');    
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -300,21 +278,21 @@ $app->get('/api/depots/{id_depot}/products', function ($request, $response, $arg
     $idDepot = $args['id_depot'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $produits = mysql_query('SELECT * FROM produits WHERE id_depot='.$idDepot);
-    $depot = mysql_query('SELECT * FROM depots WHERE id='.$idDepot);
-    if(mysql_num_rows($produits) !== 0)
+    $depot = Depots::find($idDepot);
+    if(!empty($depot))
     {
-        while ($row = mysql_fetch_assoc($produits)) {
-            $tab[] = $row;
+        $produits = Produits::where('id_depot','=',$idDepot)->get();
+        if(count($produits)>0){
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response = $response->write(json_encode($produits));
         }
-        $response = $response->write(json_encode($tab));
+        else{
+            $response = $response->withStatus(404, 'Aucun produits');
+        }
     } 
-    if(mysql_num_rows($depot)==0) {
+    else{
         $response = $response->withStatus(404, 'Depot inexistant');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -715,17 +693,13 @@ $app->delete('/api/products/{reference}', function ($request, $response, $args) 
     $reference = $args['reference'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $produit = mysql_query('SELECT * FROM produits WHERE reference='.$reference);
-    $obj = mysql_fetch_object($produit);
-    if ($obj) {
-        $produit = mysql_query('DELETE FROM produits WHERE reference='.$reference);
+    $produit = Produits::where('reference', $reference)->first();
+    if (count($produit)>0) {
+        Produits::where('reference', $reference)->delete();
         $response = $response->withStatus(200, 'Product deleted');
     } else {
         $response = $response->withStatus(404, 'Reference produit inexistante');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -754,16 +728,12 @@ $app->delete('/api/staffs/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $produit = mysql_query('SELECT * FROM staff WHERE id='.$id);
-    $obj = mysql_fetch_object($produit);
-    if ($obj) {
-        $produit = mysql_query('DELETE FROM staff WHERE id='.$id);
+    $staff=Staff::find($id);
+    if (!empty($staff)) {
+        $staff->delete();
         $response = $response->withStatus(200, 'Staff deleted');
     } else {
         $response = $response->withStatus(404, 'Staff inexistant');
     }
-    require 'app/closedb.php';
     return $response;
 });
