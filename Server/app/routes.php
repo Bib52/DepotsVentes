@@ -44,15 +44,9 @@ $app->post('/api/depots', function ($request, $response) {
         $email=Depots::where('email', $params['email'])->first();
         if(count($email)==0){
             $idDepot = Depots::addDepot($params);
-            /*Depots::insert(array('nom' => $params['nom'],
-                                'prenom' => $params['prenom'],
-                                'email' => $params['email'],
-                                'adresse' => $params['adresse'],
-                                'telephone' => $params['telephone']));*/
             $response = $response->withStatus(201, 'Depot created');
             $response = $response->withHeader('Content-Type', 'application/json');
-            $find=Depots::where('email', $params['email'])->first();
-            // $find=Depots::find($idDepot);
+            $find=Depots::find($idDepot);
             $response = $response->write(json_encode($find));
         }
         else {
@@ -64,7 +58,7 @@ $app->post('/api/depots', function ($request, $response) {
     return $response;
 });
 
-//Modifier les information du deposant du dépot id ------>  NON
+//Modifier les information du deposant du dépot id ------>  OK
 $app->put('/api/depots/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -97,14 +91,12 @@ $app->put('/api/depots/{id}', function ($request, $response, $args) {
                     $response = $response->withStatus(400, 'email already use');
                 }
             }
-            else
-            {
+            else{
                 $findDepot->save();
                 $response = $response->withStatus(201, 'Product updated');
                 $response = $response->withHeader('Content-Type', 'application/json');
                 $response = $response->write(json_encode($findDepot));   
             }
-      
         }
         else{
             $response = $response->withStatus(400, 'Depot inexistant');
@@ -142,30 +134,16 @@ $app->post('/api/depots/{id_depot}/products', function ($request, $response, $ar
         && !empty($params['prix'])
         && !empty($params['description'])
     ) {    
-        require 'app/config.php';
-        require 'app/opendb.php';
         $depot = Depots::find($idDepot);
-        /*mysql_query('SELECT * FROM depots WHERE id="'.$idDepot.'"');
-        $obj = mysql_fetch_object($find);*/
         if(! empty($depot)){
             $produit = Produits::where('reference', '=', $params['reference'])->first();
-            /*$find = mysql_query('SELECT * FROM produits WHERE reference="'.$params['reference'].'"');
-            $depot = mysql_fetch_object($find);*/
             if (empty($produit)){
-                /*$sql = "INSERT INTO produits (reference, prix, description, etat, id_depot)
-                        VALUES ('".$params['reference']."','"
-                                .$params['prix']."','"
-                                .$params['description']."',
-                                'En stock','"
-                                .$idDepot."')";
-                $insert = mysql_query($sql);*/
                 $insert = Produits::addProduit($params, $idDepot);
                 if($insert){
                     $response = $response->withStatus(201, 'Product created');
                     $response = $response->withHeader('Content-Type', 'application/json');
-                    $find = mysql_query('SELECT * FROM produits WHERE reference="'.$params['reference'].'"');
-                    $depot = mysql_fetch_object($find);
-                    $response = $response->write(json_encode($depot));
+                    $product = Produits::where('reference', '=', $params['reference'])->first();
+                    $response = $response->write(json_encode($product));
                 }
                 else{
                     echo'error insertion';
@@ -176,7 +154,6 @@ $app->post('/api/depots/{id_depot}/products', function ($request, $response, $ar
         } else {
             $response = $response->withStatus(400, 'Depot inexitant');
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -216,43 +193,30 @@ $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $re
         && !empty($params['description'])
         && !empty($params['etat'])
     ) {
-        require 'app/config.php';
-        require 'app/opendb.php';
-        /*$findDepot = mysql_query('SELECT * FROM depots WHERE id="'.$idDepot.'"');
-        $res = mysql_fetch_object($findDepot);*/
         $depot = Depots::find($idDepot);
         if ($depot)
         {
-            /*$findProduct = mysql_query('SELECT * FROM produits WHERE reference="'.$refProduct.'"');
-            $obj = mysql_fetch_object($findProduct);*/
-            $produit = Produits::where('reference', '=', $refProduct)->first();
+            $produit = Produits::where('reference', '=', $refProduct)
+                            ->where('id_depot', '=', $idDepot)->first();
             if($produit){
-                /*$sql = "UPDATE produits SET prix='".$params['prix']."',
-                                    description='".$params['description']."',
-                                    etat='".$params['etat']."' 
-                                    WHERE reference='".$refProduct."'"; 
-                $update = mysql_query($sql);*/
                 $update = Produits::updateProduit($refProduct, $params);
                 if($update){
                     $response = $response->withStatus(201, 'Product updated');
                     $response = $response->withHeader('Content-Type', 'application/json');
-                    /*$find = mysql_query('SELECT * FROM produits WHERE reference="'.$refProduct.'"');
-                    $depot = mysql_fetch_object($find);*/
                     $produit = Produits::where('reference', '=', $refProduct)->first();
                     $response = $response->write(json_encode($produit));
                 }
                 else{
-                    echo'error update';
+                    $response = $response->withStatus(201, 'Aucune modification realise');
                 }
             }
             else {
-                $response = $response->withStatus(400, 'Produit inexistant');
+                $response = $response->withStatus(400, 'Produit inexistant dans ce depot');
             }
         }
         else{
             $response = $response->withStatus(400, 'Depot inexistant');
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -283,24 +247,17 @@ $app->get('/api/depots/{id_depot}/products', function ($request, $response, $arg
 });
 
 /* ------------------------------VENTE------------------------------ */
-//Creer une vente ------>  NON
+//Creer une vente ------>  OK
 $app->post('/api/sales', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
-    require 'app/config.php';
-    require 'app/opendb.php';
     $vente = Ventes::addVente();
-    if($vente){
-        $findID = Ventes::orderBy('id', 'desc')->first();
-        $response = $response->withStatus(201, 'Vente created');
-        $response = $response->write(json_encode($findID));
-    }
-    else{
-        echo'error insertion';
-    } 
-    require 'app/closedb.php';
+    $find = Ventes::find($vente);
+    $response = $response->withStatus(201, 'Vente created');
+    $response = $response->withHeader('Content-Type', 'application/json');
+    $response = $response->write(json_encode($find));
     return $response;
 });
 
@@ -312,50 +269,42 @@ $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, 
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $findProduct = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
-    $obj = mysql_fetch_object($findProduct);
-    if ($obj) {
-        //requete update produit dans vente, changer etat produit de "en stock" à "en cours de vente"
-        $sql = "UPDATE produits SET etat='En cours de vente',
-                                    id_vente='".$idSale."' 
-                                    WHERE reference='".$ref."'"; 
-        $update = mysql_query($sql);
-        $find = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
-        $obj = mysql_fetch_object($find);
-        $response = $response->write(json_encode($obj));
+    $find = Produits::where("reference","=",$ref)->first();
+    if ($find) {
+        $donnees["etat"]="En cours de vente";
+        $donnees["id_vente"]=$idSale;
+        Produits::addProduitVente($ref,$donnees);
+        $produit = Produits::where('reference', '=', $ref)->first();
+        $response = $response->write(json_encode($produit));
         $response = $response->withHeader('Content-Type', 'application/json');
         $response = $response->withStatus(200, 'Produit ajoute de la vente');
     } else {
         $response = $response->withStatus(404, 'Reference produit inexistante');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
-//Recuperer les produits d'une vente ------>  NON
+//Recuperer les produits d'une vente ------>  OK
 $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    $vente = mysql_query('SELECT * FROM ventes WHERE id ='.$idSale);
-    $produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$idSale);
-    if(mysql_num_rows($produits) !== 0)
-    {
-        while ($row = mysql_fetch_assoc($produits)) {
-            $tab[] = $row;
+    $vente = Ventes::find($idSale);
+    if ($vente){
+        $produits = Produits::where("id_vente","=",$idSale)->get();
+        if(count($produits)>0){
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response = $response->write(json_encode($produits));
         }
-        $response = $response->write(json_encode($tab));
-    } 
-    if(mysql_num_rows($vente)==0) {
+        else{
+            $response = $response->withStatus(404, 'Aucun produit dans cette vente');
+        }
+    }
+    else{
         $response = $response->withStatus(404, 'Vente inexistante');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
