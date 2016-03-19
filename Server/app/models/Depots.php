@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 class Depots extends Eloquent{
   	protected $table = 'depots';
 	protected $key = 'id';
- 	protected $timestamp = false;
+ 	public $timestamp = false;
 
  	// public static function addDepot($donnees)
   //   {

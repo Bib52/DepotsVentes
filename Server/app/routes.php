@@ -110,7 +110,7 @@ $app->put('/api/depots/{id}', function ($request, $response, $args) {
             if ($telephone != $params['telephone']){
                 echo 'ok telephone';
             }
-            // $findDepot->save();
+            $findDepot->save();
             $response = $response->withStatus(201, 'Product updated');
             $response = $response->withHeader('Content-Type', 'application/json');
             $response = $response->write(json_encode($findDepot));
