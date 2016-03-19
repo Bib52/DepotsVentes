@@ -1,6 +1,4 @@
 <?php
-Configuration::config();
-
 /* ------------------------------DEPOT------------------------------ */
 //Recuperer le depot id ------>  OK
 $app->get('/api/depots/{id}', function ($request, $response, $args) {
@@ -31,7 +29,7 @@ $app->get('/api/depots', function ($request, $response) {
     return $response;
 });
 
-//Creer un depot ------>  OK
+//Creer un depot ------>  
 $app->post('/api/depots', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -45,6 +43,7 @@ $app->post('/api/depots', function ($request, $response) {
     ) {
         $email=Depots::where('email', $params['email'])->first();
         if(count($email)==0){
+            // $idDepot = Depots::addDepot($params);
             Depots::insert(array('nom' => $params['nom'],
                                 'prenom' => $params['prenom'],
                                 'email' => $params['email'],
@@ -53,6 +52,7 @@ $app->post('/api/depots', function ($request, $response) {
             $response = $response->withStatus(201, 'Depot created');
             $response = $response->withHeader('Content-Type', 'application/json');
             $find=Depots::where('email', $params['email'])->first();
+            // $find=Depots::find($idDepot);
             $response = $response->write(json_encode($find));
         }
         else {
@@ -64,73 +64,60 @@ $app->post('/api/depots', function ($request, $response) {
     return $response;
 });
 
-//Modifier les information du desposant du dépot id ------>  OK
+//Modifier les information du desposant du dépot id ------>  NON
 $app->put('/api/depots/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
-
     if (!empty($params['nom'])
         && !empty($params['prenom'])
         && !empty($params['email'])
         && !empty($params['adresse'])
         && !empty($params['telephone'])
     ) {
-        require 'app/config.php';
-        require 'app/opendb.php';
-        $findDepot = mysql_query('SELECT * FROM depots WHERE id="'.$id.'"');
-        $res = mysql_fetch_object($findDepot);
-        if ($res)
-        {
-            $findEmail = mysql_query('SELECT * FROM depots WHERE email="'.$params['email'].'"');
-            $obj = mysql_fetch_object($findEmail);
-            if($params['email'] !== $res->email && !$obj){
-                $sql = "UPDATE depots SET nom='".$params['nom']."',
-                                    prenom='".$params['prenom']."',
-                                    email='".$params['email']."',
-                                    adresse='".$params['adresse']."',
-                                    telephone='".$params['telephone']."' 
-                                    WHERE id='".$id."'"; 
-                $update = mysql_query($sql);
-                if($update){
-                    $response = $response->withStatus(201, 'Product updated');
-                    $response = $response->withHeader('Content-Type', 'application/json');
-                    $find = mysql_query('SELECT * FROM depots WHERE id="'.$id.'"');
-                    $depot = mysql_fetch_object($find);
-                    $response = $response->write(json_encode($depot));
+        $findDepot = Depots::find($id);
+        if (!empty($findDepot)){
+            $nom = $findDepot->nom;
+            $prenom = $findDepot->prenom;
+            $email = $findDepot->email;
+            $adresse = $findDepot->adresse;
+            $telephone = $findDepot->telephone;
+            if ($nom != $params['nom']){
+                echo 'ok nom';
+                $findDepot->nom = $params['nom'];
+                // $nom = $params['nom'];
+                // $findDepot->update(array('nom' => $nom));
+                // $findDepot->save();
+            }
+            if ($prenom != $params['prenom']){
+                echo 'ok prenom';
+            }
+            if ($email != $params['email']){
+                echo 'ok email';
+                $findEmail = Depots::where('email','=',$email)->first();
+                if(count($findEmail)>0){
+                    echo 'email nexiste pas';
                 }
                 else{
-                    echo'error update';
+                    $response = $response->withStatus(400, 'email already use');
                 }
             }
-            elseif($params['email'] == $res->email){
-                $sql = "UPDATE depots SET nom='".$params['nom']."',
-                                    prenom='".$params['prenom']."',
-                                    adresse='".$params['adresse']."',
-                                    telephone='".$params['telephone']."' 
-                                    WHERE id='".$id."'"; 
-                $update = mysql_query($sql);
-                if($update){
-                    $response = $response->withStatus(201, 'Depot updated');
-                    $response = $response->withHeader('Content-Type', 'application/json');
-                    $find = mysql_query('SELECT * FROM depots WHERE id="'.$id.'"');
-                    $depot = mysql_fetch_object($find);
-                    $response = $response->write(json_encode($depot));
-                }
-                else{
-                    echo'error update';
-                }
+            if ($adresse != $params['adresse']){
+                echo 'adresse';
             }
-            else {
-                $response = $response->withStatus(400, 'email already use');
+            if ($telephone != $params['telephone']){
+                echo 'ok telephone';
             }
+            // $findDepot->save();
+            $response = $response->withStatus(201, 'Product updated');
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response = $response->write(json_encode($findDepot));
         }
         else{
             $response = $response->withStatus(400, 'Depot inexistant');
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -152,7 +139,8 @@ $app->delete('/api/depots/{id}', function ($request, $response, $args) {
     }
     return $response;
 });
-//Ajouter des produits dans un depots ------>  OK
+
+//Ajouter des produits dans un depots ------>  NON
 $app->post('/api/depots/{id_depot}/products', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
     $params = $request->getParsedBody();
@@ -222,7 +210,7 @@ $app->delete('/api/depots/{id_depot}/products/{reference}', function ($request, 
     return $response;
 });
 
-//Modifier le produit id du depot id_depot ------>  OK
+//Modifier le produit id du depot id_depot ------>  NON
 $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
     $refProduct = $args['reference'];
@@ -297,7 +285,7 @@ $app->get('/api/depots/{id_depot}/products', function ($request, $response, $arg
 });
 
 /* ------------------------------VENTE------------------------------ */
-//Creer une vente ------>  OK
+//Creer une vente ------>  NON
 $app->post('/api/sales', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -326,7 +314,7 @@ $app->post('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Ajouter un produits dans une vente : produit (ref) dans la vente (id) ------>  OK
+//Ajouter un produits dans une vente : produit (ref) dans la vente (id) ------>  NON
 $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
     $ref = $args['ref'];
@@ -356,7 +344,7 @@ $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, 
     return $response;
 });
 
-//Recuperer les produits d'une vente ------>  OK
+//Recuperer les produits d'une vente ------>  NON
 $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
     $params = $request->getParsedBody();
@@ -381,7 +369,7 @@ $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args)
     return $response;
 });
 
-//Supprimer un produit dans une vente : produit (ref) de la vente (id) ------>  OK
+//Supprimer un produit dans une vente : produit (ref) de la vente (id) ------>  NON
 $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $id_vente = $args['id_sale'];
     $ref = $args['ref'];
@@ -420,7 +408,7 @@ $app->get('/api/sales/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Ajouter les informations de l'acheteur à la vente id ------>  OK
+//Ajouter les informations de l'acheteur à la vente id ------>  NON
 $app->put('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -482,7 +470,7 @@ $app->get('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Supprimer la vente id ------>  OK
+//Supprimer la vente id ------>  NON
 $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -507,7 +495,7 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------PAIMENT VENTE------------------------------ */
-// Ajouter un paiement à une vente ------>  A TESTER (creer table paiements)
+// Ajouter un paiement à une vente ------>  NON (creer table paiements)
 $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $params = $request->getParsedBody();
@@ -540,7 +528,7 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     return $response;
 });
 
-// Supprimer un paiement ------>  A TESTER (creer table paiements)
+// Supprimer un paiement ------>  NON (creer table paiements)
 $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -561,7 +549,7 @@ $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $ar
 
 
 /* ------------------------------MODE DE PAIMENT------------------------------ */
-//Recuperer les modes de paiements ------>  A TESTER (creer table modepaiements)
+//Recuperer les modes de paiements ------>  NON (creer table modepaiements)
 $app->get('/api/payments', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -580,7 +568,7 @@ $app->get('/api/payments', function ($request, $response) {
     return $response;
 });
 
-//Ajouter un mode de paiement ------> A TESTER (creer table modepaiements)
+//Ajouter un mode de paiement ------> NON (creer table modepaiements)
 $app->post('/api/payments', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -609,7 +597,7 @@ $app->post('/api/payments', function ($request, $response) {
     return $response;
 });
 
-//Modifier un mode de paiement ------> A TESTER (creer table modepaiements)
+//Modifier un mode de paiement ------> NON (creer table modepaiements)
 $app->put('/api/payments/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -639,7 +627,7 @@ $app->put('/api/payments/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Supprimer un mode de paiement ------> A TESTER (creer table modepaiements)
+//Supprimer un mode de paiement ------> NON (creer table modepaiements)
 $app->delete('/api/payments/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -723,7 +711,7 @@ $app->post('/api/staffs', function ($request, $response) {
 
 });
 
-// //Supprimer un membre du staff ------>  A TESTER
+// Supprimer un membre du staff ------>  A TESTER
 $app->delete('/api/staffs/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
