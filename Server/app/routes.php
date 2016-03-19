@@ -29,7 +29,7 @@ $app->get('/api/depots', function ($request, $response) {
     return $response;
 });
 
-//Creer un depot ------>  
+//Creer un depot ------>  OK
 $app->post('/api/depots', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -64,7 +64,7 @@ $app->post('/api/depots', function ($request, $response) {
     return $response;
 });
 
-//Modifier les information du desposant du dépot id ------>  NON
+//Modifier les information du deposant du dépot id ------>  NON
 $app->put('/api/depots/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -131,7 +131,7 @@ $app->delete('/api/depots/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Ajouter des produits dans un depots ------>  NON
+//Ajouter des produits dans un depots ------>  OK
 $app->post('/api/depots/{id_depot}/products', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
     $params = $request->getParsedBody();
@@ -144,19 +144,22 @@ $app->post('/api/depots/{id_depot}/products', function ($request, $response, $ar
     ) {    
         require 'app/config.php';
         require 'app/opendb.php';
-        $find = mysql_query('SELECT * FROM depots WHERE id="'.$idDepot.'"');
-        $obj = mysql_fetch_object($find);
-        if(! empty($obj)){
-            $find = mysql_query('SELECT * FROM produits WHERE reference="'.$params['reference'].'"');
-            $depot = mysql_fetch_object($find);
-            if (empty($depot)){
-                $sql = "INSERT INTO produits (reference, prix, description, etat, id_depot)
+        $depot = Depots::find($idDepot);
+        /*mysql_query('SELECT * FROM depots WHERE id="'.$idDepot.'"');
+        $obj = mysql_fetch_object($find);*/
+        if(! empty($depot)){
+            $produit = Produits::where('reference', '=', $params['reference'])->first();
+            /*$find = mysql_query('SELECT * FROM produits WHERE reference="'.$params['reference'].'"');
+            $depot = mysql_fetch_object($find);*/
+            if (empty($produit)){
+                /*$sql = "INSERT INTO produits (reference, prix, description, etat, id_depot)
                         VALUES ('".$params['reference']."','"
                                 .$params['prix']."','"
                                 .$params['description']."',
                                 'En stock','"
                                 .$idDepot."')";
-                $insert = mysql_query($sql);
+                $insert = mysql_query($sql);*/
+                $insert = Produits::addProduit($params, $idDepot);
                 if($insert){
                     $response = $response->withStatus(201, 'Product created');
                     $response = $response->withHeader('Content-Type', 'application/json');
@@ -201,7 +204,7 @@ $app->delete('/api/depots/{id_depot}/products/{reference}', function ($request, 
     return $response;
 });
 
-//Modifier le produit id du depot id_depot ------>  NON
+//Modifier le produit id du depot id_depot ------>  OK
 $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
     $refProduct = $args['reference'];
@@ -215,24 +218,28 @@ $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $re
     ) {
         require 'app/config.php';
         require 'app/opendb.php';
-        $findDepot = mysql_query('SELECT * FROM depots WHERE id="'.$idDepot.'"');
-        $res = mysql_fetch_object($findDepot);
-        if ($res)
+        /*$findDepot = mysql_query('SELECT * FROM depots WHERE id="'.$idDepot.'"');
+        $res = mysql_fetch_object($findDepot);*/
+        $depot = Depots::find($idDepot);
+        if ($depot)
         {
-            $findProduct = mysql_query('SELECT * FROM produits WHERE reference="'.$refProduct.'"');
-            $obj = mysql_fetch_object($findProduct);
-            if($obj){
-                $sql = "UPDATE produits SET prix='".$params['prix']."',
+            /*$findProduct = mysql_query('SELECT * FROM produits WHERE reference="'.$refProduct.'"');
+            $obj = mysql_fetch_object($findProduct);*/
+            $produit = Produits::where('reference', '=', $refProduct)->first();
+            if($produit){
+                /*$sql = "UPDATE produits SET prix='".$params['prix']."',
                                     description='".$params['description']."',
                                     etat='".$params['etat']."' 
                                     WHERE reference='".$refProduct."'"; 
-                $update = mysql_query($sql);
+                $update = mysql_query($sql);*/
+                $update = Produits::updateProduit($refProduct, $params);
                 if($update){
                     $response = $response->withStatus(201, 'Product updated');
                     $response = $response->withHeader('Content-Type', 'application/json');
-                    $find = mysql_query('SELECT * FROM produits WHERE reference="'.$refProduct.'"');
-                    $depot = mysql_fetch_object($find);
-                    $response = $response->write(json_encode($depot));
+                    /*$find = mysql_query('SELECT * FROM produits WHERE reference="'.$refProduct.'"');
+                    $depot = mysql_fetch_object($find);*/
+                    $produit = Produits::where('reference', '=', $refProduct)->first();
+                    $response = $response->write(json_encode($produit));
                 }
                 else{
                     echo'error update';
@@ -284,19 +291,11 @@ $app->post('/api/sales', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
     require 'app/config.php';
     require 'app/opendb.php';
-    $sql = "INSERT INTO ventes (nom, prenom, adresse, ville, email, telephone, etat)
-                    VALUES ('','','','','','', 'En cours')";
-    $insert = mysql_query($sql);
-    if($insert){
-        $findID = mysql_query("SELECT MAX(id) FROM ventes");
-        while ($row = mysql_fetch_assoc($findID)) {
-            $tab[] = $row;
-            $res=($row['MAX(id)']);
-        }
-        $findALL = mysql_query("SELECT * FROM ventes WHERE id=".$res);
-        $obj = mysql_fetch_object($findALL);
+    $vente = Ventes::addVente();
+    if($vente){
+        $findID = Ventes::orderBy('id', 'desc')->first();
         $response = $response->withStatus(201, 'Vente created');
-        $response = $response->write(json_encode($obj));
+        $response = $response->write(json_encode($findID));
     }
     else{
         echo'error insertion';
