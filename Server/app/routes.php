@@ -43,12 +43,12 @@ $app->post('/api/depots', function ($request, $response) {
     ) {
         $email=Depots::where('email', $params['email'])->first();
         if(count($email)==0){
-            // $idDepot = Depots::addDepot($params);
-            Depots::insert(array('nom' => $params['nom'],
+            $idDepot = Depots::addDepot($params);
+            /*Depots::insert(array('nom' => $params['nom'],
                                 'prenom' => $params['prenom'],
                                 'email' => $params['email'],
                                 'adresse' => $params['adresse'],
-                                'telephone' => $params['telephone']));
+                                'telephone' => $params['telephone']));*/
             $response = $response->withStatus(201, 'Depot created');
             $response = $response->withHeader('Content-Type', 'application/json');
             $find=Depots::where('email', $params['email'])->first();
