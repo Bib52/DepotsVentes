@@ -6,6 +6,10 @@ class Depots extends Eloquent{
 	protected $key = 'id';
  	public $timestamps = false;
 
+    public function produit(){
+        return $this->hasMany('Produits', 'id', 'id_type');
+    }
+
  	public static function addDepot($donnees)
     {
         $depots = new Depots();

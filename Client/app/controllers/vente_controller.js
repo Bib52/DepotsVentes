@@ -15,6 +15,7 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
             	$scope.vente.$save(function(data) {
                                     console.log(data);
                                     $scope.venteid = data.id;
+                                    console.log(data.id);
                                     $scope.playVente=true;
                                 },
                                 function(err) {
