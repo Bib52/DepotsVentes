@@ -43,12 +43,12 @@ $app->post('/api/depots', function ($request, $response) {
     ) {
         $email=Depots::where('email', $params['email'])->first();
         if(count($email)==0){
-            // $idDepot = Depots::addDepot($params);
-            Depots::insert(array('nom' => $params['nom'],
+            $idDepot = Depots::addDepot($params);
+            /*Depots::insert(array('nom' => $params['nom'],
                                 'prenom' => $params['prenom'],
                                 'email' => $params['email'],
                                 'adresse' => $params['adresse'],
-                                'telephone' => $params['telephone']));
+                                'telephone' => $params['telephone']));*/
             $response = $response->withStatus(201, 'Depot created');
             $response = $response->withHeader('Content-Type', 'application/json');
             $find=Depots::where('email', $params['email'])->first();
@@ -85,30 +85,25 @@ $app->put('/api/depots/{id}', function ($request, $response, $args) {
             $adresse = $findDepot->adresse;
             $telephone = $findDepot->telephone;
             if ($nom != $params['nom']){
-                echo 'ok nom';
                 $findDepot->nom = $params['nom'];
-                // $nom = $params['nom'];
-                // $findDepot->update(array('nom' => $nom));
-                // $findDepot->save();
             }
             if ($prenom != $params['prenom']){
-                echo 'ok prenom';
+                $findDepot->prenom = $params['prenom'];
             }
             if ($email != $params['email']){
-                echo 'ok email';
                 $findEmail = Depots::where('email','=',$email)->first();
-                if(count($findEmail)>0){
-                    echo 'email nexiste pas';
+                if(count($findEmail)==0){
+                    $findDepot->email = $params['email'];
                 }
                 else{
                     $response = $response->withStatus(400, 'email already use');
                 }
             }
             if ($adresse != $params['adresse']){
-                echo 'adresse';
+                $findDepot->adresse = $params['adresse'];
             }
             if ($telephone != $params['telephone']){
-                echo 'ok telephone';
+                $findDepot->telephone = $params['telephone'];
             }
             $findDepot->save();
             $response = $response->withStatus(201, 'Product updated');
