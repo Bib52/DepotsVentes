@@ -79,36 +79,32 @@ $app->put('/api/depots/{id}', function ($request, $response, $args) {
     ) {
         $findDepot = Depots::find($id);
         if (!empty($findDepot)){
-            $nom = $findDepot->nom;
-            $prenom = $findDepot->prenom;
             $email = $findDepot->email;
-            $adresse = $findDepot->adresse;
-            $telephone = $findDepot->telephone;
-            if ($nom != $params['nom']){
-                $findDepot->nom = $params['nom'];
-            }
-            if ($prenom != $params['prenom']){
-                $findDepot->prenom = $params['prenom'];
-            }
+            $findDepot->nom = $params['nom'];
+            $findDepot->prenom = $params['prenom'];
+            $findDepot->adresse = $params['adresse'];
+            $findDepot->telephone = $params['telephone'];
             if ($email != $params['email']){
-                $findEmail = Depots::where('email','=',$email)->first();
+                $findEmail = Depots::where('email','=',$params['email'])->first();
                 if(count($findEmail)==0){
                     $findDepot->email = $params['email'];
+                    $findDepot->save();
+                    $response = $response->withStatus(201, 'Product updated');
+                    $response = $response->withHeader('Content-Type', 'application/json');
+                    $response = $response->write(json_encode($findDepot));
                 }
                 else{
                     $response = $response->withStatus(400, 'email already use');
                 }
             }
-            if ($adresse != $params['adresse']){
-                $findDepot->adresse = $params['adresse'];
+            else
+            {
+                $findDepot->save();
+                $response = $response->withStatus(201, 'Product updated');
+                $response = $response->withHeader('Content-Type', 'application/json');
+                $response = $response->write(json_encode($findDepot));   
             }
-            if ($telephone != $params['telephone']){
-                $findDepot->telephone = $params['telephone'];
-            }
-            $findDepot->save();
-            $response = $response->withStatus(201, 'Product updated');
-            $response = $response->withHeader('Content-Type', 'application/json');
-            $response = $response->write(json_encode($findDepot));
+      
         }
         else{
             $response = $response->withStatus(400, 'Depot inexistant');
