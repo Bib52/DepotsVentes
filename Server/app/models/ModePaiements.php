@@ -10,7 +10,7 @@ class ModePaiements extends Eloquent{
    		$modePaiement = new ModePaiements();
    		$modePaiement->nom = $donnees['nom'];
    		if($modePaiement->save()){
-   			return true;
+   			return $modePaiement;
    		}
    		else{
    			return false;

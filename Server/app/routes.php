@@ -391,8 +391,9 @@ $app->put('/api/sales/{id}', function ($request, $response, $args) {
             if($update){
                 $response = $response->withStatus(201, 'Vente updated');
                 $response = $response->withHeader('Content-Type', 'application/json');
-                $find = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-                $vente = mysql_fetch_object($find);
+                /*$find = mysql_query('SELECT * FROM ventes WHERE id='.$id);
+                $vente = mysql_fetch_object($find);*/
+                $vente = Ventes::find($id);
                 $response = $response->write(json_encode($vente));
             }
             else{
@@ -529,12 +530,12 @@ $app->post('/api/payments', function ($request, $response) {
                     VALUES ('".$params['nom']."')";
         $insert = mysql_query($sql);*/
         $insert = ModePaiements::addModePaiement($params);
-        if($insert){
+        if($insert != false){
             /*$find = mysql_query("SELECT * FROM modepaiements WHERE nom=".$params['nom']);
             $obj = mysql_fetch_object($find);*/
-            $modePaiement = ModePaiements::where('nom', '=', $params['nom']);
+            //$modePaiement = ModePaiements::where('nom', '=', $params['nom']);
             $response = $response->withStatus(201, 'Mode de paiement ajoute');
-            $response = $response->write(json_encode($modePaiement));
+            $response = $response->write(json_encode($insert));
         }
         else{
             echo'error insertion';

@@ -20,13 +20,19 @@
             <label class="col-md-6 col-sm-6">Commission sur déposant (en %) : </label>
             <input class="col-md-6 col-sm-6" type="number" placeholder="Commission déposant"/>
         </div>
-        <div class="form-group col-md-12 col-sm-12">
+        <div class="form-group col-md-12 col-sm-12" >
             <label class="col-md-6 col-sm-6">Mode de paiement : </label>
-            <input type="checkbox" name="cb" value="cb">Carte Bleue</input>
-            <input type="checkbox" name="espece" value="espece">Espèce</input>
-            <input type="checkbox" name="cheque" value="cheque">Chèque</input>
+            <span ng-repeat="md in mdpaiement">
+                <input type="checkbox" name="cb" value="{{md.etat}}"> {{md.nom}}</input>
+            </span>
+        </div>
+        <div class="form-group col-md-12">
+            <label class="col-md-6 col-sm-6">Ajouter mode paiement :</label>
+            <input type="text" class="col-md-4 col-sm-4" placeholder="Mode paiement" ng-model="paiement.nom" name="nom" required /> 
+            <input type="submit" class="col-md-1 col-md-offset-1 btn btn-sm btn-success" value="Ok" ng-click="addModePaiement()" />
         </div>
         <input type="submit" class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 btn btn-sm btn-info"
                value="Valider"/>
     </form>
+        
 </div>
