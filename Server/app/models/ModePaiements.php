@@ -17,6 +17,18 @@ class ModePaiements extends Eloquent{
    		}
    	}
 
+    public static function updateModePaiement($id, $donnees){
+      $modePaiement = ModePaiements::find($id);
+      $modePaiement->nom = $donnees['nom'];       
+      $modePaiement->etat = $donnees['etat'];          
+      if($modePaiement->save()){
+        return $modePaiement;
+      }
+      else{
+        return false;
+      }
+    }
+
 }
 
 ?>

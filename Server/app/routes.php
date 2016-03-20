@@ -420,13 +420,8 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
     if (!empty($params['prix'])
     ) {    
-        /*$Vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-        $obj = mysql_fetch_object($Vente);*/
         $vente = Ventes::find($id);
         if ($vente) {
-            /*$sql = "INSERT INTO paiements (prix)
-                    VALUES ('".$params['prix']."')";
-            $insert = mysql_query($sql);*/
             $insert = Paiements::addPaiement($params);
             if($insert){
                 $response = $response->withStatus(201, 'Mode de paiement ajoute');
@@ -448,11 +443,8 @@ $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $ar
     $id = $args['id_sale'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    /*$produit = mysql_query('SELECT * FROM paiements WHERE id='.$id);
-    $obj = mysql_fetch_object($produit);*/
     $paiement = Paiements::find($id);
     if ($paiement) {
-        /*$produit = mysql_query('DELETE FROM paiements WHERE id='.$id);*/
         Paiements::destroy($id);
         $response = $response->withStatus(200, 'Paiment supprime');
     } else {
@@ -463,16 +455,13 @@ $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $ar
 
 
 /* ------------------------------MODE DE PAIEMENT------------------------------ */
-//Recuperer les modes de paiements ------>  NON (creer table modepaiements)
+//Recuperer les modes de paiements ------>  OK
 $app->get('/api/payments', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    $modePaiment = mysql_query('SELECT * FROM modepaiements');
     $modePaiement = ModePaiements::all();
     if(count($modePaiement) > 0) {
-        /*while ($row = mysql_fetch_assoc($modePaiment)) {
-            $tab[] = $row;
-        }*/
+        $response = $response->withHeader('Content-Type', 'application/json');
         $response = $response->write(json_encode($modePaiement));
     } else {
         $response = $response->withStatus(404, 'Aucun mode de paiement enregistre');
@@ -480,23 +469,17 @@ $app->get('/api/payments', function ($request, $response) {
     return $response;
 });
 
-//Ajouter un mode de paiement ------> NON (creer table modepaiements)
+//Ajouter un mode de paiement ------> OK
 $app->post('/api/payments', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
-    if (!empty($params['nom']))
-    {
-        /*$sql = "INSERT INTO modepaiements (nom)
-                    VALUES ('".$params['nom']."')";
-        $insert = mysql_query($sql);*/
+    if (!empty($params['nom'])){
         $insert = ModePaiements::addModePaiement($params);
         if($insert != false){
-            /*$find = mysql_query("SELECT * FROM modepaiements WHERE nom=".$params['nom']);
-            $obj = mysql_fetch_object($find);*/
-            //$modePaiement = ModePaiements::where('nom', '=', $params['nom']);
             $response = $response->withStatus(201, 'Mode de paiement ajoute');
+            $response = $response->withHeader('Content-Type', 'application/json');
             $response = $response->write(json_encode($insert));
         }
         else{
@@ -508,26 +491,21 @@ $app->post('/api/payments', function ($request, $response) {
     return $response;
 });
 
-//Modifier un mode de paiement ------> NON (creer table modepaiements)
+//Modifier un mode de paiement ------> OK
 $app->put('/api/payments/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
-    if (!empty($params['nom'])) 
+    if (!empty($params['nom'])
+        && !empty($params['etat'])) 
     {
-        $sql = "UPDATE modepaiements SET nom='".$params['nom']."'
-                                WHERE id='".$id."'"; 
-        $update = mysql_query($sql);
-        $update = ModePaiements::where('id', '=', $id)
-        ->update(['nom' => $params['nom']]);
-        if($update){
-            /*$find = mysql_query("SELECT * FROM modepaiements WHERE id=".$id);
-            $obj = mysql_fetch_object($find);*/
-            $modePaiement = ModePaiements::find($id);
+        $mdPaiement = ModePaiements::updateModePaiement($id, $params);
+        if($mdPaiement){
             $response = $response->withStatus(201, 'Mode de paiement ajoute');
-            $response = $response->write(json_encode($modePaiement));
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response = $response->write(json_encode($update));
         }
         else{
             echo'error update';
@@ -538,17 +516,14 @@ $app->put('/api/payments/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Supprimer un mode de paiement ------> NON (creer table modepaiements)
+//Supprimer un mode de paiement ------> OK
 $app->delete('/api/payments/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    /*$modePayment = mysql_query('SELECT * FROM modepaiements WHERE id='.$id);
-    $obj = mysql_fetch_object($modePayment);*/
     $modePaiement = ModePaiements::find($id);
     if ($modePaiement) {
-        /*$modePayment = mysql_query('DELETE FROM modepaiements WHERE id='.$id);*/
-        ModePaiements::destroy($id);
+        $modePaiement->delete();
         $response = $response->withStatus(200, 'Mode de paiement supprime');
     } else {
         $response = $response->withStatus(404, 'Mode de paiement inexistant');
@@ -616,9 +591,30 @@ $app->get('/api/staffs', function ($request, $response) {
     return $response;
 });
 
-//Ajouter une menbre du staff ------>  A COMPLETER 
+//Ajouter une menbre du staff ------>  A TESTER 
 $app->post('/api/staffs', function ($request, $response) {
-
+    $params = $request->getParsedBody();
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
+    if (!empty($params['nom'])
+        && !empty($params['login'])
+        && !empty($params['password'])
+        && !empty($params['permission'])
+    ){
+        $insert = Staff::addStaff($params);
+        if($insert != false){
+            $response = $response->withStatus(201, 'Staff ajoute');
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response = $response->write(json_encode($insert));
+        }
+        else{
+            echo'error insertion';
+        }
+    } else {
+        $response = $response->withStatus(400, 'Invalid parameters');
+    }
+    return $response;
 });
 
 // Supprimer un membre du staff ------>  A TESTER
