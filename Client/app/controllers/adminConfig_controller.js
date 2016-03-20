@@ -19,6 +19,5 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 			function(data){
                 console.log(data);
 			});
-			/*console.log($scope.mdpaiement);*/
 		}
 }]);
