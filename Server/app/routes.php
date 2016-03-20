@@ -44,15 +44,9 @@ $app->post('/api/depots', function ($request, $response) {
         $email=Depots::where('email', $params['email'])->first();
         if(count($email)==0){
             $idDepot = Depots::addDepot($params);
-            /*Depots::insert(array('nom' => $params['nom'],
-                                'prenom' => $params['prenom'],
-                                'email' => $params['email'],
-                                'adresse' => $params['adresse'],
-                                'telephone' => $params['telephone']));*/
             $response = $response->withStatus(201, 'Depot created');
             $response = $response->withHeader('Content-Type', 'application/json');
-            $find=Depots::where('email', $params['email'])->first();
-            // $find=Depots::find($idDepot);
+            $find=Depots::find($idDepot);
             $response = $response->write(json_encode($find));
         }
         else {
@@ -64,7 +58,7 @@ $app->post('/api/depots', function ($request, $response) {
     return $response;
 });
 
-//Modifier les information du deposant du dépot id ------>  NON
+//Modifier les information du deposant du dépot id ------>  OK
 $app->put('/api/depots/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -79,36 +73,30 @@ $app->put('/api/depots/{id}', function ($request, $response, $args) {
     ) {
         $findDepot = Depots::find($id);
         if (!empty($findDepot)){
-            $nom = $findDepot->nom;
-            $prenom = $findDepot->prenom;
             $email = $findDepot->email;
-            $adresse = $findDepot->adresse;
-            $telephone = $findDepot->telephone;
-            if ($nom != $params['nom']){
-                $findDepot->nom = $params['nom'];
-            }
-            if ($prenom != $params['prenom']){
-                $findDepot->prenom = $params['prenom'];
-            }
+            $findDepot->nom = $params['nom'];
+            $findDepot->prenom = $params['prenom'];
+            $findDepot->adresse = $params['adresse'];
+            $findDepot->telephone = $params['telephone'];
             if ($email != $params['email']){
-                $findEmail = Depots::where('email','=',$email)->first();
+                $findEmail = Depots::where('email','=',$params['email'])->first();
                 if(count($findEmail)==0){
                     $findDepot->email = $params['email'];
+                    $findDepot->save();
+                    $response = $response->withStatus(201, 'Product updated');
+                    $response = $response->withHeader('Content-Type', 'application/json');
+                    $response = $response->write(json_encode($findDepot));
                 }
                 else{
                     $response = $response->withStatus(400, 'email already use');
                 }
             }
-            if ($adresse != $params['adresse']){
-                $findDepot->adresse = $params['adresse'];
+            else{
+                $findDepot->save();
+                $response = $response->withStatus(201, 'Product updated');
+                $response = $response->withHeader('Content-Type', 'application/json');
+                $response = $response->write(json_encode($findDepot));   
             }
-            if ($telephone != $params['telephone']){
-                $findDepot->telephone = $params['telephone'];
-            }
-            $findDepot->save();
-            $response = $response->withStatus(201, 'Product updated');
-            $response = $response->withHeader('Content-Type', 'application/json');
-            $response = $response->write(json_encode($findDepot));
         }
         else{
             $response = $response->withStatus(400, 'Depot inexistant');
@@ -146,30 +134,16 @@ $app->post('/api/depots/{id_depot}/products', function ($request, $response, $ar
         && !empty($params['prix'])
         && !empty($params['description'])
     ) {    
-        require 'app/config.php';
-        require 'app/opendb.php';
         $depot = Depots::find($idDepot);
-        /*mysql_query('SELECT * FROM depots WHERE id="'.$idDepot.'"');
-        $obj = mysql_fetch_object($find);*/
         if(! empty($depot)){
             $produit = Produits::where('reference', '=', $params['reference'])->first();
-            /*$find = mysql_query('SELECT * FROM produits WHERE reference="'.$params['reference'].'"');
-            $depot = mysql_fetch_object($find);*/
             if (empty($produit)){
-                /*$sql = "INSERT INTO produits (reference, prix, description, etat, id_depot)
-                        VALUES ('".$params['reference']."','"
-                                .$params['prix']."','"
-                                .$params['description']."',
-                                'En stock','"
-                                .$idDepot."')";
-                $insert = mysql_query($sql);*/
                 $insert = Produits::addProduit($params, $idDepot);
                 if($insert){
                     $response = $response->withStatus(201, 'Product created');
                     $response = $response->withHeader('Content-Type', 'application/json');
-                    $find = mysql_query('SELECT * FROM produits WHERE reference="'.$params['reference'].'"');
-                    $depot = mysql_fetch_object($find);
-                    $response = $response->write(json_encode($depot));
+                    $product = Produits::where('reference', '=', $params['reference'])->first();
+                    $response = $response->write(json_encode($product));
                 }
                 else{
                     echo'error insertion';
@@ -180,7 +154,6 @@ $app->post('/api/depots/{id_depot}/products', function ($request, $response, $ar
         } else {
             $response = $response->withStatus(400, 'Depot inexitant');
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -220,43 +193,30 @@ $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $re
         && !empty($params['description'])
         && !empty($params['etat'])
     ) {
-        require 'app/config.php';
-        require 'app/opendb.php';
-        /*$findDepot = mysql_query('SELECT * FROM depots WHERE id="'.$idDepot.'"');
-        $res = mysql_fetch_object($findDepot);*/
         $depot = Depots::find($idDepot);
         if ($depot)
         {
-            /*$findProduct = mysql_query('SELECT * FROM produits WHERE reference="'.$refProduct.'"');
-            $obj = mysql_fetch_object($findProduct);*/
-            $produit = Produits::where('reference', '=', $refProduct)->first();
+            $produit = Produits::where('reference', '=', $refProduct)
+                            ->where('id_depot', '=', $idDepot)->first();
             if($produit){
-                /*$sql = "UPDATE produits SET prix='".$params['prix']."',
-                                    description='".$params['description']."',
-                                    etat='".$params['etat']."' 
-                                    WHERE reference='".$refProduct."'"; 
-                $update = mysql_query($sql);*/
                 $update = Produits::updateProduit($refProduct, $params);
                 if($update){
                     $response = $response->withStatus(201, 'Product updated');
                     $response = $response->withHeader('Content-Type', 'application/json');
-                    /*$find = mysql_query('SELECT * FROM produits WHERE reference="'.$refProduct.'"');
-                    $depot = mysql_fetch_object($find);*/
                     $produit = Produits::where('reference', '=', $refProduct)->first();
                     $response = $response->write(json_encode($produit));
                 }
                 else{
-                    echo'error update';
+                    $response = $response->withStatus(201, 'Aucune modification realise');
                 }
             }
             else {
-                $response = $response->withStatus(400, 'Produit inexistant');
+                $response = $response->withStatus(400, 'Produit inexistant dans ce depot');
             }
         }
         else{
             $response = $response->withStatus(400, 'Depot inexistant');
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -293,18 +253,11 @@ $app->post('/api/sales', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
-    require 'app/config.php';
-    require 'app/opendb.php';
     $vente = Ventes::addVente();
-    if($vente){
-        $findID = Ventes::orderBy('id', 'desc')->first();
-        $response = $response->withStatus(201, 'Vente created');
-        $response = $response->write(json_encode($findID));
-    }
-    else{
-        echo'error insertion';
-    } 
-    require 'app/closedb.php';
+    $find = Ventes::find($vente);
+    $response = $response->withStatus(201, 'Vente created');
+    $response = $response->withHeader('Content-Type', 'application/json');
+    $response = $response->write(json_encode($find));
     return $response;
 });
 
@@ -316,8 +269,6 @@ $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, 
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
-    require 'app/config.php';
-    require 'app/opendb.php';
     /*$findProduct = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
     $obj = mysql_fetch_object($findProduct);*/
     $product = Produits::where('reference', '=', $ref)->first();
@@ -342,7 +293,6 @@ $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, 
     } else {
         $response = $response->withStatus(404, 'Reference produit inexistante');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -353,23 +303,20 @@ $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args)
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
-    //$vente = mysql_query('SELECT * FROM ventes WHERE id ='.$idSale);
     $vente = Ventes::find($idSale);
-    //$produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$idSale);
-    $produits = Produits::where('id_vente', '=', $idSale)->get();
-    if(count($produits) > 0)
-    {
-        /*while ($row = $produits) {
-            $tab[] = $row;
-        }*/
-        $response = $response->write(json_encode($produits));
+    if ($vente){
+        $produits = Produits::where("id_vente","=",$idSale)->get();
+        if(count($produits)>0){
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response = $response->write(json_encode($produits));
+        }
+        else{
+            $response = $response->withStatus(404, 'Aucun produit dans cette vente');
+        }
     }
-    if(! $vente) {
+    else{
         $response = $response->withStatus(404, 'Vente inexistante');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -379,8 +326,6 @@ $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $respons
     $ref = $args['ref'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    require 'app/config.php';
-    require 'app/opendb.php';
     /*$produit = mysql_query('SELECT * FROM produits WHERE reference="'.$ref.'" AND id_vente="'.$id_vente.'"');
     $obj = mysql_fetch_object($produit);*/
     $product = Produits::where('reference', '=', $ref)->where('id_vente', '=', $id_vente)->get();
@@ -397,7 +342,6 @@ $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $respons
     } else {
         $response = $response->withStatus(404, 'Produit inexistant');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -428,10 +372,8 @@ $app->put('/api/sales/{id}', function ($request, $response, $args) {
         && !empty($params['adresse'])
         && !empty($params['ville'])
         && !empty($params['email'])
-        && !empty($params['telephone'])
-    ) {    
-        require 'app/config.php';
-        require 'app/opendb.php';
+        && !empty($params['telephone'])) 
+    {
         /*$vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
         $obj = mysql_fetch_object($vente);*/
         $vente = Ventes::find($id);
@@ -459,7 +401,6 @@ $app->put('/api/sales/{id}', function ($request, $response, $args) {
         } else {
             $response = $response->withStatus(400, 'Vente inexitanet');
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -485,8 +426,6 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    require 'app/config.php';
-    require 'app/opendb.php';
     /*$vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
     $obj = mysql_fetch_object($vente);*/
     $vente = Ventes::find($id);
@@ -505,7 +444,6 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     } else {
         $response = $response->withStatus(404, 'Vente inexistante');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -519,8 +457,6 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
     if (!empty($params['prix'])
     ) {    
-        require 'app/config.php';
-        require 'app/opendb.php';
         /*$Vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
         $obj = mysql_fetch_object($Vente);*/
         $vente = Ventes::find($id);
@@ -538,7 +474,6 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
         } else {
             $response = $response->withStatus(404, 'Vente inexistante');
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -550,8 +485,6 @@ $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $ar
     $id = $args['id_sale'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    require 'app/config.php';
-    require 'app/opendb.php';
     /*$produit = mysql_query('SELECT * FROM paiements WHERE id='.$id);
     $obj = mysql_fetch_object($produit);*/
     $paiement = Paiements::find($id);
@@ -562,7 +495,6 @@ $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $ar
     } else {
         $response = $response->withStatus(404, 'Paiment inexistant');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -572,8 +504,6 @@ $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $ar
 $app->get('/api/payments', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    require 'app/config.php';
-    require 'app/opendb.php';
     $modePaiment = mysql_query('SELECT * FROM modepaiements');
     $modePaiement = ModePaiements::all();
     if(count($modePaiement) > 0) {
@@ -584,7 +514,6 @@ $app->get('/api/payments', function ($request, $response) {
     } else {
         $response = $response->withStatus(404, 'Aucun mode de paiement enregistre');
     }
-    require 'app/closedb.php';
     return $response;
 });
 
@@ -594,10 +523,8 @@ $app->post('/api/payments', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
-    if (!empty($params['nom'])
-    ) {    
-        require 'app/config.php';
-        require 'app/opendb.php';
+    if (!empty($params['nom']))
+    {
         /*$sql = "INSERT INTO modepaiements (nom)
                     VALUES ('".$params['nom']."')";
         $insert = mysql_query($sql);*/
@@ -612,7 +539,6 @@ $app->post('/api/payments', function ($request, $response) {
         else{
             echo'error insertion';
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -626,10 +552,8 @@ $app->put('/api/payments/{id}', function ($request, $response, $args) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
-    if (!empty($params['nom'])
-    ) {    
-        require 'app/config.php';
-        require 'app/opendb.php';
+    if (!empty($params['nom'])) 
+    {
         $sql = "UPDATE modepaiements SET nom='".$params['nom']."'
                                 WHERE id='".$id."'"; 
         $update = mysql_query($sql);
@@ -645,7 +569,6 @@ $app->put('/api/payments/{id}', function ($request, $response, $args) {
         else{
             echo'error update';
         }
-        require 'app/closedb.php';
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
     }
@@ -657,8 +580,6 @@ $app->delete('/api/payments/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    require 'app/config.php';
-    require 'app/opendb.php';
     /*$modePayment = mysql_query('SELECT * FROM modepaiements WHERE id='.$id);
     $obj = mysql_fetch_object($modePayment);*/
     $modePaiement = ModePaiements::find($id);
@@ -669,7 +590,6 @@ $app->delete('/api/payments/{id}', function ($request, $response, $args) {
     } else {
         $response = $response->withStatus(404, 'Mode de paiement inexistant');
     }
-    require 'app/closedb.php';
     return $response;
 });
 

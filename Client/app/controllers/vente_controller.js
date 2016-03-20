@@ -134,7 +134,7 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 					$scope.type = "Cheque";
 				}
 				facture.text(120, hauteur+25, "Regle par : " + $scope.type);
-				//facture.save('facture.pdf');
+				facture.save('facture.pdf');
 			}
 
 			$scope.addAcheteur = function(){

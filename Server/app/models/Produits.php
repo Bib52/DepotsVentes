@@ -32,9 +32,21 @@ class Produits extends Eloquent{
 
     public static function updateProduit($id, $donnees){
     	$produit = Produits::where('reference', '=', $id)
-        ->update(['prix' => $donnees['prix'], 
-        	'description' => $donnees['description'], 
-        	'etat' => $donnees['etat']]);
+			        ->update(['prix' => $donnees['prix'], 
+			        	'description' => $donnees['description'], 
+			        	'etat' => $donnees['etat']]);
+    	if($produit){
+        	return true;
+        }
+        else{
+        	return false;
+        }
+    }
+
+    public static function addProduitVente($id, $donnees){
+    	$produit = Produits::where('reference', '=', $id)
+						->update([ 'etat' => $donnees['etat'],
+								'id_vente' => $donnees['id_vente']]);
     	if($produit){
         	return true;
         }
