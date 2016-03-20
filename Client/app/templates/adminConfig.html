@@ -23,11 +23,7 @@
         <div class="form-group col-md-12 col-sm-12" >
             <label class="col-md-6 col-sm-6">Mode de paiement : </label>
             <span ng-repeat="md in mdpaiement">
-
-                <!-- <input type="checkbox" name="cb" value="{{md.etat}}" ng-checked="1"> {{md.nom}}</input> -->
-
-                <input type="checkbox" name="cb" value="{{md.id}}" ng-model="md.etat" ng-change="upModePaiement(md)" ng-checked="md.etat"> {{md.nom}}</input>
-
+                <input type="checkbox" name="cb" value="{{md.id}}" ng-model="md.etat" ng-change="upModePaiement(md)" ng-checked="md.etat" ng-true-value="1" ng-false-value="0"> {{md.nom}}</input>
             </span>
         </div>
         <div class="form-group col-md-12">
@@ -35,8 +31,7 @@
             <input type="text" class="col-md-4 col-sm-4" placeholder="Mode paiement" ng-model="paiement.nom" name="nom" required /> 
             <input type="submit" class="col-md-1 col-md-offset-1 btn btn-sm btn-success" value="Ok" ng-click="addModePaiement()" />
         </div>
-        <input type="submit" class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 btn btn-sm btn-info"
-               value="Valider"/>
+        <input type="submit" class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 btn btn-sm btn-info" value="Valider"/>
     </form>
         
 </div>

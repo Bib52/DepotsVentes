@@ -501,14 +501,19 @@ $app->put('/api/payments/{id}', function ($request, $response, $args) {
     if (!empty($params['nom'])
         && !empty($params['etat'])) 
     {
-        $mdPaiement = ModePaiements::updateModePaiement($id, $params);
-        if($mdPaiement){
-            $response = $response->withStatus(201, 'Mode de paiement ajoute');
-            $response = $response->withHeader('Content-Type', 'application/json');
-            $response = $response->write(json_encode($update));
-        }
-        else{
-            echo'error update';
+        $modePaiement = ModePaiements::find($id);
+        if($modePaiement){
+            $mdPaiement = ModePaiements::updateModePaiement($id, $params);
+            if($mdPaiement){
+                $response = $response->withStatus(201, 'Mode de paiement modifie');
+                $response = $response->withHeader('Content-Type', 'application/json');
+                $response = $response->write(json_encode($mdPaiement));
+            }
+            else{
+                echo'error update';
+            }
+        } else {
+            $response = $response->withStatus(404, 'Mode de paiement inexistant');
         }
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');

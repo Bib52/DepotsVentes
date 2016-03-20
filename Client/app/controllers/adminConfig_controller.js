@@ -4,7 +4,7 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 		$scope.mdpaiement = ModePaiement.query();
 
 		$scope.addModePaiement = function(){
-			$scope.modePaiement = new ModePaiement({nom : $scope.paiement.nom });
+			$scope.modePaiement = new ModePaiement({nom: $scope.paiement.nom});
 			$scope.modePaiement.$save(function(data) {
                                     console.log(data);
                                     $scope.mdpaiement.push(data);
@@ -13,12 +13,10 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 		}
 
 		$scope.upModePaiement = function(md){
-			new ModePaiement({nom : md.nom,
-							etat: md.etat})
-			.$update({id : md.id},
-			function(data){
-                console.log(data);
-			});
-			/*console.log($scope.mdpaiement);*/
+			new ModePaiement({nom: md.nom, etat: md.etat})
+							.$update({id : md.id},
+							function(data){
+				                console.log(data);
+							});
 		}
 }]);
