@@ -607,14 +607,19 @@ $app->post('/api/staffs', function ($request, $response) {
         && !empty($params['password'])
         && !empty($params['permission'])
     ){
-        $insert = Staff::addStaff($params);
-        if($insert != false){
-            $response = $response->withStatus(201, 'Staff ajoute');
-            $response = $response->withHeader('Content-Type', 'application/json');
-            $response = $response->write(json_encode($insert));
-        }
-        else{
-            echo'error insertion';
+        $findLogin = Staff::where("login","=",$params['login'])->first();
+        if(empty($findLogin)){
+            $insert = Staff::addStaff($params);
+            if($insert != false){
+                $response = $response->withStatus(201, 'Staff ajoute');
+                $response = $response->withHeader('Content-Type', 'application/json');
+                $response = $response->write(json_encode($insert));
+            }
+            else{
+                echo'error insertion';
+            }
+        } else{
+            $response = $response->withStatus(400, 'Login deja utilise');
         }
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
