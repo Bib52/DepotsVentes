@@ -43,23 +43,13 @@ class Produits extends Eloquent{
         }
     }
 
-    public static function addProduitVente($id, $donnees){
-    	$produit = Produits::where('reference', '=', $id)
-						->update([ 'etat' => $donnees['etat'],
-								'id_vente' => $donnees['id_vente']]);
-    	if($produit){
-        	return true;
-        }
-        else{
-        	return false;
-        }
-    }
-
     public static function addToVente($id, $idVente){
     	$produit = Produits::where('reference', '=', $id)
-        ->update(['etat' => 'En cours de vente',
-        	'id_vente' => $idVente]);
+                            ->where('etat','=','En stock')->first();
     	if($produit){
+            Produits::where('reference', '=', $id)
+                    ->update(['etat' => 'En cours de vente',
+                            'id_vente' => $idVente]);
     		return true;
     	}
     	else{

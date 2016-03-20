@@ -10,7 +10,7 @@ class Ventes extends Eloquent{
 		return $this->hasMany('Produits', 'id', 'id_vente');
 	}
 
-	public static function addVente()
+	public static function createVente()
     {
         $vente = new Ventes();
         $vente->etat = "En cours";

@@ -194,8 +194,7 @@ $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $re
         && !empty($params['etat'])
     ) {
         $depot = Depots::find($idDepot);
-        if ($depot)
-        {
+        if ($depot){
             $produit = Produits::where('reference', '=', $refProduct)
                             ->where('id_depot', '=', $idDepot)->first();
             if($produit){
@@ -253,7 +252,7 @@ $app->post('/api/sales', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
-    $vente = Ventes::addVente();
+    $vente = Ventes::createVente();
     $find = Ventes::find($vente);
     $response = $response->withStatus(201, 'Vente created');
     $response = $response->withHeader('Content-Type', 'application/json');
@@ -261,7 +260,7 @@ $app->post('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Ajouter un produits dans une vente : produit (ref) dans la vente (id) ------>  NON
+//Ajouter un produits dans une vente : produit (ref) dans la vente (id) ------>  OK
 $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
     $ref = $args['ref'];
@@ -269,27 +268,18 @@ $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, 
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
-    /*$findProduct = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
-    $obj = mysql_fetch_object($findProduct);*/
     $product = Produits::where('reference', '=', $ref)->first();
     if ($product) {
-        //if($product.id_vente != 0){ --> /!\ à voir pour produit dans une seule vente
-        //requete update produit dans vente, changer etat produit de "en stock" à "en cours de vente"
-        /*$sql = "UPDATE produits SET etat='En cours de vente',
-                                    id_vente='".$idSale."' 
-                                    WHERE reference='".$ref."'"; 
-        $update = mysql_query($sql);*/
-        $update = Produits::addToVente($ref, $idSale);
-       /* $find = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
-        $obj = mysql_fetch_object($find);*/
-        $product = Produits::where('reference', '=', $ref)->first();
-        $response = $response->write(json_encode($product));
-        $response = $response->withHeader('Content-Type', 'application/json');
-        $response = $response->withStatus(200, 'Produit ajoute de la vente');
-        /*}
+        $addProduit = Produits::addToVente($ref, $idSale);
+        if($addProduit) {
+            $product = Produits::where('reference', '=', $ref)->first();
+            $response = $response->write(json_encode($product));
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response = $response->withStatus(200, 'Produit ajoute de la vente');
+        }
         else{
-            $response = $response->withStatus(400, 'Produit dans une autre vente');
-        }*/
+            $response = $response->withStatus(400, 'Produit plus en stock');
+        }
     } else {
         $response = $response->withStatus(404, 'Reference produit inexistante');
     }
@@ -326,18 +316,11 @@ $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $respons
     $ref = $args['ref'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    /*$produit = mysql_query('SELECT * FROM produits WHERE reference="'.$ref.'" AND id_vente="'.$id_vente.'"');
-    $obj = mysql_fetch_object($produit);*/
     $product = Produits::where('reference', '=', $ref)->where('id_vente', '=', $id_vente)->get();
     if (count($product) > 0) {
-        // remettre le produits avec id_vente=0 et etat=en stock
-        /*$sql = "UPDATE produits SET etat='En stock',
-                                    id_vente=0 
-                                    WHERE reference='".$ref."'"; 
-        $update = mysql_query($sql);*/
         $update = Produits::where('reference', '=', $ref)
-        ->update(['etat' => 'En stock',
-            'id_vente' => 0]);
+                    ->update(['etat' => 'En stock',
+                        'id_vente' => 0]);
         $response = $response->withStatus(200, 'Produit retire de la vente');
     } else {
         $response = $response->withStatus(404, 'Produit inexistant');
@@ -367,32 +350,19 @@ $app->put('/api/sales/{id}', function ($request, $response, $args) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
-     if (!empty($params['nom'])
+    if (!empty($params['nom'])
         && !empty($params['prenom'])
         && !empty($params['adresse'])
         && !empty($params['ville'])
         && !empty($params['email'])
-        && !empty($params['telephone'])) 
-    {
-        /*$vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-        $obj = mysql_fetch_object($vente);*/
+        && !empty($params['telephone'])
+    ){
         $vente = Ventes::find($id);
         if($vente != null){
-            
-            /*$sql = "UPDATE ventes SET nom='".$params['nom']."',
-                                    prenom='".$params['prenom']."',
-                                    adresse='".$params['adresse']."',
-                                    ville='".$params['ville']."',
-                                    email='".$params['email']."',
-                                    telephone='".$params['telephone']."'
-                                WHERE id='".$id."'"; 
-            $update = mysql_query($sql);*/
             $update = Ventes::addCoordonnees($id, $params);
             if($update){
                 $response = $response->withStatus(201, 'Vente updated');
                 $response = $response->withHeader('Content-Type', 'application/json');
-                /*$find = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-                $vente = mysql_fetch_object($find);*/
                 $vente = Ventes::find($id);
                 $response = $response->write(json_encode($vente));
             }
@@ -427,20 +397,12 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    /*$vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-    $obj = mysql_fetch_object($vente);*/
     $vente = Ventes::find($id);
-    if ($vente != null) {
-        // remettre les produits avec id_vente=0 et etat=en stock
-        /*$sql = "UPDATE produits SET etat='En stock',
-                                    id_vente=0 
-                                    WHERE id_vente='".$id."'"; 
-        $update = mysql_query($sql);*/
+    if (!empty($vente)) {
         Produits::where('id_vente', '=', $id)
-        ->update(['etat' => 'En stock', 
-            'id_vente' => 0]);
-        /*$v = mysql_query('DELETE FROM ventes WHERE id='.$id);*/
-        Ventes::destroy($id);
+                ->update(['etat' => 'En stock', 
+                        'id_vente' => 0]);
+        $vente->delete();
         $response = $response->withStatus(200, 'Vente deleted');
     } else {
         $response = $response->withStatus(404, 'Vente inexistante');

@@ -1,5 +1,5 @@
-angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'Products', 'VenteProducts', '$route',
-		function($scope, Vente, Products, VenteProducts, $route){
+angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'VenteProducts', '$route',
+		function($scope, Vente, VenteProducts, $route){
 
 			$scope.objet="";
 			$scope.listObjet = {
@@ -28,23 +28,15 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 				new VenteProducts().$update({id_sale: $scope.venteid, ref: $scope.objet.reference},
 					                function(data){
 					                    console.log(data);
+					                    $scope.listObjet.objet.push(data);
+										$scope.objet="";
+										$scope.prixtotale+=parseFloat(data.prix);
+										$scope.error="";
 					                },
 					                function(err) {
 					                    $scope.error = err;
 					                    console.log($scope.error);
-					                });
-				$scope.produit = Products.get({reference: $scope.objet.reference}, 
-								function(data) {
-									console.log(data);
-			                		$scope.listObjet.objet.push($scope.produit);
-									$scope.objet="";
-									$scope.prixtotale+=parseFloat($scope.produit.prix);
-									$scope.error="";
-			           			},
-			           			function(err){
-			           				console.log(err);
-			           				$scope.error = err;
-			           			});	
+					                });	
 			}
 
 			$scope.deleteObject = function(obj){
