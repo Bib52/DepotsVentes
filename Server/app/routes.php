@@ -287,7 +287,7 @@ $app->get('/api/depots/{id_depot}/products', function ($request, $response, $arg
 });
 
 /* ------------------------------VENTE------------------------------ */
-//Creer une vente ------>  NON
+//Creer une vente ------>  OK
 $app->post('/api/sales', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -318,19 +318,27 @@ $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, 
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
     require 'app/config.php';
     require 'app/opendb.php';
-    $findProduct = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
-    $obj = mysql_fetch_object($findProduct);
-    if ($obj) {
+    /*$findProduct = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
+    $obj = mysql_fetch_object($findProduct);*/
+    $product = Produits::where('reference', '=', $ref)->first();
+    if ($product) {
+        //if($product.id_vente != 0){ --> /!\ à voir pour produit dans une seule vente
         //requete update produit dans vente, changer etat produit de "en stock" à "en cours de vente"
-        $sql = "UPDATE produits SET etat='En cours de vente',
+        /*$sql = "UPDATE produits SET etat='En cours de vente',
                                     id_vente='".$idSale."' 
                                     WHERE reference='".$ref."'"; 
-        $update = mysql_query($sql);
-        $find = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
-        $obj = mysql_fetch_object($find);
-        $response = $response->write(json_encode($obj));
+        $update = mysql_query($sql);*/
+        $update = Produits::addToVente($ref, $idSale);
+       /* $find = mysql_query("SELECT * FROM produits WHERE reference=".$ref);
+        $obj = mysql_fetch_object($find);*/
+        $product = Produits::where('reference', '=', $ref)->first();
+        $response = $response->write(json_encode($product));
         $response = $response->withHeader('Content-Type', 'application/json');
         $response = $response->withStatus(200, 'Produit ajoute de la vente');
+        /*}
+        else{
+            $response = $response->withStatus(400, 'Produit dans une autre vente');
+        }*/
     } else {
         $response = $response->withStatus(404, 'Reference produit inexistante');
     }
@@ -338,7 +346,7 @@ $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, 
     return $response;
 });
 
-//Recuperer les produits d'une vente ------>  NON
+//Recuperer les produits d'une vente ------>  Voir que faire quand produits est vide (supprimer la vente ou pas)
 $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
     $params = $request->getParsedBody();
@@ -347,23 +355,25 @@ $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args)
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
     require 'app/config.php';
     require 'app/opendb.php';
-    $vente = mysql_query('SELECT * FROM ventes WHERE id ='.$idSale);
-    $produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$idSale);
-    if(mysql_num_rows($produits) !== 0)
+    //$vente = mysql_query('SELECT * FROM ventes WHERE id ='.$idSale);
+    $vente = Ventes::find($idSale);
+    //$produits = mysql_query('SELECT * FROM produits WHERE id_vente='.$idSale);
+    $produits = Produits::where('id_vente', '=', $idSale)->get();
+    if(count($produits) > 0)
     {
-        while ($row = mysql_fetch_assoc($produits)) {
+        /*while ($row = $produits) {
             $tab[] = $row;
-        }
-        $response = $response->write(json_encode($tab));
-    } 
-    if(mysql_num_rows($vente)==0) {
+        }*/
+        $response = $response->write(json_encode($produits));
+    }
+    if(! $vente) {
         $response = $response->withStatus(404, 'Vente inexistante');
     }
     require 'app/closedb.php';
     return $response;
 });
 
-//Supprimer un produit dans une vente : produit (ref) de la vente (id) ------>  NON
+//Supprimer un produit dans une vente : produit (ref) de la vente (id) ------>  OK
 $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $id_vente = $args['id_sale'];
     $ref = $args['ref'];
@@ -371,15 +381,19 @@ $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $respons
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
     require 'app/config.php';
     require 'app/opendb.php';
-    $produit = mysql_query('SELECT * FROM produits WHERE reference="'.$ref.'" AND id_vente="'.$id_vente.'"');
-    $obj = mysql_fetch_object($produit);
-    if ($obj) {
+    /*$produit = mysql_query('SELECT * FROM produits WHERE reference="'.$ref.'" AND id_vente="'.$id_vente.'"');
+    $obj = mysql_fetch_object($produit);*/
+    $product = Produits::where('reference', '=', $ref)->where('id_vente', '=', $id_vente)->get();
+    if (count($product) > 0) {
         // remettre le produits avec id_vente=0 et etat=en stock
-        $sql = "UPDATE produits SET etat='En stock',
+        /*$sql = "UPDATE produits SET etat='En stock',
                                     id_vente=0 
                                     WHERE reference='".$ref."'"; 
-        $update = mysql_query($sql);
-        $response = $response->withStatus(200, 'Produit retiré de la vente');
+        $update = mysql_query($sql);*/
+        $update = Produits::where('reference', '=', $ref)
+        ->update(['etat' => 'En stock',
+            'id_vente' => 0]);
+        $response = $response->withStatus(200, 'Produit retire de la vente');
     } else {
         $response = $response->withStatus(404, 'Produit inexistant');
     }
@@ -402,7 +416,7 @@ $app->get('/api/sales/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Ajouter les informations de l'acheteur à la vente id ------>  NON
+//Ajouter les informations de l'acheteur à la vente id ------>  OK
 $app->put('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -418,18 +432,20 @@ $app->put('/api/sales/{id}', function ($request, $response, $args) {
     ) {    
         require 'app/config.php';
         require 'app/opendb.php';
-        $vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-        $obj = mysql_fetch_object($vente);
-        if(! empty($obj)){
+        /*$vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
+        $obj = mysql_fetch_object($vente);*/
+        $vente = Ventes::find($id);
+        if($vente != null){
             
-            $sql = "UPDATE ventes SET nom='".$params['nom']."',
+            /*$sql = "UPDATE ventes SET nom='".$params['nom']."',
                                     prenom='".$params['prenom']."',
                                     adresse='".$params['adresse']."',
                                     ville='".$params['ville']."',
                                     email='".$params['email']."',
                                     telephone='".$params['telephone']."'
                                 WHERE id='".$id."'"; 
-            $update = mysql_query($sql);
+            $update = mysql_query($sql);*/
+            $update = Ventes::addCoordonnees($id, $params);
             if($update){
                 $response = $response->withStatus(201, 'Vente updated');
                 $response = $response->withHeader('Content-Type', 'application/json');
@@ -464,22 +480,27 @@ $app->get('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Supprimer la vente id ------>  NON
+//Supprimer la vente id ------>  OK
 $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
     require 'app/config.php';
     require 'app/opendb.php';
-    $vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-    $obj = mysql_fetch_object($vente);
-    if ($obj) {
+    /*$vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
+    $obj = mysql_fetch_object($vente);*/
+    $vente = Ventes::find($id);
+    if ($vente != null) {
         // remettre les produits avec id_vente=0 et etat=en stock
-        $sql = "UPDATE produits SET etat='En stock',
+        /*$sql = "UPDATE produits SET etat='En stock',
                                     id_vente=0 
                                     WHERE id_vente='".$id."'"; 
-        $update = mysql_query($sql);
-        $v = mysql_query('DELETE FROM ventes WHERE id='.$id);
+        $update = mysql_query($sql);*/
+        Produits::where('id_vente', '=', $id)
+        ->update(['etat' => 'En stock', 
+            'id_vente' => 0]);
+        /*$v = mysql_query('DELETE FROM ventes WHERE id='.$id);*/
+        Ventes::destroy($id);
         $response = $response->withStatus(200, 'Vente deleted');
     } else {
         $response = $response->withStatus(404, 'Vente inexistante');
@@ -488,7 +509,7 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-/* ------------------------------PAIMENT VENTE------------------------------ */
+/* ------------------------------PAIEMENT VENTE------------------------------ */
 // Ajouter un paiement à une vente ------>  NON (creer table paiements)
 $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
@@ -500,12 +521,14 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     ) {    
         require 'app/config.php';
         require 'app/opendb.php';
-        $Vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
-        $obj = mysql_fetch_object($Vente);
-        if ($obj) {
-            $sql = "INSERT INTO paiements (prix)
+        /*$Vente = mysql_query('SELECT * FROM ventes WHERE id='.$id);
+        $obj = mysql_fetch_object($Vente);*/
+        $vente = Ventes::find($id);
+        if ($vente) {
+            /*$sql = "INSERT INTO paiements (prix)
                     VALUES ('".$params['prix']."')";
-            $insert = mysql_query($sql);
+            $insert = mysql_query($sql);*/
+            $insert = Paiements::addPaiement($params);
             if($insert){
                 $response = $response->withStatus(201, 'Mode de paiement ajoute');
             }
@@ -513,7 +536,7 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
                 echo'error insertion';
             }
         } else {
-            $response = $response->withStatus(404, 'Vente inexistantd');
+            $response = $response->withStatus(404, 'Vente inexistante');
         }
         require 'app/closedb.php';
     } else {
@@ -529,10 +552,12 @@ $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $ar
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
     require 'app/config.php';
     require 'app/opendb.php';
-    $produit = mysql_query('SELECT * FROM paiements WHERE id='.$id);
-    $obj = mysql_fetch_object($produit);
-    if ($obj) {
-        $produit = mysql_query('DELETE FROM paiements WHERE id='.$id);
+    /*$produit = mysql_query('SELECT * FROM paiements WHERE id='.$id);
+    $obj = mysql_fetch_object($produit);*/
+    $paiement = Paiements::find($id);
+    if ($paiement) {
+        /*$produit = mysql_query('DELETE FROM paiements WHERE id='.$id);*/
+        Paiements::destroy($id);
         $response = $response->withStatus(200, 'Paiment supprime');
     } else {
         $response = $response->withStatus(404, 'Paiment inexistant');
@@ -542,7 +567,7 @@ $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $ar
 });
 
 
-/* ------------------------------MODE DE PAIMENT------------------------------ */
+/* ------------------------------MODE DE PAIEMENT------------------------------ */
 //Recuperer les modes de paiements ------>  NON (creer table modepaiements)
 $app->get('/api/payments', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -550,11 +575,12 @@ $app->get('/api/payments', function ($request, $response) {
     require 'app/config.php';
     require 'app/opendb.php';
     $modePaiment = mysql_query('SELECT * FROM modepaiements');
-    if(mysql_num_rows($modePaiment) !== 0) {
-        while ($row = mysql_fetch_assoc($modePaiment)) {
+    $modePaiement = ModePaiements::all();
+    if(count($modePaiement) > 0) {
+        /*while ($row = mysql_fetch_assoc($modePaiment)) {
             $tab[] = $row;
-        }
-        $response = $response->write(json_encode($tab));
+        }*/
+        $response = $response->write(json_encode($modePaiement));
     } else {
         $response = $response->withStatus(404, 'Aucun mode de paiement enregistre');
     }
@@ -572,14 +598,16 @@ $app->post('/api/payments', function ($request, $response) {
     ) {    
         require 'app/config.php';
         require 'app/opendb.php';
-        $sql = "INSERT INTO modepaiements (nom)
+        /*$sql = "INSERT INTO modepaiements (nom)
                     VALUES ('".$params['nom']."')";
-        $insert = mysql_query($sql);
+        $insert = mysql_query($sql);*/
+        $insert = ModePaiements::addModePaiement($params);
         if($insert){
-            $find = mysql_query("SELECT * FROM modepaiements WHERE nom=".$params['nom']);
-            $obj = mysql_fetch_object($find);
+            /*$find = mysql_query("SELECT * FROM modepaiements WHERE nom=".$params['nom']);
+            $obj = mysql_fetch_object($find);*/
+            $modePaiement = ModePaiements::where('nom', '=', $params['nom']);
             $response = $response->withStatus(201, 'Mode de paiement ajoute');
-            $response = $response->write(json_encode($obj));
+            $response = $response->write(json_encode($modePaiement));
         }
         else{
             echo'error insertion';
@@ -605,11 +633,14 @@ $app->put('/api/payments/{id}', function ($request, $response, $args) {
         $sql = "UPDATE modepaiements SET nom='".$params['nom']."'
                                 WHERE id='".$id."'"; 
         $update = mysql_query($sql);
+        $update = ModePaiements::where('id', '=', $id)
+        ->update(['nom' => $params['nom']]);
         if($update){
-            $find = mysql_query("SELECT * FROM modepaiements WHERE id=".$id);
-            $obj = mysql_fetch_object($find);
+            /*$find = mysql_query("SELECT * FROM modepaiements WHERE id=".$id);
+            $obj = mysql_fetch_object($find);*/
+            $modePaiement = ModePaiements::find($id);
             $response = $response->withStatus(201, 'Mode de paiement ajoute');
-            $response = $response->write(json_encode($obj));
+            $response = $response->write(json_encode($modePaiement));
         }
         else{
             echo'error update';
@@ -628,10 +659,12 @@ $app->delete('/api/payments/{id}', function ($request, $response, $args) {
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
     require 'app/config.php';
     require 'app/opendb.php';
-    $modePayment = mysql_query('SELECT * FROM modepaiements WHERE id='.$id);
-    $obj = mysql_fetch_object($modePayment);
-    if ($obj) {
-        $modePayment = mysql_query('DELETE FROM modepaiements WHERE id='.$id);
+    /*$modePayment = mysql_query('SELECT * FROM modepaiements WHERE id='.$id);
+    $obj = mysql_fetch_object($modePayment);*/
+    $modePaiement = ModePaiements::find($id);
+    if ($modePaiement) {
+        /*$modePayment = mysql_query('DELETE FROM modepaiements WHERE id='.$id);*/
+        ModePaiements::destroy($id);
         $response = $response->withStatus(200, 'Mode de paiement supprime');
     } else {
         $response = $response->withStatus(404, 'Mode de paiement inexistant');

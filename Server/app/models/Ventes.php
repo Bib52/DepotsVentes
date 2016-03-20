@@ -17,6 +17,22 @@ class Ventes extends Eloquent{
         $vente->save();
         return $vente->id;
     }
+
+    public static function addCoordonnees($id, $donnees){
+    	$vente = Ventes::where('id', '=', $id)
+        ->update(['nom' => $donnees['nom'], 
+        	'prenom' => $donnees['prenom'], 
+        	'adresse' => $donnees['adresse'],
+        	'ville' => $donnees['ville'],
+        	'email' => $donnees['email'],
+        	'telephone' => $donnees['telephone']]);
+    	if($vente){
+        	return true;
+        }
+        else{
+        	return false;
+        }
+    }
 }
 
 ?>

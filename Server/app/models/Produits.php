@@ -42,6 +42,18 @@ class Produits extends Eloquent{
         	return false;
         }
     }
+
+    public static function addToVente($id, $idVente){
+    	$produit = Produits::where('reference', '=', $id)
+        ->update(['etat' => 'En cours de vente',
+        	'id_vente' => $idVente]);
+    	if($produit){
+    		return true;
+    	}
+    	else{
+    		return false;
+    	}
+    }
 }
 
 ?>

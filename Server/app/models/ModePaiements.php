@@ -6,6 +6,17 @@ class ModePaiements extends Eloquent{
   	protected $key = 'id';
    	public $timestamps = false;
 
+   	public static function addModePaiement($donnees){
+   		$modePaiement = new ModePaiements();
+   		$modePaiement->nom = $donnees['nom'];
+   		if($modePaiement->save()){
+   			return true;
+   		}
+   		else{
+   			return false;
+   		}
+   	}
+
 }
 
 ?>

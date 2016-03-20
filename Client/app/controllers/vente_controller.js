@@ -118,7 +118,7 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 					hauteur = 95+5*i;
 					var p = parseFloat($scope.listObjet.objet[i].prix);
 					prix = (p+(5*p/100)).toFixed(2).toString();
-					facture.text(20, hauteur, $scope.listObjet.objet[i].reference);
+					facture.text(20, hauteur, $scope.listObjet.objet[i].reference.toString());
 					facture.text(60, hauteur, $scope.listObjet.objet[i].description);
 					facture.text(170, hauteur, prix);
 				}
@@ -134,7 +134,7 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'P
 					$scope.type = "Cheque";
 				}
 				facture.text(120, hauteur+25, "Regle par : " + $scope.type);
-				facture.save('facture.pdf');
+				//facture.save('facture.pdf');
 			}
 
 			$scope.addAcheteur = function(){
