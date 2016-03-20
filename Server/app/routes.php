@@ -411,7 +411,7 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------PAIEMENT VENTE------------------------------ */
-// Ajouter un paiement à une vente ------>  NON (creer table paiements)
+// Ajouter un paiement à une vente ------>  A TESTER (creer table paiements)
 $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $params = $request->getParsedBody();
@@ -424,7 +424,7 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
         if ($vente) {
             $insert = Paiements::addPaiement($params);
             if($insert){
-                $response = $response->withStatus(201, 'Mode de paiement ajoute');
+                $response = $response->withStatus(201, 'paiement enregistre');
             }
             else{
                 echo'error insertion';
@@ -438,14 +438,14 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     return $response;
 });
 
-// Supprimer un paiement ------>  NON (creer table paiements)
+// Supprimer un paiement ------>  A TESTER (creer table paiements)
 $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
     $paiement = Paiements::find($id);
     if ($paiement) {
-        Paiements::destroy($id);
+        $paiement->delete();
         $response = $response->withStatus(200, 'Paiment supprime');
     } else {
         $response = $response->withStatus(404, 'Paiment inexistant');
@@ -582,7 +582,7 @@ $app->delete('/api/products/{reference}', function ($request, $response, $args) 
 });
 
 /* ------------------------------STAFFS------------------------------ */
-//Recuperer les membres du staff ------>  A TESTER
+//Recuperer les membres du staff ------>  OK
 $app->get('/api/staffs', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -596,7 +596,7 @@ $app->get('/api/staffs', function ($request, $response) {
     return $response;
 });
 
-//Ajouter une menbre du staff ------>  A TESTER 
+//Ajouter un membre du staff ------>  OK
 $app->post('/api/staffs', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -627,7 +627,7 @@ $app->post('/api/staffs', function ($request, $response) {
     return $response;
 });
 
-// Supprimer un membre du staff ------>  A TESTER
+// Supprimer un membre du staff ------>  OK
 $app->delete('/api/staffs/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -641,3 +641,51 @@ $app->delete('/api/staffs/{id}', function ($request, $response, $args) {
     }
     return $response;
 });
+
+// Modifier un membre du staff --> OK
+$app->put('/api/staffs/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $params = $request->getParsedBody();
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
+    if (!empty($params['nom'])
+        && !empty($params['login'])
+        && !empty($params['password'])
+        && !empty($params['permission'])
+    ) {
+        $findStaff = Staff::find($id);
+        if (!empty($findStaff)){
+            $login = $findStaff->login;
+            $findStaff->nom = $params['nom'];
+            $findStaff->password = password_hash($params['password'], PASSWORD_DEFAULT);
+            $findStaff->permission = $params['permission'];
+            if ($login != $params['login']){
+                $findLogin = Staff::where("login","=",$params['login'])->first();
+                if(count($findLogin)==0){
+                    $findStaff->login = $params['login'];
+                    $findStaff->save();
+                    $response = $response->withStatus(201, 'Staff updated');
+                    $response = $response->withHeader('Content-Type', 'application/json');
+                    $response = $response->write(json_encode($findStaff));
+                }
+                else{
+                    $response = $response->withStatus(400, 'login already use');
+                }
+            }
+            else{
+                $findStaff->save();
+                $response = $response->withStatus(201, 'Staff updated');
+                $response = $response->withHeader('Content-Type', 'application/json');
+                $response = $response->write(json_encode($findStaff));   
+            }
+        }
+        else{
+            $response = $response->withStatus(400, 'Staff inexistant');
+        }
+    } else {
+        $response = $response->withStatus(400, 'Invalid parameters');
+    }
+    return $response;
+});
+
