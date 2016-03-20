@@ -555,11 +555,12 @@ $app->put('/api/payments/{id}', function ($request, $response, $args) {
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
     if (!empty($params['nom'])) 
     {
-        $sql = "UPDATE modepaiements SET nom='".$params['nom']."'
+        /*$sql = "UPDATE modepaiements SET nom='".$params['nom']."'
                                 WHERE id='".$id."'"; 
-        $update = mysql_query($sql);
+        $update = mysql_query($sql);*/
         $update = ModePaiements::where('id', '=', $id)
-        ->update(['nom' => $params['nom']]);
+        ->update(['nom' => $params['nom'],
+            'etat' => $params['etat']]);
         if($update){
             /*$find = mysql_query("SELECT * FROM modepaiements WHERE id=".$id);
             $obj = mysql_fetch_object($find);*/
