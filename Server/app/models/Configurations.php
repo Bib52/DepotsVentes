@@ -1,8 +1,8 @@
 <?php
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class Commissions extends Eloquent{
-  	protected $table = 'commissions';
+class Configurations extends Eloquent{
+  	protected $table = 'configurations';
 	protected $key = 'id';
  	public $timestamps = false;
 

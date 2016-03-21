@@ -689,31 +689,56 @@ $app->put('/api/staffs/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------COMMISSIONS------------------------------ */
-//Recuperer la configuration des commissions ------>  A TESTER (creer table commission)
-$app->get('/api/commissions', function ($request, $response) {
+//Recuperer la configuration des commissions ------>  A TESTER 
+$app->get('/api/configurations', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
-    $com=Commissions::all();
-    if(count($com)>0) {
+    $conf=Configurations::all();
+    if(count($conf)>0) {
         $response = $response->withHeader('Content-Type', 'application/json');
-        $response = $response->write(json_encode($com));
+        $response = $response->write(json_encode($conf));
     } else {
-        $response = $response->withStatus(404, 'Aucune commission enregistre');
+        $response = $response->withStatus(404, 'Aucune configuration enregistre');
+    }
+    return $response;
+});
+
+//Recuperer la configuration id
+$app->get('/api/configurations/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
+    $conf=Configurations::find($id);
+    if(!empty($conf)) {
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response = $response->write(json_encode($conf));
+    } else {
+        $response = $response->withStatus(404, 'Configuration inexistante');
     }
     return $response;
 });
 
 //Modifier commissions 
-$app->put('/api/commissions/{id}', function ($request, $response, $args) {
-    // $id = $args['id'];
-    // $params = $request->getParsedBody();
-    // $response = $response->withHeader("Access-Control-Allow-Origin", "*");
-    // $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
-    // $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
-    
-    // $response = $response->withStatus(201, 'Commission updated');
-    // $response = $response->withHeader('Content-Type', 'application/json');
-    // $response = $response->write(json_encode());   
-     
-    // return $response;
+$app->put('/api/configurations/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $params = $request->getParsedBody();
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
+    if (!empty($params['valeur'])
+    ) {
+        $conf=Configurations::find($id);
+        if(!empty($conf)) {
+            $conf->valeur = $params['valeur'];
+            $conf->save();
+            $response = $response->withStatus(201, 'Commission updated');
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response = $response->write(json_encode($conf));   
+        } else {
+            $response = $response->withStatus(404, 'Configuration inexistante');
+        }
+    } else {
+        $response = $response->withStatus(400, 'Invalid parameters');
+    }
+    return $response;
 });

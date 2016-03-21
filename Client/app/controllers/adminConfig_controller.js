@@ -1,13 +1,31 @@
-angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'ModePaiement',
-	function($scope, ModePaiement){
+angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'ModePaiement', 'Config',
+	function($scope, ModePaiement, Config){
 
+		//Recuperer les modes de paiements
 		$scope.mdpaiement = ModePaiement.query();
-		$scope.commissionA = 0;
-		$scope.commissionD = 0;
+
+		//Recuperer commission sur acheteur
+		Config.get({id:1},function(data){
+							$scope.commissionA = data.valeur;
+						},
+                        function(err) {
+                            $scope.commissionA = 0;
+                        });
+
+		//Recuperer commission sur déposant
+		Config.get({id:2},function(data){
+							$scope.commissionD = data.valeur;
+						},
+	                    function(err) {
+							$scope.commissionD = 0;
+	                    });
 
 		$scope.updateCommissionA = function(){
-			$scope.iseditingA = false;
-			//requete modif commssionA
+			new Config({valeur: $scope.commissionA})
+							.$update({id : 1},
+							function(data){
+								$scope.iseditingA = false;
+							});
 		}
 
 		$scope.editCommissionA = function(){
@@ -15,8 +33,11 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 		}
 
 		$scope.updateCommissionD = function(){
-			$scope.iseditingD = false;
-			//requete modif commssionD
+			new Config({valeur: $scope.commissionD})
+							.$update({id : 2},
+							function(data){
+								$scope.iseditingD = false;
+							});
 		}
 
 		$scope.editCommissionD = function(){
