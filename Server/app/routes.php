@@ -411,7 +411,7 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------PAIEMENT VENTE------------------------------ */
-//Ajouter un paiement à une vente ------>  A TESTER (creer table paiements)
+//Ajouter un paiement à une vente ------> OK
 $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $params = $request->getParsedBody();
@@ -419,12 +419,16 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
     if (!empty($params['prix'])
+        && !empty($params['mode_paiements'])
     ) {    
         $vente = Ventes::find($id);
         if ($vente) {
-            $insert = Paiements::addPaiement($params);
-            if($insert){
+            $idpaiement = Paiements::addPaiement($params, $id);
+            if($idpaiement){
+                $paiement = Paiements::find($idpaiement);
                 $response = $response->withStatus(201, 'paiement enregistre');
+                $response = $response->withHeader('Content-Type', 'application/json');
+                $response = $response->write(json_encode($paiement));
             }
             else{
                 echo'error insertion';
@@ -438,17 +442,22 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     return $response;
 });
 
-//Supprimer un paiement ------>  A TESTER (creer table paiements)
+//Supprimer un paiement ------>  OK
 $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "DELETE");
-    $paiement = Paiements::find($id);
-    if ($paiement) {
-        $paiement->delete();
-        $response = $response->withStatus(200, 'Paiment supprime');
+    $vente = Ventes::find($id);
+    if($vente){
+        $paiement = Paiements::where("id_vente","=",$id)->first();
+        if ($paiement) {
+            Paiements::where("id_vente","=",$id)->delete();
+            $response = $response->withStatus(200, 'Paiment supprime');
+        } else {
+            $response = $response->withStatus(404, 'Paiment inexistant');
+        }
     } else {
-        $response = $response->withStatus(404, 'Paiment inexistant');
+        $response = $response->withStatus(404, 'Vente inexistante');
     }
     return $response;
 });

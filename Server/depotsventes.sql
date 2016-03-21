@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Lun 21 Mars 2016 à 19:18
+-- Généré le :  Lun 21 Mars 2016 à 22:37
 -- Version du serveur :  10.0.17-MariaDB
 -- Version de PHP :  5.6.14
 
@@ -37,7 +37,7 @@ CREATE TABLE `configurations` (
 --
 
 INSERT INTO `configurations` (`id`, `nom`, `valeur`) VALUES
-(1, 'Commission sur acheteur', 5),
+(1, 'Commission sur acheteur', 7),
 (2, 'Commission sur déposant', 5);
 
 -- --------------------------------------------------------
@@ -60,7 +60,8 @@ CREATE TABLE `depots` (
 --
 
 INSERT INTO `depots` (`id`, `nom`, `prenom`, `email`, `adresse`, `telephone`) VALUES
-(60, 'ah', 'aha', 'ahh@ajaj', 'hah', '0444505454');
+(60, 'ah', 'aha', 'ahh@ajaj', 'hah', '0444505454'),
+(61, 'titi', 'titi', 'titi@titi', 'titi', '0444505454');
 
 -- --------------------------------------------------------
 
@@ -80,8 +81,31 @@ CREATE TABLE `modepaiements` (
 
 INSERT INTO `modepaiements` (`id`, `nom`, `etat`) VALUES
 (18, 'Chèque', 0),
-(23, 'Espèce', 1),
-(24, 'Carte Bleue', 1);
+(24, 'Carte Bleue', 1),
+(30, 'Espèce', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `paiements`
+--
+
+CREATE TABLE `paiements` (
+  `id` int(11) NOT NULL,
+  `prix` double NOT NULL,
+  `mode_paiements` varchar(255) NOT NULL,
+  `id_vente` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `paiements`
+--
+
+INSERT INTO `paiements` (`id`, `prix`, `mode_paiements`, `id_vente`) VALUES
+(5, 26.75, 'Espèce', 73),
+(6, 26.75, 'Carte Bleue', 74),
+(7, 26.75, 'Espèce', 75),
+(8, 32.1, 'Espèce', 76);
 
 -- --------------------------------------------------------
 
@@ -103,12 +127,16 @@ CREATE TABLE `produits` (
 --
 
 INSERT INTO `produits` (`reference`, `prix`, `description`, `etat`, `id_depot`, `id_vente`) VALUES
-(1, 10, 'je', 'En cours de vente', 60, 50),
+(1, 10, 'je', 'Vendu', 60, 50),
 (2, 35, 'zjas', 'En cours de vente', 60, 52),
-(3, 10, 'ee', 'En cours de vente', 60, 54),
-(4, 100, 'zzii', 'En cours de vente', 60, 54),
-(5, 25, 'kz', 'En cours de vente', 60, 54),
-(6, 30, 'jkek', 'En cours de vente', 60, 62);
+(3, 10, 'ee', 'Rendu', 60, 54),
+(4, 100, 'zzii', 'En cours de vente', 60, 68),
+(5, 25, 'kz', 'En cours de vente', 60, 75),
+(6, 30, 'jkek', 'En cours de vente', 60, 76),
+(7, 25, 'ok', 'En stock', 61, 0),
+(8, 30, 'lolo', 'En stock', 61, 0),
+(9, 40, 'vizv', 'En stock', 61, 0),
+(10, 15, 'also', 'En stock', 61, 0);
 
 -- --------------------------------------------------------
 
@@ -161,7 +189,14 @@ INSERT INTO `ventes` (`id`, `nom`, `prenom`, `adresse`, `ville`, `email`, `telep
 (54, '', '', '', '', '', '', 'En cours'),
 (59, '', '', '', '', '', '', 'En cours'),
 (60, '', '', '', '', '', '', 'En cours'),
-(62, '', '', '', '', '', '', 'En cours');
+(62, '', '', '', '', '', '', 'En cours'),
+(63, '', '', '', '', '', '', 'En cours'),
+(64, '', '', '', '', '', '', 'En cours'),
+(66, '', '', '', '', '', '', 'En cours'),
+(67, '', '', '', '', '', '', 'En cours'),
+(68, '', '', '', '', '', '', 'En cours'),
+(75, '', '', '', '', '', '', 'En cours'),
+(76, '', '', '', '', '', '', 'En cours');
 
 --
 -- Index pour les tables exportées
@@ -183,6 +218,12 @@ ALTER TABLE `depots`
 -- Index pour la table `modepaiements`
 --
 ALTER TABLE `modepaiements`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `paiements`
+--
+ALTER TABLE `paiements`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -216,12 +257,17 @@ ALTER TABLE `configurations`
 -- AUTO_INCREMENT pour la table `depots`
 --
 ALTER TABLE `depots`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 --
 -- AUTO_INCREMENT pour la table `modepaiements`
 --
 ALTER TABLE `modepaiements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+--
+-- AUTO_INCREMENT pour la table `paiements`
+--
+ALTER TABLE `paiements`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT pour la table `staff`
 --
@@ -231,7 +277,7 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT pour la table `ventes`
 --
 ALTER TABLE `ventes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

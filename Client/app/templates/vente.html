@@ -50,9 +50,9 @@
 		<form name="paye">
 			<div class="form-group col-md-12">
 				<label class="col-md-6">Mode de paiement : </label>
-				<select name="paiement" ng-model="vente.paiement" class="col-md-5 text-center" required>
-					<option value="" selected>Mode de paiement</option>
-					<option ng-repeat="md in mdpaiement" value="{{md.id}}" ng-if="md.etat === 1">{{md.nom}}</option>
+				<select name="paiement" ng-model="modepaiement" class="col-md-5 text-center" required>
+					<option value="" selected>-- Mode de paiement --</option>
+					<option ng-repeat="md in mdpaiement" value="{{md.nom}}" ng-if="md.etat === 1">{{md.nom}}</option>
 				</select>
 			</div>
 			<div class="form-group col-md-12">

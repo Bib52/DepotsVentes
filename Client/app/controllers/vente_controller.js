@@ -1,5 +1,6 @@
-angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'VenteProducts', '$route', 'ModePaiement', 'Config',
-		function($scope, Vente, VenteProducts, $route, ModePaiement, Config){
+angular.module("DepotVente").controller('VenteController',
+		['$scope', 'Vente', 'VenteProducts', '$route', 'ModePaiement', 'Config', 'Paiement',
+		function($scope, Vente, VenteProducts, $route, ModePaiement, Config, Paiement){
 			$scope.objet="";
 			$scope.listObjet = {
 				objet : []
@@ -69,55 +70,52 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'V
 			}
 
 			$scope.generatePDF = function(){
-				var date = calculDate();
-				var facture = new jsPDF();
-				facture.setFont('Helvetica-Bold');
-				facture.text(20, 20, "Numero de facture : " + $scope.venteid);
-				facture.text(20, 25, "Date : " + date);
-				if($scope.vente.nom && $scope.vente.prenom){
-					facture.text(120, 40, $scope.vente.nom + " " + $scope.vente.prenom);
-				}
-				else if($scope.vente.prenom){
-					facture.text(120, 40, $scope.vente.prenom);
-				}
-				else if($scope.vente.nom){
-					facture.text(120, 40, $scope.vente.nom);
-				}
-				if($scope.vente.adresse){
-					facture.text(120, 45, $scope.vente.adresse);
-				}
-				if($scope.vente.ville){
-					facture.text(120, 50, $scope.vente.ville);
-				}
-				facture.setFontSize(22);
-				facture.setFontStyle("bold");
-				facture.text(20, 70, "Recapitulatif : ");
-				facture.setFontSize(16);
-				facture.setFontStyle("normal");
-				facture.text(20, 85, "Reference");
-				facture.text(60, 85, "Description");
-				facture.text(170, 85, "Prix");
-				for(var i = 0; i < $scope.listObjet.objet.length; i++){
-					hauteur = 95+5*i;
-					var p = parseFloat($scope.listObjet.objet[i].prix);
-					prix = (p+(5*p/100)).toFixed(2).toString();
-					facture.text(20, hauteur, $scope.listObjet.objet[i].reference.toString());
-					facture.text(60, hauteur, $scope.listObjet.objet[i].description);
-					facture.text(170, hauteur, prix);
-				}
-				facture.setFontStyle("bold");
-				facture.text(120, hauteur+20, "Total a payer : " + $scope.prixtotaleAC + " euros");
-				if($scope.vente.paiement === "1"){
-					$scope.type = "Liquide";
-				}
-				if($scope.vente.paiement === "2"){
-					$scope.type = "Carte Bancaire";
-				}
-				if($scope.vente.paiement === "3"){
-					$scope.type = "Cheque";
-				}
-				facture.text(120, hauteur+25, "Regle par : " + $scope.type);
-				facture.save('facture.pdf');
+				new Paiement({prix : $scope.prixtotaleAC, mode_paiements : $scope.modepaiement}).$save({id_sale : $scope.venteid},
+					function(data) {
+						var date = calculDate();
+						var facture = new jsPDF();
+						facture.setFont('Helvetica-Bold');
+						facture.text(20, 20, "Numero de facture : " + $scope.venteid);
+						facture.text(20, 25, "Date : " + date);
+						if($scope.vente.nom && $scope.vente.prenom){
+							facture.text(120, 40, $scope.vente.nom + " " + $scope.vente.prenom);
+						}
+						else if($scope.vente.prenom){
+							facture.text(120, 40, $scope.vente.prenom);
+						}
+						else if($scope.vente.nom){
+							facture.text(120, 40, $scope.vente.nom);
+						}
+						if($scope.vente.adresse){
+							facture.text(120, 45, $scope.vente.adresse);
+						}
+						if($scope.vente.ville){
+							facture.text(120, 50, $scope.vente.ville);
+						}
+						facture.setFontSize(22);
+						facture.setFontStyle("bold");
+						facture.text(20, 70, "Recapitulatif : ");
+						facture.setFontSize(16);
+						facture.setFontStyle("normal");
+						facture.text(20, 85, "Reference");
+						facture.text(60, 85, "Description");
+						facture.text(170, 85, "Prix");
+						for(var i = 0; i < $scope.listObjet.objet.length; i++){
+							hauteur = 95+5*i;
+							var p = parseFloat($scope.listObjet.objet[i].prix);
+							prix = (p+(5*p/100)).toFixed(2).toString();
+							facture.text(20, hauteur, $scope.listObjet.objet[i].reference.toString());
+							facture.text(60, hauteur, $scope.listObjet.objet[i].description);
+							facture.text(170, hauteur, prix);
+						}
+						facture.setFontStyle("bold");
+						facture.text(120, hauteur+20, "Total a payer : " + $scope.prixtotaleAC + " euros");
+						facture.text(120, hauteur+25, "Regle par : " + $scope.modepaiement);
+						facture.save('facture.pdf');
+                    },
+                    function(err) {
+                        console.log("error");
+                    });
 			}
 
 			$scope.addAcheteur = function(){
