@@ -15,13 +15,10 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                             adresse: $scope.depot.adresse, 
                             telephone: $scope.depot.telephone});
             $scope.depot.$save(function(data) {
-                                    console.log(data);
                                     $scope.isplay = true;
                                 },
                                 function(err) {
                                     $scope.error = err;
-                                    console.log(err);
-                                    console.log("email deja utilisé");
                                 });
         };
 
@@ -33,12 +30,10 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                         telephone: $scope.depot.telephone})
                 .$update({id: $scope.depot.id},
                 function(data){
-                    console.log(data);
                     $scope.editCoord = false;
                 },
                 function(err) {
                     $scope.error = err;
-                    console.log("email deja utilisé");
                 });
         }
 
@@ -48,13 +43,11 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                     description: $scope.objet.description, 
                                     idDepot: $scope.depot.id});
             product.$save(function(data) {
-                    console.log(data);
                     $scope.products.push(data);
                     $scope.objet=""; 
                 }, 
                 function(err){
                     $scope.error = err;
-                    console.log($scope.error);
                 });
         }
 
@@ -78,28 +71,21 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                             etat: objet.etat})
             .$update({idDepot: objet.id_depot, ref: objet.reference},
             function(data){
-                console.log(data);
                 objet.isediting=false;
             },
             function(err) {
                 $scope.error = err;
-                console.log($scope.error);
             });
         }
 
         $scope.findDepot = function(){
             $scope.depot = Depot.get({id: $scope.id}, function() {
-                                    console.log($scope.depot);
                                     $scope.isplay = true;
                                 },
                                 function(err) {
-                                    console.log(err);
                                     $scope.error = err;
-                                    console.log("Dépôt inexistant");
                                 });
-            $scope.products = DepotProducts.query({idDepot: $scope.id}, function() {
-                console.log($scope.products);
-            });
+            $scope.products = DepotProducts.query({idDepot: $scope.id});
         }
 
         $scope.deleteDepot = function(){
@@ -107,13 +93,10 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             {
                 Depot.delete({id: $scope.id},
                             function() {
-                                console.log($scope.depot);
                                 $location.path("/depot/new")
                             },
                             function(err) {
-                                console.log(err);
                                 $scope.error = err;
-                                console.log("Dépôt inexistant");
                             });
             }
         }

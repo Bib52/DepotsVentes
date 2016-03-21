@@ -6,7 +6,6 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 		$scope.addModePaiement = function(){
 			$scope.modePaiement = new ModePaiement({nom: $scope.paiement.nom});
 			$scope.modePaiement.$save(function(data) {
-                                    console.log(data);
                                     $scope.mdpaiement.push(data);
                    					$scope.paiement=""; 
                                 });
@@ -19,4 +18,18 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 				                console.log(data);
 							});
 		}
+
+		$scope.deleteModePaiement = function(md){
+			ModePaiement.delete({id: md.id});
+				for(i in $scope.mdpaiement){
+			    	if($scope.mdpaiement[i] === md){
+			        	$scope.mdpaiement.splice(i, 1);
+			        	break;
+			    	}
+				}
+		}
+		
+		$scope.editModePaiement = function(md){
+            md.isediting=true;
+        }
 }]);

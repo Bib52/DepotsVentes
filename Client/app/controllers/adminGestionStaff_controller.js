@@ -1,7 +1,8 @@
-angular.module("DepotVente").controller('GestStaffController',['$scope',
-	function($scope){
+angular.module("DepotVente").controller('GestStaffController',['$scope', 'Staff',
+	function($scope, Staff){
 
-		$scope.staffs = [];
+		$scope.staffs = Staff.query();
+
 		$scope.addStaff = function()
 		{
 			console.log('ok staff ajouté');

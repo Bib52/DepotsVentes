@@ -22,9 +22,13 @@
         </div>
         <div class="form-group col-md-12 col-sm-12" >
             <label class="col-md-6 col-sm-6">Mode de paiement : </label>
-            <span ng-repeat="md in mdpaiement">
-                <input type="checkbox" name="cb" value="{{md.id}}" ng-model="md.etat" ng-change="upModePaiement(md)" ng-checked="md.etat" ng-true-value="1" ng-false-value="0"> {{md.nom}}</input>
-            </span>
+            <div class="col-md-6 col-sm-6" ng-repeat="md in mdpaiement">
+                <input ng-hide="md.isediting" type="checkbox" name="cb" value="{{md.id}}" ng-model="md.etat" ng-change="upModePaiement(md)" ng-checked="md.etat" ng-true-value="1" ng-false-value="0"> {{md.nom}} </input>
+                <img ng-hide="md.isediting" ng-click="editModePaiement(md)" src="img/edit.png" style="width: 16px" alt="edit" />
+                <img ng-hide="md.isediting" ng-click="deleteModePaiement(md)" src="img/delete.png" style="width: 16px" alt="delete" />
+                <input ng-show="md.isediting" type="text" class="col-md-10" placeholder="Mode paiement" ng-model="md.nom" name="nom" required />
+                <input ng-show="md.isediting" type="submit" class="col-md-2 btn btn-sm btn-success" value="Ok" ng-click="upModePaiement(md)" />
+            </div>
         </div>
         <div class="form-group col-md-12">
             <label class="col-md-6 col-sm-6">Ajouter mode paiement :</label>

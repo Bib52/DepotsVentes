@@ -65,8 +65,8 @@
     </div>
     <div class="col-md-12" ng-repeat="obj in staffs">
         <strong class="col-md-4 bg-primary">{{obj.nom}}</strong>
-        <strong class="col-md-4 bg-primary">{{obj.identifiant}}</strong>
-        <strong class="col-md-3 bg-primary">{{obj.authorisation}}</strong>
+        <strong class="col-md-4 bg-primary">{{obj.login}}</strong>
+        <strong class="col-md-3 bg-primary">{{obj.permission}}</strong>
         <div class="text-right">
             <img ng-click="editStaff(obj)" src="img/edit.png" style="width: 16px" alt="edit" />
             <img ng-click="deleteStaff(obj)" src="img/delete.png" style="width: 16px" alt="delete" />

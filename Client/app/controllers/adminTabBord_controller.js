@@ -18,7 +18,6 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                         $scope.nbrPerdu+=1;
                                     }
                                 }
-                                console.log($scope.nbrEnStock);
                             },
                             function(err) {
                                 $scope.nbrProducts=0;

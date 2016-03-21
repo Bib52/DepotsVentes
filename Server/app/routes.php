@@ -498,8 +498,7 @@ $app->put('/api/payments/{id}', function ($request, $response, $args) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
     $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
-    if (!empty($params['nom'])
-        && !empty($params['etat'])) 
+    if (!empty($params['nom']))
     {
         $modePaiement = ModePaiements::find($id);
         if($modePaiement){

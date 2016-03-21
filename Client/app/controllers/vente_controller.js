@@ -12,21 +12,17 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'V
 			$scope.createVente = function(){
 				$scope.vente = new Vente();
             	$scope.vente.$save(function(data) {
-                                    console.log(data);
                                     $scope.venteid = data.id;
-                                    console.log(data.id);
                                     $scope.playVente=true;
                                 },
                                 function(err) {
                                     $scope.error = err;
-                                    console.log(err);
                                 });
 			}
 
 			$scope.addObject = function(){
 				new VenteProducts().$update({id_sale: $scope.venteid, ref: $scope.objet.reference},
 					                function(data){
-					                    console.log(data);
 					                    $scope.listObjet.objet.push(data);
 										$scope.objet="";
 										$scope.prixtotale+=parseFloat(data.prix);
@@ -34,7 +30,6 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'V
 					                },
 					                function(err) {
 					                    $scope.error = err;
-					                    console.log($scope.error);
 					                });	
 			}
 
@@ -55,9 +50,6 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'V
 					//prix ac comission de 5%
 					$scope.prixtotaleAC=$scope.prixtotale+(5*$scope.prixtotale/100);
 					$scope.mdpaiement = ModePaiement.query();
-					console.log('vente validé');
-					console.log($scope.listObjet);
-					console.log($scope.listObjet.objet);
 				}
 			}
 
@@ -76,9 +68,7 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'V
 			}
 
 			$scope.generatePDF = function(){
-				console.log('generer pdf');
 				var date = calculDate();
-				console.log($scope.listObjet.objet[0]);
 				var facture = new jsPDF();
 				facture.setFont('Helvetica-Bold');
 				facture.text(20, 20, "Numero de facture : " + $scope.venteid);
@@ -141,7 +131,6 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'V
 				                },
 				                function(err) {
 				                    $scope.error = err;
-				                    console.log($scope.error);
 				                });
 			}
 			$scope.annuleVente = function(){
