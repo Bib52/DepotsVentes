@@ -22,20 +22,26 @@
         </div>
         <div class="form-group col-md-12 col-sm-12" >
             <label class="col-md-6 col-sm-6">Mode de paiement : </label>
-            <div class="col-md-6 col-sm-6" ng-repeat="md in mdpaiement">
-                <input ng-hide="md.isediting" type="checkbox" name="cb" value="{{md.id}}" ng-model="md.etat" ng-change="upModePaiement(md)" ng-checked="md.etat" ng-true-value="1" ng-false-value="0"> {{md.nom}} </input>
-                <img ng-hide="md.isediting" ng-click="editModePaiement(md)" src="img/edit.png" style="width: 16px" alt="edit" />
-                <img ng-hide="md.isediting" ng-click="deleteModePaiement(md)" src="img/delete.png" style="width: 16px" alt="delete" />
-                <input ng-show="md.isediting" type="text" class="col-md-10" placeholder="Mode paiement" ng-model="md.nom" name="nom" required />
-                <input ng-show="md.isediting" type="submit" class="col-md-2 btn btn-sm btn-success" value="Ok" ng-click="upModePaiement(md)" />
+            <div class="col-md-offset-6 col-md-6 col-sm-offset-6 col-sm-6" ng-repeat="md in mdpaiement">
+                <div ng-hide="md.isediting">
+                    <input type="checkbox" name="cb" value="{{md.id}}" ng-model="md.etat" ng-change="upModePaiement(md)" ng-checked="md.etat" ng-true-value="1" ng-false-value="0"> {{md.nom}} </input>
+                    <img ng-click="editModePaiement(md)" src="img/edit.png" style="width: 16px" alt="edit" />
+                    <img ng-click="deleteModePaiement(md)" src="img/delete.png" style="width: 16px" alt="delete" />
+                </div>
+                <div ng-show="md.isediting">
+                    <input type="text" class="col-md-10" placeholder="Mode paiement" ng-model="md.nom" name="nom" required />
+                    <input type="submit" class="col-md-2 btn btn-sm btn-success" value="Ok" ng-click="updateModePaiement(md)" />
+                </div>
+            </div>
+            <div class="col-md-offset-6 col-md-6 col-sm-offset-6 col-sm-6" ng-hide="viewadd">
+                <strong class="text-info"><u ng-click="viewAdd()">Ajouter un mode de paiement</u></strong>
+            </div>
+            <div class="col-md-offset-6 col-md-6 col-sm-offset-6 col-sm-6" ng-show="viewadd">
+                <input type="text" class="col-md-8 col-sm-8" placeholder="Mode paiement" ng-model="paiement.nom" name="nom" required /> 
+                <input type="submit" class="col-md-3 col-md-offset-1 btn btn-sm btn-success" value="Ajouter" ng-click="addModePaiement()" />
             </div>
         </div>
-        <div class="form-group col-md-12">
-            <label class="col-md-6 col-sm-6">Ajouter mode paiement :</label>
-            <input type="text" class="col-md-4 col-sm-4" placeholder="Mode paiement" ng-model="paiement.nom" name="nom" required /> 
-            <input type="submit" class="col-md-1 col-md-offset-1 btn btn-sm btn-success" value="Ok" ng-click="addModePaiement()" />
-        </div>
-        <input type="submit" class="col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 btn btn-sm btn-info" value="Valider"/>
+        
     </form>
         
 </div>

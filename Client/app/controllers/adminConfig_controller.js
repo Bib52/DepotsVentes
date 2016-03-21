@@ -2,13 +2,20 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 	function($scope, ModePaiement){
 
 		$scope.mdpaiement = ModePaiement.query();
+		$scope.viewadd = false;
+
 
 		$scope.addModePaiement = function(){
 			$scope.modePaiement = new ModePaiement({nom: $scope.paiement.nom});
 			$scope.modePaiement.$save(function(data) {
                                     $scope.mdpaiement.push(data);
                    					$scope.paiement=""; 
+                   					$scope.viewadd = false;
+
                                 });
+		}
+		$scope.viewAdd = function(){
+			$scope.viewadd = true;
 		}
 
 		$scope.upModePaiement = function(md){
@@ -31,5 +38,9 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 		
 		$scope.editModePaiement = function(md){
             md.isediting=true;
+        }
+
+        $scope.updateModePaiement = function(md){
+        	md.isediting=false;
         }
 }]);

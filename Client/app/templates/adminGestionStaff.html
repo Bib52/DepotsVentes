@@ -38,14 +38,15 @@
             <input class="col-md-8" type="password" placeholder="Re-saisir le mot de passe" ng-model="staff.repassword" name="rmdp" required/>
             <div class="help-block" ng-messages="form.rmdp.$error" ng-if="form.rmdp.$touched">
                 <p ng-message="required">Vous devez entrer à nouveau le mot de passe.</p>
+                <p class="error" ng-if="error">Veuillez saisir le même mot de passe.</p>
             </div>
         </div>
         <div class="form-group col-md-12" ng-class="{ 'has-error': form.autho.$touched && form.autho.$invalid }">
             <label class="col-md-4">Niveau d'authorisation <span class="text-danger" ng-if="!form.autho.$valid">*</span> : </label>
             <select class="col-md-8 text-center" ng-model="staff.authorisation" name="autho" required>
                 <option value="" selected>----- Niveau d'authorisation -----</option>
-                <option value="1">Staff</option>
-                <option value="2">Admin</option>
+                <option value="Staff">Staff</option>
+                <option value="Admin">Admin</option>
             </select>
             <div class="help-block" ng-messages="form.autho.$error" ng-if="form.autho.$touched">
                 <p ng-message="required">Vous devez choisir le niveau d'authorisation.</p>
@@ -64,12 +65,18 @@
         <strong class="col-md-4 text-muted"><i>Niveau d'authorisation</i></strong>
     </div>
     <div class="col-md-12" ng-repeat="obj in staffs">
-        <strong class="col-md-4 bg-primary">{{obj.nom}}</strong>
-        <strong class="col-md-4 bg-primary">{{obj.login}}</strong>
-        <strong class="col-md-3 bg-primary">{{obj.permission}}</strong>
-        <div class="text-right">
+        <strong ng-hide="staff.isediting" class="col-md-4 bg-primary">{{obj.nom}}</strong>
+        <strong ng-hide="staff.isediting" class="col-md-4 bg-primary">{{obj.login}}</strong>
+        <strong ng-hide="staff.isediting" class="col-md-3 bg-primary">{{obj.permission}}</strong>
+        <div class="text-right" ng-hide="staff.isediting">
             <img ng-click="editStaff(obj)" src="img/edit.png" style="width: 16px" alt="edit" />
             <img ng-click="deleteStaff(obj)" src="img/delete.png" style="width: 16px" alt="delete" />
+        </div>
+        <div ng-show="obj.isediting">
+            <input class="col-md-4" type="text" placeholder="Nom" ng-model="obj.nom" name="nom" required/>
+            <input class="col-md-4" type="text" placeholder="Login" ng-model="obj.login" name="login" required/>
+            <input class="col-md-3" type="text" placeholder="Permission" ng-model="obj.permission" name="permission" required/>
+            <input type="submit" class="col-md-1 btn btn-sm btn-success" value="Valider" ng-click="updateStaff(obj)"/>
         </div>
     </div>
 </div>
