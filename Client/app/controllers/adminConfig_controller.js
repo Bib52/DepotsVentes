@@ -20,15 +20,19 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 							$scope.commissionD = 0;
 	                    });
 
+		$scope.alert = "";
+
 		$scope.updateCommissionA = function(){
 			new Config({valeur: $scope.commissionA})
 							.$update({id : 1},
 							function(data){
 								$scope.iseditingA = false;
+								$scope.alert = "La modification de la commission sur acheteur a bien été enregistré.";
 							});
 		}
 
 		$scope.editCommissionA = function(){
+			$scope.alert = "";
 			$scope.iseditingA = true;
 		}
 
@@ -37,10 +41,12 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 							.$update({id : 2},
 							function(data){
 								$scope.iseditingD = false;
+								$scope.alert = "La modification de la commission sur déposant a bien été enregistré.";
 							});
 		}
 
 		$scope.editCommissionD = function(){
+			$scope.alert = "";
 			$scope.iseditingD = true;
 		}
 
@@ -50,10 +56,12 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
                                     $scope.mdpaiement.push(data);
                                     $scope.paiement = "";
                    					$scope.viewadd = false;
+                   					$scope.alert = "Le mode de paiement : "+ data.nom +" a bien été ajouté.";
                                 });
 		}
 
 		$scope.viewAdd = function(){
+			$scope.alert = "";
 			$scope.viewadd = true;
 		}
 
@@ -61,21 +69,31 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 			new ModePaiement({nom: md.nom, etat: md.etat})
 							.$update({id : md.id},
 							function(data){
-				                console.log(data);
+								if (data.etat === 0){
+                   					$scope.alert = "Le mode de paiement : "+ data.nom +" a été désactivé.";
+                   				}else{
+                   					$scope.alert = "Le mode de paiement : "+ data.nom +" a été activé.";
+                   				}
 							});
 		}
 
 		$scope.deleteModePaiement = function(md){
-			ModePaiement.delete({id: md.id});
+			if(confirm("Voulez-vous supprimer le mode de paiement : "+md.nom)){
+				ModePaiement.delete({id: md.id});
+				$scope.alert = "Le mode de paiement : "+ md.nom +" a été supprimé.";
 				for(i in $scope.mdpaiement){
 			    	if($scope.mdpaiement[i] === md){
 			        	$scope.mdpaiement.splice(i, 1);
 			        	break;
 			    	}
 				}
+			}else{
+				$scope.alert = "";
+			}
 		}
 		
 		$scope.editModePaiement = function(md){
+			$scope.alert = "";
             md.isediting = true;
         }
 
@@ -84,6 +102,7 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 							.$update({id : md.id},
 							function(data){
 				                md.isediting = false;
+				                $scope.alert = "La Modification du mode de paiement a bien été enregistré.";
 							});
         }
 }]);

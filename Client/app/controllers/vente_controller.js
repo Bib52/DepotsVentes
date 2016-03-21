@@ -1,5 +1,5 @@
-angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'VenteProducts', '$route', 'ModePaiement',
-		function($scope, Vente, VenteProducts, $route, ModePaiement){
+angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'VenteProducts', '$route', 'ModePaiement', 'Config',
+		function($scope, Vente, VenteProducts, $route, ModePaiement, Config){
 			$scope.objet="";
 			$scope.listObjet = {
 				objet : []
@@ -47,8 +47,9 @@ angular.module("DepotVente").controller('VenteController',['$scope', 'Vente', 'V
 			$scope.validVente = function(){
 				if($scope.listObjet.objet.length > 0){
 					$scope.payment=true;
-					//prix ac comission de 5%
-					$scope.prixtotaleAC=$scope.prixtotale+(5*$scope.prixtotale/100);
+					Config.get({id:1},function(data){
+						$scope.prixtotaleAC = $scope.prixtotale + (data.valeur * $scope.prixtotale / 100);
+					});
 					$scope.mdpaiement = ModePaiement.query();
 				}
 			}

@@ -3,20 +3,32 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
 		// Nombre de produits
         $scope.products = Products.query(
 							function(data) {
-                                $scope.nbrProducts=data.length;
-                                $scope.nbrEnStock=0;
-                                $scope.nbrVendu=0;
-                                $scope.nbrPerdu=0;
+                                $scope.nbrProducts = data.length;
+                                $scope.nbrEnStock = 0;
+                                $scope.nbrCoursVente = 0;
+                                $scope.nbrVendu = 0;
+                                $scope.nbrRendu = 0;
+                                $scope.nbrPerdu = 0;
                                 for (i in data){
-                                    if(data[i].etat=="En stock"){
+                                    if(data[i].etat === "En stock"){
                                         $scope.nbrEnStock+=1;
                                     }
-                                    if(data[i].etat=="Vendu"){
+                                    if(data[i].etat === "En cours de vente"){
+                                        $scope.nbrCoursVente+=1;
+                                    }
+                                    if(data[i].etat === "Vendu"){
                                         $scope.nbrVendu+=1;
                                     }
-                                    if(data[i].etat=="Perdu"){
+                                    if(data[i].etat === "Rendu"){
+                                        $scope.nbrRendu+=1;
+                                    }
+                                    if(data[i].etat === "Perdu"){
                                         $scope.nbrPerdu+=1;
                                     }
+                                    //Graphique pie : nombre produits en fonction de son etat
+                                    $scope.labelspie=["En stock","En cours de vente","Vendu","Rendu","Perdu"];
+                                    $scope.datapie=[$scope.nbrEnStock,$scope.nbrCoursVente,
+                                                    $scope.nbrVendu,$scope.nbrRendu,$scope.nbrPerdu];
                                 }
                             },
                             function(err) {
@@ -49,10 +61,6 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
 
         //Total des vente avec commission
         $scope.totalAC=0;
-
-        //Graphique pie : nombre produits
-        $scope.labelspie=["En stock","Vendu","Perdu"];
-        $scope.datapie=[100,50,10];
 
         //Graphique line
         $scope.labelsline = ["January", "February", "March", "April", "May", "June", "July"];

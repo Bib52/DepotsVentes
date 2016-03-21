@@ -11,6 +11,9 @@
 </div>
 
 <div class="well well-lg col-md-8 col-sm-6 col-xs-6">
+    <div class="col-md-10 col-md-offset-1 col-sm-12 alert alert-success text-center" ng-if="alert">
+        <strong>{{alert}}</strong>
+    </div>
     <form class="col-md-10 col-md-offset-1 col-sm-12">
         <div class="form-group col-md-12 col-sm-12" >
             <label class="col-md-6 col-sm-6">Commission sur acheteur (en %) : </label>
@@ -46,8 +49,6 @@
                 <input type="text" class="col-md-8 col-sm-8" placeholder="Mode paiement" ng-model="paiement.nom" name="nom" required /> 
                 <input type="submit" class="col-md-3 col-md-offset-1 btn btn-sm btn-success" value="Ajouter" ng-click="addModePaiement()" />
             </div>
-        </div>
-        
-    </form>
-        
+        </div>   
+    </form>     
 </div>

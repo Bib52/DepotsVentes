@@ -689,7 +689,7 @@ $app->put('/api/staffs/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------COMMISSIONS------------------------------ */
-//Recuperer la configuration des commissions ------>  A TESTER 
+//Recuperer la configuration des commissions ------>  OK
 $app->get('/api/configurations', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -703,7 +703,7 @@ $app->get('/api/configurations', function ($request, $response) {
     return $response;
 });
 
-//Recuperer la configuration id
+//Recuperer la configuration id ------>  OK
 $app->get('/api/configurations/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -718,7 +718,7 @@ $app->get('/api/configurations/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Modifier commissions 
+//Modifier la configuration id ------>  OK
 $app->put('/api/configurations/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();

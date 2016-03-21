@@ -23,12 +23,12 @@ angular.module("DepotVente").controller('GestStaffController',['$scope', 'Staff'
 
 		$scope.deleteStaff = function(staff){
 			Staff.delete({id: staff.id});
-				for(i in $scope.staffs){
-			    	if($scope.staffs[i] === staff){
-			        	$scope.staffs.splice(i, 1);
-			        	break;
-			    	}
-				}
+			for(i in $scope.staffs){
+		    	if($scope.staffs[i] === staff){
+		        	$scope.staffs.splice(i, 1);
+		        	break;
+		    	}
+			}
 		}
 
 		$scope.editStaff = function(staff){
@@ -39,6 +39,4 @@ angular.module("DepotVente").controller('GestStaffController',['$scope', 'Staff'
             //faire requete modif staff
             staff.isediting = false;
         }
-        
-
 }]);

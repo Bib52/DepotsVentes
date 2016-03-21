@@ -8,7 +8,7 @@
 #### Lien : ####
 * site github : http://fbergeret.github.io/DepotsVentes/
 
-### Prérequis : ###
+#### Prérequis : ####
 
 * Serveur apache et mysql;
 * Composer sur le serveur (https://getcomposer.org/);
@@ -21,6 +21,3 @@
   * importer le script "DepotsVentes/Server/depotsventes.sql" dans la base de données créé;
 * Configurer : mettre vos informations dans le fichier "DepotsVentes/Server/app/Configuration.php".
 * Tester : http://server/DepotsVentes/Client
-
-#### Utilisation : ####
-
