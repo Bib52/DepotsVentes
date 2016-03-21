@@ -411,7 +411,7 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------PAIEMENT VENTE------------------------------ */
-// Ajouter un paiement à une vente ------>  A TESTER (creer table paiements)
+//Ajouter un paiement à une vente ------>  A TESTER (creer table paiements)
 $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $params = $request->getParsedBody();
@@ -438,7 +438,7 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     return $response;
 });
 
-// Supprimer un paiement ------>  A TESTER (creer table paiements)
+//Supprimer un paiement ------>  A TESTER (creer table paiements)
 $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -626,7 +626,7 @@ $app->post('/api/staffs', function ($request, $response) {
     return $response;
 });
 
-// Supprimer un membre du staff ------>  OK
+//Supprimer un membre du staff ------>  OK
 $app->delete('/api/staffs/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -641,7 +641,7 @@ $app->delete('/api/staffs/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-// Modifier un membre du staff --> OK
+//Modifier un membre du staff --> OK
 $app->put('/api/staffs/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -688,3 +688,32 @@ $app->put('/api/staffs/{id}', function ($request, $response, $args) {
     return $response;
 });
 
+/* ------------------------------COMMISSIONS------------------------------ */
+//Recuperer la configuration des commissions ------>  A TESTER (creer table commission)
+$app->get('/api/commissions', function ($request, $response) {
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
+    $com=Commissions::all();
+    if(count($com)>0) {
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response = $response->write(json_encode($com));
+    } else {
+        $response = $response->withStatus(404, 'Aucune commission enregistre');
+    }
+    return $response;
+});
+
+//Modifier commissions 
+$app->put('/api/commissions/{id}', function ($request, $response, $args) {
+    // $id = $args['id'];
+    // $params = $request->getParsedBody();
+    // $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    // $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
+    // $response = $response->withHeader("Access-Control-Allow-Methods", "PUT");
+    
+    // $response = $response->withStatus(201, 'Commission updated');
+    // $response = $response->withHeader('Content-Type', 'application/json');
+    // $response = $response->write(json_encode());   
+     
+    // return $response;
+});

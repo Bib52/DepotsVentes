@@ -32,12 +32,12 @@ angular.module("DepotVente").controller('GestStaffController',['$scope', 'Staff'
 		}
 
 		$scope.editStaff = function(staff){
-            staff.isediting=true;
+            staff.isediting = true;
         }
 
         $scope.updateStaff = function(staff){
             //faire requete modif staff
-            staff.isediting=false;
+            staff.isediting = false;
         }
         
 

@@ -2,18 +2,36 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 	function($scope, ModePaiement){
 
 		$scope.mdpaiement = ModePaiement.query();
-		$scope.viewadd = false;
+		$scope.commissionA = 0;
+		$scope.commissionD = 0;
 
+		$scope.updateCommissionA = function(){
+			$scope.iseditingA = false;
+			//requete modif commssionA
+		}
+
+		$scope.editCommissionA = function(){
+			$scope.iseditingA = true;
+		}
+
+		$scope.updateCommissionD = function(){
+			$scope.iseditingD = false;
+			//requete modif commssionD
+		}
+
+		$scope.editCommissionD = function(){
+			$scope.iseditingD = true;
+		}
 
 		$scope.addModePaiement = function(){
 			$scope.modePaiement = new ModePaiement({nom: $scope.paiement.nom});
 			$scope.modePaiement.$save(function(data) {
                                     $scope.mdpaiement.push(data);
-                   					$scope.paiement=""; 
+                                    $scope.paiement = "";
                    					$scope.viewadd = false;
-
                                 });
 		}
+
 		$scope.viewAdd = function(){
 			$scope.viewadd = true;
 		}
@@ -37,10 +55,14 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 		}
 		
 		$scope.editModePaiement = function(md){
-            md.isediting=true;
+            md.isediting = true;
         }
 
         $scope.updateModePaiement = function(md){
-        	md.isediting=false;
+        	new ModePaiement({nom: md.nom, etat: md.etat})
+							.$update({id : md.id},
+							function(data){
+				                md.isediting = false;
+							});
         }
 }]);
