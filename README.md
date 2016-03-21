@@ -8,13 +8,19 @@
 #### Lien : ####
 * site github : http://fbergeret.github.io/DepotsVentes/
 
+### Prérequis : ###
+
+* Serveur apache et mysql;
+* Composer sur le serveur (https://getcomposer.org/);
+
 #### Installation : ####
-* Télécharger le projet et le placer dans la racine de votre serveur web.
-* Commande : composer install (dans DepotsVentes/Server/).
-* Créer base de données : créer une base de données (nom : depotsventes).
-* Importer base de données : importer le script "DepotsVentes/Server/depotsventes.sql" dans la base de données créé.
-* Configurer : mettre vos informations dans le fichier "DepotsVentes/Server/app/config.php".
-* Tester : http://localhost/DepotsVentes/Client
+* Télécharger le projet et le placer dans la racine de votre serveur web;
+* Commande : composer install (dans DepotsVentes/Server/);
+* Base de données : 
+  * créer une base de données depotsventes;
+  * importer le script "DepotsVentes/Server/depotsventes.sql" dans la base de données créé;
+* Configurer : mettre vos informations dans le fichier "DepotsVentes/Server/app/Configuration.php".
+* Tester : http://server/DepotsVentes/Client
 
 #### Utilisation : ####
 
