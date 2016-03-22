@@ -1,6 +1,9 @@
 angular.module("DepotVente").controller('VenteController',
-		['$scope', 'Vente', 'VenteProducts', '$route', 'ModePaiement', 'Config', 'Paiement',
-		function($scope, Vente, VenteProducts, $route, ModePaiement, Config, Paiement){
+		['$scope', '$rootScope', 'Vente', 'VenteProducts', '$route', 'ModePaiement', 'Config', 'Paiement',
+		function($scope, $rootScope, Vente, VenteProducts, $route, ModePaiement, Config, Paiement){
+			
+			$scope.nom = $rootScope.nom;
+			$scope.connect = $rootScope.connect;
 			$scope.objet="";
 			$scope.listObjet = {
 				objet : []
@@ -70,7 +73,8 @@ angular.module("DepotVente").controller('VenteController',
 			}
 
 			$scope.generatePDF = function(){
-				new Paiement({prix : $scope.prixtotaleAC, mode_paiements : $scope.modepaiement}).$save({id_sale : $scope.venteid},
+				new Paiement({prix : $scope.prixtotaleAC, mode_paiements : $scope.modepaiement})
+				.$save({id_sale : $scope.venteid},
 					function(data) {
 						var date = calculDate();
 						var facture = new jsPDF();

@@ -38,14 +38,18 @@
     <script type="text/javascript" src="app/resources/modePaiement_resource.js"></script>
     <script type="text/javascript" src="app/resources/staff_resource.js"></script>
     <script type="text/javascript" src="app/resources/config_resource.js"></script>
+    <script type="text/javascript" src="app/resources/connect_resource.js"></script>
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="style/main.css">  
 </head>
-<body class="col-md-12 col-sm-12">
-    <div class="page-header">
-        <a class="col-md-2 col-sm-3" ng-href="#/"><!-- <img src="images/logo.png" alt="Logo"/> -->Logo Dépôt/Vente</a>
-        <a class="col-md-offset-8 col-sm-offset-7" ng-href="#/">Se déconnecter</a>
+<body class="col-md-12 col-sm-12" ng-controller="connexionController">
+    <strong class="col-md-2 col-sm-3"><!-- <img src="images/logo.png" alt="Logo"/> -->Logo Dépôt/Vente</strong>
+    <strong class="col-md-10 col-sm-10 text-right" ng-if="nom">
+        Bienvenue {{nom}}
+        <a ng-href="#/" ng-click="Deconnect()">Se déconnecter</a>
+    </strong>
+    <div class="page-header" ng-if="connect">
         <div class="container">
             <nav class="navbar navbar-inverse">
                 <ul class="nav navbar-nav">
@@ -56,7 +60,7 @@
             </nav>
         </div>
     </div>
-    <div ng-view>
+    <div class="col-md-12 col-sm-12" ng-view>
     </div>
 </body>
 </html>

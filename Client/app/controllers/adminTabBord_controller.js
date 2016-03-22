@@ -49,10 +49,21 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
         // Nombre de vente
         $scope.ventes = Vente.query(
                             function(data) {
-                                $scope.nbrVente=data.length;
+                                $scope.nbrVenteFini = 0;
+                                $scope.nbrVenteEnCours = 0;
+                                for (i in data){
+                                    if(data[i].etat === 'Finie'){
+                                        $scope.nbrVenteFini+=1;
+                                    }
+                                    if(data[i].etat === 'En cours'){
+                                        $scope.nbrVenteEnCours+=1;  
+                                    }
+                                }
+                                data.length;
                             },
                             function(err) {
-                                $scope.nbrVente=0;
+                                $scope.nbrVenteFini=0;
+                                $scope.nbrVenteEnCours = 0;
                                 console.log(err);
                             });
 

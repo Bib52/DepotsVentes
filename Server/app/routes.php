@@ -423,6 +423,9 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     ) {    
         $vente = Ventes::find($id);
         if ($vente) {
+            $vente->etat = 'Finie';
+            $vente->save();
+            $produits = Produits::where("id_vente","=",$id)->update(['etat' => 'Vendu']);
             $idpaiement = Paiements::addPaiement($params, $id);
             if($idpaiement){
                 $paiement = Paiements::find($idpaiement);
@@ -698,7 +701,7 @@ $app->put('/api/staffs/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------COMMISSIONS------------------------------ */
-//Recuperer la configuration des commissions ------>  OK
+//Recuperer toutes les cnfigurations ------>  OK
 $app->get('/api/configurations', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -745,6 +748,37 @@ $app->put('/api/configurations/{id}', function ($request, $response, $args) {
             $response = $response->write(json_encode($conf));   
         } else {
             $response = $response->withStatus(404, 'Configuration inexistante');
+        }
+    } else {
+        $response = $response->withStatus(400, 'Invalid parameters');
+    }
+    return $response;
+});
+
+/* ------------------------------CONNEXION------------------------------ */
+
+//Connecter un membre du staff
+$app->post('/api/staffs/signin', function ($request, $response) {
+    $params = $request->getParsedBody();
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Headers", "Content-Type");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "POST");
+    if (!empty($params['login'])
+        && !empty($params['password'])
+    ){
+        $findLogin = Staff::where("login","=",$params['login'])->first();
+        if(!empty($findLogin)){
+            $connect = Staff::connexion($params);
+            if($connect != false){
+                $response = $response->withStatus(201, 'Staff connecte');
+                $response = $response->withHeader('Content-Type', 'application/json');
+                $response = $response->write(json_encode($connect));
+            }
+            else{
+                $response = $response->withStatus(400, 'Erreur Password');
+            }
+        } else{
+            $response = $response->withStatus(400, 'Erreur Login');
         }
     } else {
         $response = $response->withStatus(400, 'Invalid parameters');
