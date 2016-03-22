@@ -130,7 +130,7 @@
             <strong ng-hide="obj.isediting" class="col-md-2 bg-primary">{{obj.prix}} €</strong>
             <strong ng-hide="obj.isediting" class="col-md-3 bg-primary">{{obj.etat}}</strong>
 
-            <div class="text-right" ng-hide="obj.isediting">
+            <div class="text-right" ng-hide="obj.isediting" ng-if="obj.etat === 'En stock' || obj.etat === 'Perdu'">
                 <img ng-click="editObject(obj)" src="img/edit.png" style="width: 16px" alt="edit" />
                 <img ng-click="deleteObject(obj)" src="img/delete.png" style="width: 16px" alt="delete" />
             </div>
@@ -156,10 +156,15 @@
                         <option value="Vendu">Vendu</option>
                         <option value="Rendu">Rendu</option>
                         <option value="Perdu">Perdu</option>
+                        <option value="Payé" ng-if="obj.etat === 'Payé'">Payé</option>
                     </select>
                 </div>
                 <input type="submit" class="col-md-1 btn btn-sm btn-warning" value="Valider" ng-click="editobj.$valid && updObject(obj)"/>
             </form>
+        </div>
+        <div class="col-md-12 text-center" ng-if="totalRembourser != 0">
+            <b>Somme due : {{totalRembourser}}</b>
+            <button class="btn btn-xs btn-success" ng-click="payer()">Payer</button>
         </div>
     </div>
 </div>

@@ -3,6 +3,8 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         
         $scope.editCoord = false;
         $scope.products = [];
+        $scope.totalRembourser=0;
+        $scope.temp = "";
 
         $scope.EditCoord = function () {
             $scope.editCoord = true;
@@ -63,6 +65,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
 
         $scope.editObject = function(objet){
             objet.isediting=true;
+            $scope.temp = objet.etat;
         }
 
         $scope.updObject = function(objet){
@@ -72,6 +75,13 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             .$update({idDepot: objet.id_depot, ref: objet.reference},
             function(data){
                 objet.isediting=false;
+                if($scope.temp !== "Perdu" && data.etat === "Perdu"){
+                    $scope.totalRembourser+=data.prix;
+                }
+                if(data.etat === "En stock" && $scope.temp === "Perdu"){
+                    $scope.totalRembourser-=data.prix;
+                }
+                console.log(data.etat);
             },
             function(err) {
                 $scope.error = err;
@@ -86,13 +96,11 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                     $scope.error = err;
                                 });
             $scope.products = DepotProducts.query({idDepot: $scope.id}, function() {
-                                            $scope.totalRembourser=0;
                                             for(i in $scope.products){
                                                 if($scope.products[i].etat === "Vendu" || $scope.products[i].etat === "Perdu"){
                                                     $scope.totalRembourser+=$scope.products[i].prix;
                                                 }
                                             }
-                                            console.log("rembourser " + $scope.totalRembourser);
                                         });
         }
 
@@ -107,5 +115,21 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                 $scope.error = err;
                             });
             }
+        }
+
+        $scope.payer = function(){
+            DepotProducts.query({idDepot: $scope.id}, function(data) {
+                for(i in data){
+                    if(data[i].etat === "Vendu" || data[i].etat === "Perdu"){
+                        new DepotProducts({prix: data[i].prix,
+                            description: data[i].description,
+                            etat: "Payé"})
+                            .$update({idDepot: data[i].id_depot, ref: data[i].reference},
+                            function(data){
+                                $scope.totalRembourser-=data.prix;
+                            });
+                    }
+                }
+            });
         }
 }]);
