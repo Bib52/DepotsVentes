@@ -2,7 +2,7 @@ window.urlAPI = "http://localhost/DepotsVentes/Server/api/";
 var app = angular.module("DepotVente", ['ngResource', 'ngRoute', 'ngSanitize', 'ngMessages', 'chart.js']);
 
 app.config(['$routeProvider', function ($routeProvider) {
-    $routeProvider.when('/', {templateUrl: "", controller: "firstController"});
+    $routeProvider.when('/', {template: "", controller: "firstController"});
     $routeProvider.when('/depot/new', {templateUrl: "app/templates/newdepot.html", controller: "DepotController"});
     $routeProvider.when('/depot/gestion', {templateUrl: "app/templates/gestionDepot.html", controller: "DepotController"});
     $routeProvider.when('/vente', {templateUrl: "app/templates/vente.html", controller: "VenteController"});
