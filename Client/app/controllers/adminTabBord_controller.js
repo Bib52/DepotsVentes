@@ -80,7 +80,7 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                     $scope.totalAC+=data.prix;
                                     Config.get({id:1}, function(data){
                                         $scope.commission = data.valeur;
-                                        $scope.totalSC = $scope.totalAC - (data.valeur * $scope.totalAC / 100);
+                                        $scope.totalSC = (100 * $scope.totalAC) / (100 + $scope.commission);
                                     });
                                 });
                             }
