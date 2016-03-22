@@ -13,37 +13,37 @@
 <div class="well well-lg col-md-8 col-sm-6 col-xs-6">
     <form class="col-md-10 col-md-offset-1" name="form" novalidate>
         <div class="form-group col-md-12" ng-class="{ 'has-error': form.nom.$touched && form.nom.$invalid }">
-            <label class="col-md-4">Nom <span class="text-danger" ng-if="!form.nom.$valid">*</span> : </label>
-            <input class="col-md-8" type="text" placeholder="Nom" ng-model="staff.nom" name="nom" required/>
+            <label class="col-md-5">Nom <span class="text-danger" ng-if="!form.nom.$valid">*</span> : </label>
+            <input class="col-md-7" type="text" placeholder="Nom" ng-model="staff.nom" name="nom" required/>
             <div class="help-block" ng-messages="form.nom.$error" ng-if="form.nom.$touched">
                 <p ng-message="required">Vous devez entrer le nom.</p>
             </div>
         </div>
         <div class="form-group col-md-12" ng-class="{ 'has-error': form.ident.$touched && form.ident.$invalid }">
-            <label class="col-md-4">Identifiant <span class="text-danger" ng-if="!form.ident.$valid">*</span> : </label>
-            <input class="col-md-8" type="text" placeholder="Identifiant" ng-model="staff.identifiant" name="ident" required/>
+            <label class="col-md-5">Identifiant <span class="text-danger" ng-if="!form.ident.$valid">*</span> : </label>
+            <input class="col-md-7" type="text" placeholder="Identifiant" ng-model="staff.identifiant" name="ident" required/>
             <div class="help-block" ng-messages="form.ident.$error" ng-if="form.ident.$touched">
                 <p ng-message="required">Vous devez entrer l'identifiant.</p>
             </div>
         </div> 
         <div class="form-group col-md-12" ng-class="{ 'has-error': form.mdp.$touched && form.mdp.$invalid }">
-            <label class="col-md-4">Mot de passe <span class="text-danger" ng-if="!form.mdp.$valid">*</span> : </label>
-            <input class="col-md-8" type="password" placeholder="Mot de passe" ng-model="staff.password" name="mdp" required/>
+            <label class="col-md-5">Mot de passe <span class="text-danger" ng-if="!form.mdp.$valid">*</span> : </label>
+            <input class="col-md-7" type="password" placeholder="Mot de passe" ng-model="staff.password" name="mdp" required/>
             <div class="help-block" ng-messages="form.mdp.$error" ng-if="form.mdp.$touched">
                 <p ng-message="required">Vous devez entrer un mot de passe.</p>
             </div>
         </div>
         <div class="form-group col-md-12" ng-class="{ 'has-error': form.rmdp.$touched && form.rmdp.$invalid }">
-            <label class="col-md-4">Re-Mot de passe <span class="text-danger" ng-if="!form.rmdp.$valid">*</span> : </label>
-            <input class="col-md-8" type="password" placeholder="Re-saisir le mot de passe" ng-model="staff.repassword" name="rmdp" required/>
+            <label class="col-md-5">Re-Mot de passe <span class="text-danger" ng-if="!form.rmdp.$valid">*</span> : </label>
+            <input class="col-md-7" type="password" placeholder="Re-saisir le mot de passe" ng-model="staff.repassword" name="rmdp" required/>
             <div class="help-block" ng-messages="form.rmdp.$error" ng-if="form.rmdp.$touched">
                 <p ng-message="required">Vous devez entrer à nouveau le mot de passe.</p>
                 <p class="error" ng-if="error">Veuillez saisir le même mot de passe.</p>
             </div>
         </div>
         <div class="form-group col-md-12" ng-class="{ 'has-error': form.autho.$touched && form.autho.$invalid }">
-            <label class="col-md-4">Niveau d'authorisation <span class="text-danger" ng-if="!form.autho.$valid">*</span> : </label>
-            <select class="col-md-8 text-center" ng-model="staff.authorisation" name="autho" required>
+            <label class="col-md-5">Niveau d'authorisation <span class="text-danger" ng-if="!form.autho.$valid">*</span> : </label>
+            <select class="col-md-7 text-center" ng-model="staff.authorisation" name="autho" required>
                 <option value="" selected>----- Niveau d'authorisation -----</option>
                 <option value="Staff">Staff</option>
                 <option value="Admin">Admin</option>

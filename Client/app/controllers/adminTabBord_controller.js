@@ -1,5 +1,5 @@
-angular.module("DepotVente").controller('TabBordController',['$scope', 'Products', 'Depot', 'Vente',
-	function($scope, Products, Depot, Vente){
+angular.module("DepotVente").controller('TabBordController',['$scope', 'Products', 'Depot', 'Vente', 'Paiement', 'Config',
+	function($scope, Products, Depot, Vente, Paiement, Config){
 		// Nombre de produits
         $scope.products = Products.query(
 							function(data) {
@@ -59,7 +59,6 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                         $scope.nbrVenteEnCours+=1;  
                                     }
                                 }
-                                data.length;
                             },
                             function(err) {
                                 $scope.nbrVenteFini=0;
@@ -67,11 +66,32 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                 console.log(err);
                             });
 
-        //Total des vente sans commission
-        $scope.totalSC=0;
-
         //Total des vente avec commission
-        $scope.totalAC=0;
+        //Total des vente sans commission
+        //valeur commission en %
+        $scope.ventes = Vente.query(
+                    function(data) {
+                        $scope.totalAC=0;
+                        $scope.totalSC=0;
+                        $scope.commission=0;
+                        for (i in data){
+                            if(data[i].etat === 'Finie'){
+                                Paiement.get({id_sale : data[i].id},function(data){
+                                    $scope.totalAC+=data.prix;
+                                    Config.get({id:1}, function(data){
+                                        $scope.commission = data.valeur;
+                                        $scope.totalSC = $scope.totalAC - (data.valeur * $scope.totalAC / 100);
+                                    });
+                                });
+                            }
+                        }
+                    },
+                    function(err) {
+                        $scope.totalAC=0;
+                        $scope.totalSC=0;
+                        $scope.commission=0;
+                        console.log(err);
+                    });
 
         //Graphique line
         $scope.labelsline = ["January", "February", "March", "April", "May", "June", "July"];
