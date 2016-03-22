@@ -445,6 +445,26 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     return $response;
 });
 
+//Recuperer paiement effectuer sur la vente id ------>  OK
+$app->get('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
+    $id = $args['id_sale'];
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*");
+    $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
+    $ventes = Ventes::find($id);
+    if(!empty($ventes)) {
+        $paiement = Paiements::where("id_vente","=",$id)->first();
+        if(count($paiement)>0) {
+            $response = $response->write(json_encode($paiement));
+            $response = $response->withHeader('Content-Type', 'application/json');
+        } else {
+        $response = $response->withStatus(404, 'Paiement inexistant');
+        }
+    } else {
+        $response = $response->withStatus(404, 'Vente inexistante');
+    }
+    return $response;
+});
+
 //Supprimer un paiement ------>  OK
 $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
