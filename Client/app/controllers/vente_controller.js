@@ -1,9 +1,7 @@
 angular.module("DepotVente").controller('VenteController',
-		['$scope', '$rootScope', 'Vente', 'VenteProducts', '$route', 'ModePaiement', 'Config', 'Paiement',
-		function($scope, $rootScope, Vente, VenteProducts, $route, ModePaiement, Config, Paiement){
-			
-			$scope.nom = $rootScope.nom;
-			$scope.connect = $rootScope.connect;
+		['$scope', 'Vente', 'VenteProducts', 'ModePaiement', 'Config', 'Paiement',
+		function($scope, Vente, VenteProducts, ModePaiement, Config, Paiement){
+
 			$scope.objet="";
 			$scope.listObjet = {
 				objet : []
@@ -14,14 +12,14 @@ angular.module("DepotVente").controller('VenteController',
 			$scope.type = "";
 
 			$scope.createVente = function(){
-				$scope.vente = new Vente();
-            	$scope.vente.$save(function(data) {
-                                    $scope.venteid = data.id;
-                                    $scope.playVente=true;
-                                },
-                                function(err) {
-                                    $scope.error = err;
-                                });
+			$scope.vente = new Vente();
+        	$scope.vente.$save(function(data) {
+                                $scope.venteid = data.id;
+                                $scope.playVente = true;
+                            },
+                            function(err) {
+                                $scope.error = err;
+                            });
 			}
 
 			$scope.addObject = function(){
@@ -138,6 +136,7 @@ angular.module("DepotVente").controller('VenteController',
 			}
 			$scope.annuleVente = function(){
 				Vente.delete({id: $scope.venteid});
-				$route.reload();
+				$scope.playVente=false;
+				$scope.venteid=false;
 			}
 }]);

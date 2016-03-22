@@ -4,50 +4,28 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 		//Recuperer les modes de paiements
 		$scope.mdpaiement = ModePaiement.query();
 
-		//Recuperer commission sur acheteur
+		//Recuperer commission
 		Config.get({id:1},function(data){
-							$scope.commissionA = data.valeur;
+							$scope.commission = data.valeur;
 						},
                         function(err) {
-                            $scope.commissionA = 0;
+                            $scope.commission = 0;
                         });
-
-		//Recuperer commission sur déposant
-		Config.get({id:2},function(data){
-							$scope.commissionD = data.valeur;
-						},
-	                    function(err) {
-							$scope.commissionD = 0;
-	                    });
 
 		$scope.alert = "";
 
-		$scope.updateCommissionA = function(){
-			new Config({valeur: $scope.commissionA})
+		$scope.updateCommission = function(){
+			new Config({valeur: $scope.commission})
 							.$update({id : 1},
 							function(data){
-								$scope.iseditingA = false;
-								$scope.alert = "La modification de la commission sur acheteur a bien été enregistré.";
+								$scope.Comisediting = false;
+								$scope.alert = "La modification de la commission a bien été enregistré.";
 							});
 		}
 
-		$scope.editCommissionA = function(){
+		$scope.editCommission = function(){
 			$scope.alert = "";
-			$scope.iseditingA = true;
-		}
-
-		$scope.updateCommissionD = function(){
-			new Config({valeur: $scope.commissionD})
-							.$update({id : 2},
-							function(data){
-								$scope.iseditingD = false;
-								$scope.alert = "La modification de la commission sur déposant a bien été enregistré.";
-							});
-		}
-
-		$scope.editCommissionD = function(){
-			$scope.alert = "";
-			$scope.iseditingD = true;
+			$scope.Comisediting = true;
 		}
 
 		$scope.addModePaiement = function(){

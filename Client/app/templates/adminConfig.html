@@ -16,18 +16,11 @@
     </div>
     <form class="col-md-10 col-md-offset-1 col-sm-12">
         <div class="form-group col-md-12 col-sm-12" >
-            <label class="col-md-6 col-sm-6">Commission sur acheteur (en %) : </label>
-            <strong ng-hide="iseditingA">{{commissionA}} %</strong>
-            <img ng-hide="iseditingA" ng-click="editCommissionA()" src="img/edit.png" style="width: 16px" alt="edit" />
-            <input ng-show="iseditingA" class="col-md-4 col-sm-4" type="number" ng-model="commissionA" placeholder="Commission sur acheteur" min="0" max="100"/>
-            <input ng-show="iseditingA" type="submit" class="col-md-2 col-sm-2 btn btn-sm btn-success" value="Ok" ng-click="updateCommissionA()" />
-        </div>
-        <div class="form-group col-md-12 col-sm-12">
-            <label class="col-md-6 col-sm-6">Commission sur déposant (en %) : </label>
-            <strong ng-hide="iseditingD">{{commissionD}} %</strong>
-            <img ng-hide="iseditingD" ng-click="editCommissionD()" src="img/edit.png" style="width: 16px" alt="edit" />
-            <input ng-show="iseditingD" class="col-md-4 col-sm-4" type="number" ng-model="commissionD" placeholder="Commission sur déposant" min="0" max="100"/>
-            <input ng-show="iseditingD" type="submit" class="col-md-2 col-sm-2 btn btn-sm btn-success" value="Ok" ng-click="updateCommissionD()" />
+            <label class="col-md-6 col-sm-6">Commission (en %) : </label>
+            <strong ng-hide="Comisediting">{{commission}} %</strong>
+            <img ng-hide="Comisediting" ng-click="editCommission()" src="img/edit.png" style="width: 16px" alt="edit" />
+            <input ng-show="Comisediting" class="col-md-4 col-sm-4" type="number" ng-model="commission" placeholder="Commission" min="0" max="100"/>
+            <input ng-show="Comisediting" type="submit" class="col-md-2 col-sm-2 btn btn-sm btn-success" value="Ok" ng-click="updateCommission()" />
         </div>
         <div class="form-group col-md-12 col-sm-12" >
             <label class="col-md-6 col-sm-6">Mode de paiement : </label>

@@ -25,7 +25,6 @@
     <script type="text/javascript" src="app/app.js"></script>
     <script type="text/javascript" src="app/controllers/depot_controller.js"></script>
     <script type="text/javascript" src="app/controllers/vente_controller.js"></script>
-    <script type="text/javascript" src="app/controllers/connexion_controller.js"></script>
     <script type="text/javascript" src="app/controllers/adminConfig_controller.js"></script>
     <script type="text/javascript" src="app/controllers/adminGestionStaff_controller.js"></script>
     <script type="text/javascript" src="app/controllers/adminTabBord_controller.js"></script>
@@ -38,18 +37,13 @@
     <script type="text/javascript" src="app/resources/modePaiement_resource.js"></script>
     <script type="text/javascript" src="app/resources/staff_resource.js"></script>
     <script type="text/javascript" src="app/resources/config_resource.js"></script>
-    <script type="text/javascript" src="app/resources/connect_resource.js"></script>
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="style/main.css">  
 </head>
-<body class="col-md-12 col-sm-12" ng-controller="connexionController">
+<body class="col-md-12 col-sm-12">
     <strong class="col-md-2 col-sm-3"><!-- <img src="images/logo.png" alt="Logo"/> -->Logo Dépôt/Vente</strong>
-    <strong class="col-md-10 col-sm-10 text-right" ng-if="nom">
-        Bienvenue {{nom}}
-        <a ng-href="#/" ng-click="Deconnect()">Se déconnecter</a>
-    </strong>
-    <div class="page-header" ng-if="connect">
+    <div class="page-header">
         <div class="container">
             <nav class="navbar navbar-inverse">
                 <ul class="nav navbar-nav">

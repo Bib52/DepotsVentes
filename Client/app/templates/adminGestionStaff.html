@@ -65,10 +65,10 @@
         <strong class="col-md-4 text-muted"><i>Niveau d'authorisation</i></strong>
     </div>
     <div class="col-md-12" ng-repeat="obj in staffs">
-        <strong ng-hide="staff.isediting" class="col-md-4 bg-primary">{{obj.nom}}</strong>
-        <strong ng-hide="staff.isediting" class="col-md-4 bg-primary">{{obj.login}}</strong>
-        <strong ng-hide="staff.isediting" class="col-md-3 bg-primary">{{obj.permission}}</strong>
-        <div class="text-right" ng-hide="staff.isediting">
+        <strong ng-hide="obj.isediting" class="col-md-4 bg-primary">{{obj.nom}}</strong>
+        <strong ng-hide="obj.isediting" class="col-md-4 bg-primary">{{obj.login}}</strong>
+        <strong ng-hide="obj.isediting" class="col-md-3 bg-primary">{{obj.permission}}</strong>
+        <div class="text-right" ng-hide="obj.isediting">
             <img ng-click="editStaff(obj)" src="img/edit.png" style="width: 16px" alt="edit" />
             <img ng-click="deleteStaff(obj)" src="img/delete.png" style="width: 16px" alt="delete" />
         </div>

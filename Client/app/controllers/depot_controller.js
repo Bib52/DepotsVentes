@@ -85,7 +85,15 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                 function(err) {
                                     $scope.error = err;
                                 });
-            $scope.products = DepotProducts.query({idDepot: $scope.id});
+            $scope.products = DepotProducts.query({idDepot: $scope.id}, function() {
+                                            $scope.totalRembourser=0;
+                                            for(i in $scope.products){
+                                                if($scope.products[i].etat === "Vendu" || $scope.products[i].etat === "Perdu"){
+                                                    $scope.totalRembourser+=$scope.products[i].prix;
+                                                }
+                                            }
+                                            console.log("rembourser " + $scope.totalRembourser);
+                                        });
         }
 
         $scope.deleteDepot = function(){
