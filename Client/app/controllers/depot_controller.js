@@ -127,6 +127,11 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                             .$update({idDepot: data[i].id_depot, ref: data[i].reference},
                             function(data){
                                 $scope.totalRembourser-=data.prix;
+                                for(i in $scope.products){
+                                    if ($scope.products[i].reference === data.reference){
+                                        $scope.products[i].etat = "Payé";
+                                    }
+                                }
                             });
                     }
                 }

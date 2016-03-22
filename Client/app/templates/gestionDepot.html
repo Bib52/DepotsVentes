@@ -28,14 +28,14 @@
 
 <div class="col-md-8 col-sm-6 col-xs-6" ng-show="isplay">
     <div class="col-md-12 text-right">
-        <strong class="badge">Identifiant : {{depot.id}}</strong>
-        <button ng-click="deleteDepot()" class="btn btn-xs btn-danger col-md-offset-8 col-md-2">Suppr Depot</button>
+        <strong class="badge col-md-2">Identifiant : {{depot.id}}</strong>
+        <button ng-click="deleteDepot()" class="btn btn-xs btn-danger col-md-offset-8 col-md-2"><strong>Supprimer</strong></button>
     </div>
     <div class="col-md-12 alert alert-info" ng-hide="editCoord">
         <div class="col-md-4"><i>Nom : </i><strong>{{depot.nom}}</strong></div>
         <div class="col-md-4"><i>Prenom : </i><strong>{{depot.prenom}}</strong></div>
         <div class="col-md-3"><i>Téléphone : </i><strong>{{depot.telephone}}</strong></div>
-        <button ng-click="EditCoord()" class="btn btn-xs btn-success col-md-1">Modifier</button>
+        <button ng-click="EditCoord()" class="btn btn-xs btn-success col-md-1"><strong>Modifier</strong></button>
         <div class="col-md-8"><i>Adresse : </i><strong>{{depot.adresse}}</strong></div>
         <div class="col-md-4"><i>E-mail : </i><strong>{{depot.email}}</strong></div>
     </div>
@@ -130,7 +130,7 @@
             <strong ng-hide="obj.isediting" class="col-md-2 bg-primary">{{obj.prix}} €</strong>
             <strong ng-hide="obj.isediting" class="col-md-3 bg-primary">{{obj.etat}}</strong>
 
-            <div class="text-right" ng-hide="obj.isediting" ng-if="obj.etat === 'En stock' || obj.etat === 'Perdu'">
+            <div class="text-right" ng-hide="obj.isediting" ng-if="obj.etat === 'Perdu' || obj.etat === 'En stock'  || obj.etat === 'En cours de vente'">
                 <img ng-click="editObject(obj)" src="img/edit.png" style="width: 16px" alt="edit" />
                 <img ng-click="deleteObject(obj)" src="img/delete.png" style="width: 16px" alt="delete" />
             </div>
@@ -162,9 +162,9 @@
                 <input type="submit" class="col-md-1 btn btn-sm btn-warning" value="Valider" ng-click="editobj.$valid && updObject(obj)"/>
             </form>
         </div>
-        <div class="col-md-12 text-center" ng-if="totalRembourser != 0">
-            <b>Somme due : {{totalRembourser}}</b>
-            <button class="btn btn-xs btn-success" ng-click="payer()">Payer</button>
+        <div class="alert alert-danger col-md-12 text-center" ng-if="totalRembourser != 0">
+            <b>Somme due : {{totalRembourser}} €</b>
+            <button class="btn btn-sm btn-success" ng-click="payer()"><strong>Payer</strong></button>
         </div>
     </div>
 </div>
