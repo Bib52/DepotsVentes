@@ -14,6 +14,7 @@ class Ventes extends Eloquent{
     {
         $vente = new Ventes();
         $vente->etat = "En cours";
+        $vente->date = date("Y-m-d");
         $vente->save();
         return $vente->id;
     }

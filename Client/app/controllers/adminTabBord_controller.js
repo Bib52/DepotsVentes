@@ -1,5 +1,23 @@
 angular.module("DepotVente").controller('TabBordController',['$scope', 'Products', 'Depot', 'Vente', 'Paiement', 'Config',
 	function($scope, Products, Depot, Vente, Paiement, Config){
+        
+        var semaine = [];
+        var calculDate = function(){
+            for (var i=0; i<7; i++){
+                var m = [ "01", "02", "03",
+                    "04", "05", "06", 
+                    "07","08", "09", 
+                    "10","11", "12"];
+                var d = new Date(Date.now());
+                var jour = d.getDate()-i;
+                var mois = d.getMonth();
+                var annee = d.getFullYear();
+                var date = (annee+'-'+m[mois]+'-'+jour);
+                semaine.push(date);
+            }
+            return semaine;
+        }
+
 		// Nombre de produits
         $scope.products = Products.query(
 							function(data) {
@@ -89,6 +107,13 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                 });
                             }
                         }
+                        //Graphique line
+                        $scope.labelsline = [calculDate()[6], calculDate()[5], calculDate()[4], calculDate()[3], calculDate()[2], calculDate()[1], calculDate()[0]];
+                        $scope.seriesline = ['Series A', 'Series B'];
+                        $scope.dataline = [
+                            [65, 59, 80, 81, 56, 55, 40],
+                            [28, 48, 40, 19, 86, 27, 90]
+                        ];
                     },
                     function(err) {
                         $scope.totalAC=0;
@@ -97,11 +122,5 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                         console.log(err);
                     });
 
-        //Graphique line
-        $scope.labelsline = ["January", "February", "March", "April", "May", "June", "July"];
-        $scope.seriesline = ['Series A', 'Series B'];
-        $scope.dataline = [
-            [65, 59, 80, 81, 56, 55, 40],
-            [28, 48, 40, 19, 86, 27, 90]
-        ];
+       
 }]);

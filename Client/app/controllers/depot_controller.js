@@ -97,7 +97,8 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                 });
             $scope.products = DepotProducts.query({idDepot: $scope.id}, function() {
                                             for(i in $scope.products){
-                                                if($scope.products[i].etat === "Vendu" || $scope.products[i].etat === "Perdu"){
+                                                if($scope.products[i].etat === "Vendu" 
+                                                    || $scope.products[i].etat === "Perdu"){
                                                     $scope.totalRembourser+=$scope.products[i].prix;
                                                 }
                                             }
@@ -107,9 +108,11 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         $scope.deleteDepot = function(){
             if(confirm("Voulez-vous supprimer le dépôt ainsi que ces poduits ?"))
             {
-                Depot.delete({id: $scope.id},
+                Depot.delete({id: $scope.depot.id},
                             function() {
-                                $location.path("/depot/new")
+                                $scope.isplay = false;
+                                $scope.depot = "";
+                                $location.path("/depot/new");
                             },
                             function(err) {
                                 $scope.error = err;
@@ -118,7 +121,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         }
 
         $scope.payer = function(){
-            DepotProducts.query({idDepot: $scope.id}, function(data) {
+            DepotProducts.query({idDepot: $scope.depot.id}, function(data) {
                 for(i in data){
                     if(data[i].etat === "Vendu" || data[i].etat === "Perdu"){
                         new DepotProducts({prix: data[i].prix,

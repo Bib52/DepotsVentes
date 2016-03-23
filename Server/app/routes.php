@@ -402,6 +402,7 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
         Produits::where('id_vente', '=', $id)
                 ->update(['etat' => 'En stock', 
                         'id_vente' => 0]);
+        Paiements::where('id_vente', "=", $id)->delete();
         $vente->delete();
         $response = $response->withStatus(200, 'Vente deleted');
     } else {
@@ -721,7 +722,7 @@ $app->put('/api/staffs/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------COMMISSIONS------------------------------ */
-//Recuperer toutes les cnfigurations ------>  OK
+//Recuperer toutes les configurations ------>  OK
 $app->get('/api/configurations', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");

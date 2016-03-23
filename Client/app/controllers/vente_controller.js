@@ -75,14 +75,23 @@ angular.module("DepotVente").controller('VenteController',
 				.$save({id_sale : $scope.venteid},
 				function(data) {
 					var date = calculDate();
+					var temp ="";
+					for (i in $scope.listObjet.objet)
+					{
+						var p = parseFloat($scope.listObjet.objet[i].prix);
+						prix = (p+(5*p/100)).toFixed(2).toString();
+						
+						temp +="{columns: [{width: '*',text: '"+$scope.listObjet.objet[i].reference.toString()+"'},{width: '*',text: '"+$scope.listObjet.objet[i].description+"'},{width: '*',text: '"+p+"'},{width: '*',text: '"+prix+"'}],},";
+					}
+					console.log(temp);
 					if($scope.vente.nom && $scope.vente.prenom && $scope.vente.adresse && $scope.vente.ville){
 						var doc = {
 			        	  content: [
-			        	    { text: 'Date : ' + date, fontSize: 15 ,margin: [ 0,0, 0, 0 ]},
-			        	    { text: 'N° Vente : ' + $scope.venteid, fontSize: 15 ,margin: [ 0, 0, 0, 0 ]},
-		        	    	{ text: $scope.vente.nom + " " + $scope.vente.prenom , fontSize: 15 ,margin: [ 300, 0, 0, 0 ]},
-		        	    	{ text: $scope.vente.adresse, fontSize: 15 ,margin: [ 300, 0, 0, 0 ]},
-		        	    	{ text: $scope.vente.ville, fontSize: 15 ,margin: [ 300, 0, 0, 30 ]},		                
+			        	    { text: 'Date : ' + date, fontSize: 15, margin: [0,0,0,0]},
+			        	    { text: 'N° Vente : ' + $scope.venteid, fontSize: 15, margin: [0,0,0,0]},
+		        	    	{ text: $scope.vente.nom + " " + $scope.vente.prenom , fontSize: 15, margin: [300,0,0,0]},
+		        	    	{ text: $scope.vente.adresse, fontSize: 15, margin: [300,0,0,0]},
+		        	    	{ text: $scope.vente.ville, fontSize: 15, margin: [300,0,0,30]},		                
 		        	    	{
 			                  columns: [
 			                    {
@@ -104,35 +113,16 @@ angular.module("DepotVente").controller('VenteController',
 			                  ],
 			                },
 			                { text: ' ', fontSize: 10},
-			                {
-			                  columns: [
-			                    {
-			                      width: '*',
-			                      text: '14'
-			                    },
-			                    {
-			                      width: '*',
-			                      text: 'efjfjioji'
-			                    },
-			                    {
-			                      width: '*',
-			                      text: '10 €'
-			                    },
-			                    {
-			                      width: '*',
-			                      text: '10 €'
-			                    }
-			                  ],
-			                },
-			                { text: ' ', fontSize: 10},
-			                { text: 'Prix Total (SC) : 100 €', bold:true, fontSize: 13 ,margin: [ 300,0, 0, 0 ]},
-			                { text: 'Prix Total (AC) : 100 €', bold:true, fontSize: 13 ,margin: [ 300,0, 0, 0 ]},
+			               	// + temp +
+			                { text: 'Prix Total (SC) : '+ $scope.prixtotale +' €', bold: true, fontSize: 13, margin: [300,10,0,0]},
+			                { text: 'Prix Total (AC) : '+ $scope.prixtotaleAC +' €', bold: true, fontSize: 13, margin: [300,0,0,0]},
+			        		{ text: 'Réglé par : ' + $scope.modepaiement, bold: true, fontSize: 13, margin: [300,0,0,0]},
 			        	]};
 			        } else {
 			        	var doc = {
 			        	  content: [
-			        	    { text: 'Date : ' + date, fontSize: 15 ,margin: [ 0,0, 0, 0 ]},
-			        	    { text: 'N° Vente : ' + $scope.venteid, fontSize: 15 ,margin: [ 0, 0, 0, 30 ]},	                
+			        	    { text: 'Date : ' + date, fontSize: 15, margin: [0,0,0,0]},
+			        	    { text: 'N° Vente : ' + $scope.venteid, fontSize: 15, margin: [0,0,0,30]},	                
 		        	    	{
 			                  columns: [
 			                    {
@@ -154,36 +144,17 @@ angular.module("DepotVente").controller('VenteController',
 			                  ],
 			                },
 			                { text: ' ', fontSize: 10},
-			                {
-			                  columns: [
-			                    {
-			                      width: '*',
-			                      text: '14'
-			                    },
-			                    {
-			                      width: '*',
-			                      text: 'efjfjioji'
-			                    },
-			                    {
-			                      width: '*',
-			                      text: '10 €'
-			                    },
-			                    {
-			                      width: '*',
-			                      text: '10 €'
-			                    }
-			                  ],
-			                },
-			                { text: ' ', fontSize: 10},
-			                { text: 'Prix Total (SC) : 100 €', bold:true, fontSize: 13 ,margin: [ 300,0, 0, 0 ]},
-			                { text: 'Prix Total (AC) : 100 €', bold:true, fontSize: 13 ,margin: [ 300,0, 0, 0 ]},
+			                // + temp +
+			                {columns: [{width: '*',text: '10'},{width: '*',text: 'didi'},{width: '*',text: '35'},{width: '*',text: '36.75'}],},
+			                { text: 'Prix Total (SC) : ' + $scope.prixtotale + ' €', bold: true, fontSize: 13, margin: [300,10,0,0]},
+			                { text: 'Prix Total (AC) : ' + $scope.prixtotaleAC + ' €', bold: true, fontSize: 13, margin: [300,0,0,0]},
+			        		{ text: 'Réglé par : ' + $scope.modepaiement, bold: true, fontSize: 13, margin: [300,0,0,0]},
 			        	]};
 			        }
 
 
 					pdfMake.createPdf(doc).open();
-
-					pdfMake.createPdf(doc).download();
+					pdfMake.createPdf(doc).download('facture.pdf');
 
 						// var facture = new jsPDF();
 						// facture.setFont('Helvetica-Bold');
