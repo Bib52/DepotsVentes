@@ -18,8 +18,7 @@
         </ul>
         <div class="col-md-12">
             <i><strong class="text-info">Nombre de produits en fonction de son état : </strong></i>
-            <canvas id="pie" class="chart chart-pie" chart-data="datapie" 
-            chart-labels="labelspie"></canvas>
+            <canvas id="pie" class="chart chart-pie" chart-data="datapie" chart-labels="labelspie"></canvas>
         </div>
     </div>
     <div class="col-md-6">
@@ -28,9 +27,9 @@
             <li><strong>Nombre total des ventes en cours : <span class="text-danger">{{nbrVenteEnCours}}</span></strong></li>
         </ul>
         <div class="col-md-12">
-            <i><strong class="text-info">Test : </strong></i>
-            <canvas id="line" class="chart chart-line" chart-data="dataline" chart-labels="labelsline" 
-            chart-legend="true" chart-series="seriesline" chart-click="onClick"></canvas>
+            <i><strong class="text-info">Nombre de ventes finie : </strong></i>
+            <canvas id="line" class="chart chart-line" chart-data="dataline" 
+            chart-labels="labelsline" chart-legend="false"chart-click="onClick"></canvas>
         </div>
     </div>
     <div class="col-md-12">
@@ -39,5 +38,5 @@
             <li><strong>Prix total des ventes <span class="small">(avec commission)</span> : <span class="text-danger">{{totalAC}} €</span></strong></li>
             <li><strong>Valeur commission <span class="small">(en %)</span> : <span class="text-danger">{{commission}} %</span></strong></li>
         </ul>
-    </div>
+    </div> 
 </div>

@@ -96,6 +96,13 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                         $scope.totalAC=0;
                         $scope.totalSC=0;
                         $scope.commission=0;
+                        $scope.ventej6=0;
+                        $scope.ventej5=0;
+                        $scope.ventej4=0;
+                        $scope.ventej3=0;
+                        $scope.ventej2=0;
+                        $scope.ventej1=0;
+                        $scope.ventej0=0;
                         for (i in data){
                             if(data[i].etat === 'Finie'){
                                 Paiement.get({id_sale : data[i].id},function(data){
@@ -106,13 +113,34 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                     });
                                 });
                             }
+                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[6]){
+                                $scope.ventej6+=1;
+                            }
+                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[5]){
+                                $scope.ventej5+=1;
+                            }
+                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[4]){
+                                $scope.ventej4+=1;
+                            }
+                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[3]){
+                                $scope.ventej3+=1;
+                            }
+                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[2]){
+                                $scope.ventej2+=1;
+                            }
+                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[1]){
+                                $scope.ventej1+=1;
+                            }
+                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[0]){
+                                $scope.ventej0+=1;
+                            }
                         }
-                        //Graphique line
-                        $scope.labelsline = [calculDate()[6], calculDate()[5], calculDate()[4], calculDate()[3], calculDate()[2], calculDate()[1], calculDate()[0]];
-                        $scope.seriesline = ['Series A', 'Series B'];
+                        //Graphique line : Nombre de vente chaque jour de le semaine
+                        $scope.labelsline = [calculDate()[6], calculDate()[5], calculDate()[4], 
+                                            calculDate()[3], calculDate()[2], calculDate()[1], calculDate()[0]];
                         $scope.dataline = [
-                            [65, 59, 80, 81, 56, 55, 40],
-                            [28, 48, 40, 19, 86, 27, 90]
+                            [$scope.ventej6, $scope.ventej5, $scope.ventej4, $scope.ventej3, 
+                            $scope.ventej2, $scope.ventej1, $scope.ventej0]                        
                         ];
                     },
                     function(err) {
@@ -121,6 +149,4 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                         $scope.commission=0;
                         console.log(err);
                     });
-
-       
 }]);
