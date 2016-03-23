@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Lun 21 Mars 2016 à 22:37
+-- Généré le :  Mer 23 Mars 2016 à 22:16
 -- Version du serveur :  10.0.17-MariaDB
 -- Version de PHP :  5.6.14
 
@@ -37,8 +37,7 @@ CREATE TABLE `configurations` (
 --
 
 INSERT INTO `configurations` (`id`, `nom`, `valeur`) VALUES
-(1, 'Commission sur acheteur', 7),
-(2, 'Commission sur déposant', 5);
+(1, 'Commission', 5);
 
 -- --------------------------------------------------------
 
@@ -60,8 +59,13 @@ CREATE TABLE `depots` (
 --
 
 INSERT INTO `depots` (`id`, `nom`, `prenom`, `email`, `adresse`, `telephone`) VALUES
-(60, 'ah', 'aha', 'ahh@ajaj', 'hah', '0444505454'),
-(61, 'titi', 'titi', 'titi@titi', 'titi', '0444505454');
+(69, 'lolo', 'LO', 'a@a', 'A', '0444505454'),
+(70, 'lolo', 'LO', 'b@as', 'A', '0444505454'),
+(71, 'lolo', 'LO', 'dddd@dd', 'A', '0444505454'),
+(72, 'lolo', 'LO', 'pod@a', 'A', '0444505454'),
+(73, 'lolo', 'LO', 'poiz@paa', 'A', '0444505454'),
+(74, 'lolo', 'dcoo', 'pk@ao', 'oaoa', '0444505454'),
+(77, 'lop', 'oi', 'io@iu', 'io', '0444505454');
 
 -- --------------------------------------------------------
 
@@ -102,10 +106,43 @@ CREATE TABLE `paiements` (
 --
 
 INSERT INTO `paiements` (`id`, `prix`, `mode_paiements`, `id_vente`) VALUES
-(5, 26.75, 'Espèce', 73),
-(6, 26.75, 'Carte Bleue', 74),
-(7, 26.75, 'Espèce', 75),
-(8, 32.1, 'Espèce', 76);
+(12, 10.5, 'Carte Bleue', 124),
+(13, 15.75, 'Carte Bleue', 126),
+(14, 42, 'Carte Bleue', 129),
+(15, 15.75, 'Carte Bleue', 131),
+(16, 15.75, 'Carte Bleue', 134),
+(17, 15.75, 'Carte Bleue', 136),
+(18, 10.5, 'Carte Bleue', 138),
+(19, 36.75, 'Carte Bleue', 139),
+(20, 36.75, 'Carte Bleue', 141),
+(21, 47.25, 'Carte Bleue', 143),
+(22, 47.25, 'Carte Bleue', 145),
+(23, 47.25, 'Carte Bleue', 146),
+(24, 10.5, 'Carte Bleue', 147),
+(25, 36.75, 'Carte Bleue', 148),
+(26, 10.5, 'Espèce', 149),
+(27, 10.5, 'Carte Bleue', 150),
+(28, 36.75, 'Carte Bleue', 151),
+(29, 10.5, 'Carte Bleue', 152),
+(30, 10.5, 'Carte Bleue', 154),
+(31, 10.5, 'Carte Bleue', 155),
+(32, 10.5, 'Carte Bleue', 156),
+(33, 10.5, 'Carte Bleue', 156),
+(34, 10.5, 'Carte Bleue', 157),
+(35, 10.5, 'Carte Bleue', 158),
+(36, 10.5, 'Carte Bleue', 159),
+(37, 10.5, 'Carte Bleue', 160),
+(38, 10.5, 'Carte Bleue', 161),
+(39, 10.5, 'Carte Bleue', 162),
+(40, 10.5, 'Carte Bleue', 162),
+(41, 10.5, 'Carte Bleue', 163),
+(44, 63, 'Carte Bleue', 173),
+(45, 26.25, 'Espèce', 174),
+(48, 52.5, 'Espèce', 177),
+(52, 42, 'Espèce', 181),
+(66, 36.75, 'Carte Bleue', 194),
+(67, 36.75, 'Carte Bleue', 194),
+(68, 15.75, 'Carte Bleue', 198);
 
 -- --------------------------------------------------------
 
@@ -127,16 +164,25 @@ CREATE TABLE `produits` (
 --
 
 INSERT INTO `produits` (`reference`, `prix`, `description`, `etat`, `id_depot`, `id_vente`) VALUES
-(1, 10, 'je', 'Vendu', 60, 50),
-(2, 35, 'zjas', 'En cours de vente', 60, 52),
-(3, 10, 'ee', 'Rendu', 60, 54),
-(4, 100, 'zzii', 'En cours de vente', 60, 68),
-(5, 25, 'kz', 'En cours de vente', 60, 75),
-(6, 30, 'jkek', 'En cours de vente', 60, 76),
-(7, 25, 'ok', 'En stock', 61, 0),
-(8, 30, 'lolo', 'En stock', 61, 0),
-(9, 40, 'vizv', 'En stock', 61, 0),
-(10, 15, 'also', 'En stock', 61, 0);
+(1, 10, 'd', 'Vendu', 74, 173),
+(2, 25, 'sosoos', 'Vendu', 74, 173),
+(3, 25, 'sosoo', 'Vendu', 74, 173),
+(4, 15, 'ppso', 'Vendu', 74, 198),
+(5, 10, 'ssi', 'Vendu', 73, 174),
+(6, 15, 'sos', 'Vendu', 73, 174),
+(7, 30, 'aksi', 'Vendu', 73, 177),
+(8, 20, 'alo', 'Vendu', 71, 177),
+(9, 25, 'poi', 'En stock', 71, 0),
+(10, 35, 'didi', 'Vendu', 70, 194),
+(11, 40, 'poiu', 'En stock', 70, 0),
+(12, 50, 'poiuh', 'En stock', 70, 0),
+(15, 40, 'lkjh', 'Vendu', 70, 181),
+(20, 15, 'oto', 'En stock', 77, 0),
+(21, 10, 'ajsj', 'En cours de vente', 77, 200),
+(22, 45, 'skjkkl', 'En stock', 77, 0),
+(23, 30, 'ksksk', 'En stock', 77, 0),
+(24, 25, 'jkskjsd', 'En stock', 77, 0),
+(25, 10, 'kskls', 'En stock', 77, 0);
 
 -- --------------------------------------------------------
 
@@ -161,7 +207,9 @@ INSERT INTO `staff` (`id`, `nom`, `login`, `password`, `permission`) VALUES
 (9, 'ba', 'bab', '$2y$10$55msCO6MjzZqPtW0pQgnleWwI5QLWCoL2xFeXo5RrMyo2quRWVxBe', 'Staff'),
 (10, 'bo', 'bo', '$2y$10$vFKq7ALPcqKAwxo1bNbdNux9vce/sfFQHrLtP63oxMw15G7LlSdce', 'Staff'),
 (11, 'ole', 'la', '$2y$10$FMZbHJRpto1731jsA1ti7OJ.J2BsD7Oyi7tfLw5d0spyJreMqk3zK', 'Staff'),
-(12, 'papa', 'papa', '$2y$10$0V/W1mlcku32/FUFHu3ev.0jQ58/SGTqUb0j08h0yj0XQ8jqTkObK', 'Staff');
+(12, 'papa', 'papa', '$2y$10$0V/W1mlcku32/FUFHu3ev.0jQ58/SGTqUb0j08h0yj0XQ8jqTkObK', 'Staff'),
+(13, 'toto', 'tata', '$2y$10$faEmkiVxRGtL87BL.WQb6.Q9sNBnvCfq90nnitDSQZSOWRn6PTATS', 'Staff'),
+(15, 'mou', 'mourad', '$2y$10$0yt5WB2eSWHZArVUYMsLDOU2E70I3Df6zRxP7Fpyjhu.aSSO9AoSq', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -177,26 +225,25 @@ CREATE TABLE `ventes` (
   `ville` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL,
   `telephone` varchar(20) NOT NULL,
-  `etat` varchar(50) NOT NULL
+  `etat` varchar(50) NOT NULL,
+  `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Contenu de la table `ventes`
 --
 
-INSERT INTO `ventes` (`id`, `nom`, `prenom`, `adresse`, `ville`, `email`, `telephone`, `etat`) VALUES
-(53, '', '', '', '', '', '', 'En cours'),
-(54, '', '', '', '', '', '', 'En cours'),
-(59, '', '', '', '', '', '', 'En cours'),
-(60, '', '', '', '', '', '', 'En cours'),
-(62, '', '', '', '', '', '', 'En cours'),
-(63, '', '', '', '', '', '', 'En cours'),
-(64, '', '', '', '', '', '', 'En cours'),
-(66, '', '', '', '', '', '', 'En cours'),
-(67, '', '', '', '', '', '', 'En cours'),
-(68, '', '', '', '', '', '', 'En cours'),
-(75, '', '', '', '', '', '', 'En cours'),
-(76, '', '', '', '', '', '', 'En cours');
+INSERT INTO `ventes` (`id`, `nom`, `prenom`, `adresse`, `ville`, `email`, `telephone`, `etat`, `date`) VALUES
+(171, '', '', '', '', '', '', 'En cours', '0000-00-00'),
+(173, '', '', '', '', '', '', 'Finie', '0000-00-00'),
+(174, '', '', '', '', '', '', 'Finie', '0000-00-00'),
+(177, '', '', '', '', '', '', 'Finie', '0000-00-00'),
+(181, '', '', '', '', '', '', 'Finie', '0000-00-00'),
+(194, '', '', '', '', '', '', 'Finie', '0000-00-00'),
+(195, '', '', '', '', '', '', 'En cours', '0000-00-00'),
+(197, '', '', '', '', '', '', 'En cours', '2016-03-23'),
+(198, '', '', '', '', '', '', 'Finie', '2016-03-23'),
+(200, '', '', '', '', '', '', 'En cours', '2016-03-23');
 
 --
 -- Index pour les tables exportées
@@ -257,27 +304,27 @@ ALTER TABLE `configurations`
 -- AUTO_INCREMENT pour la table `depots`
 --
 ALTER TABLE `depots`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 --
 -- AUTO_INCREMENT pour la table `modepaiements`
 --
 ALTER TABLE `modepaiements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 --
 -- AUTO_INCREMENT pour la table `paiements`
 --
 ALTER TABLE `paiements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 --
 -- AUTO_INCREMENT pour la table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT pour la table `ventes`
 --
 ALTER TABLE `ventes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=201;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
