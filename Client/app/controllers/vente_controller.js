@@ -101,13 +101,15 @@ angular.module("DepotVente").controller('VenteController',
 					facture.setFontStyle("normal");
 					facture.text(20, 85, "Référence");
 					facture.text(60, 85, "Description");
-					facture.text(170, 85, "Prix");
+					facture.text(140, 85, "Prix (SC)");
+					facture.text(170, 85, "Prix (AC)");
 					for(var i = 0; i < $scope.listObjet.objet.length; i++){
 						hauteur = 95+5*i;
 						var p = parseFloat($scope.listObjet.objet[i].prix);
 						prix = (p+(5*p/100)).toFixed(2).toString();
 						facture.text(20, hauteur, $scope.listObjet.objet[i].reference.toString());
 						facture.text(60, hauteur, $scope.listObjet.objet[i].description);
+						facture.text(140, hauteur, $scope.listObjet.objet[i].prix.toFixed(2).toString() + ' €');
 						facture.text(170, hauteur, prix + ' €');
 					}
 					facture.setFontStyle("bold");
