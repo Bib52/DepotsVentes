@@ -249,5 +249,9 @@ angular.module("DepotVente").controller('VenteController',
 				$scope.playVente=false;
 				$scope.payment=false;
 				$scope.venteid=false;
+				$scope.objet="";
+				$scope.listObjet = {
+					objet : []
+				};
 			}
 }]);

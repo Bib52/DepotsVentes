@@ -9,6 +9,7 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                 $scope.nbrVendu = 0;
                                 $scope.nbrRendu = 0;
                                 $scope.nbrPerdu = 0;
+                                $scope.nbrPaye = 0;
                                 for (i in data){
                                     if(data[i].etat === "En stock"){
                                         $scope.nbrEnStock+=1;
@@ -25,11 +26,14 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                     if(data[i].etat === "Perdu"){
                                         $scope.nbrPerdu+=1;
                                     }
-                                    //Graphique pie : nombre produits en fonction de son etat
-                                    $scope.labelspie=["En stock","En cours de vente","Vendu","Rendu","Perdu"];
-                                    $scope.datapie=[$scope.nbrEnStock,$scope.nbrCoursVente,
-                                                    $scope.nbrVendu,$scope.nbrRendu,$scope.nbrPerdu];
+                                    if(data[i].etat === "Payé"){
+                                        $scope.nbrPaye+=1;
+                                    }
                                 }
+                                //Graphique pie : nombre produits en fonction de son etat
+                                $scope.labelspie=["En stock","En cours de vente","Vendu","Rendu","Perdu","Payé"];
+                                $scope.datapie=[$scope.nbrEnStock,$scope.nbrCoursVente,$scope.nbrVendu,
+                                                $scope.nbrRendu,$scope.nbrPerdu,$scope.nbrPaye];
                             },
                             function(err) {
                                 $scope.nbrProducts=0;
