@@ -172,7 +172,6 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             facture.text(20, 28, "Date : " + date);
             facture.text(120, 40, $scope.depot.nom + " " + $scope.depot.prenom);
             facture.text(120, 48, $scope.depot.adresse);
-            facture.text(120, 56, $scope.depot.email);
             facture.text(120, 64, $scope.depot.telephone);
             facture.setFontSize(22);
             facture.setFontStyle("bold");
