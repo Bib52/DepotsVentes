@@ -82,19 +82,9 @@ angular.module("DepotVente").controller('VenteController',
 					facture.setFont('Helvetica-Bold');
 					facture.text(20, 20, "Numéro de facture : " + $scope.venteid);
 					facture.text(20, 25, "Date : " + date);
-					if($scope.vente.nom && $scope.vente.prenom){
+					if($scope.vente.nom && $scope.vente.prenom && $scope.vente.adresse && $scope.vente.ville){
 						facture.text(120, 40, $scope.vente.nom + " " + $scope.vente.prenom);
-					}
-					else if($scope.vente.prenom){
-						facture.text(120, 40, $scope.vente.prenom);
-					}
-					else if($scope.vente.nom){
-						facture.text(120, 40, $scope.vente.nom);
-					}
-					if($scope.vente.adresse){
 						facture.text(120, 45, $scope.vente.adresse);
-					}
-					if($scope.vente.ville){
 						facture.text(120, 50, $scope.vente.ville);
 					}
 					facture.setFontSize(22);

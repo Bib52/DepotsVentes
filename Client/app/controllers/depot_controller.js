@@ -149,4 +149,47 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 }
             });
         }
+
+        var calculDate = function(){
+            var m = [
+                "Janvier", "Février", "Mars",
+                "Avril", "Mai", "Juin", "Juillet",
+                "Août", "Septembre", "Octobre",
+                "Novembre", "Décembre"];
+            var d = new Date(Date.now());
+            var jour = d.getDate();
+            var mois = d.getMonth();
+            var annee = d.getFullYear();
+            var date = (jour + ' ' + m[mois] + ' ' + annee);
+            return date;
+        }
+
+        $scope.recepisseDepot = function(){
+            var date = calculDate();
+            var facture = new jsPDF();
+            facture.setFont('Helvetica-Bold');
+            facture.text(20, 20, "Identifiant déposant : " + $scope.depot.id);
+            facture.text(20, 28, "Date : " + date);
+            facture.text(120, 40, $scope.depot.nom + " " + $scope.depot.prenom);
+            facture.text(120, 48, $scope.depot.adresse);
+            facture.text(120, 56, $scope.depot.email);
+            facture.text(120, 64, $scope.depot.telephone);
+            facture.setFontSize(22);
+            facture.setFontStyle("bold");
+            facture.text(20, 80, "Récapitulatif : ");
+            facture.setFontSize(16);
+            facture.setFontStyle("normal");
+            facture.text(20, 95, "Référence");
+            facture.text(60, 95, "Description");
+            facture.text(170, 95, "Prix");
+            for(i in $scope.products){
+                hauteur = 105+5*i;
+                if($scope.products[i].reference != undefined){
+                    facture.text(20, hauteur, $scope.products[i].reference.toString());
+                    facture.text(60, hauteur, $scope.products[i].description);
+                    facture.text(170, hauteur, $scope.products[i].prix + ' €');
+                }
+            }
+            facture.save('recepisse.pdf');
+        }
 }]);
