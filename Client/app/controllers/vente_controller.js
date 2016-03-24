@@ -125,6 +125,7 @@ angular.module("DepotVente").controller('VenteController',
 						telephone: $scope.vente.telephone}).$update({id: $scope.venteid},
 				                function(data){
 				                    console.log(data);
+				                    $scope.generatePDF();
 				                },
 				                function(err) {
 				                    $scope.error = err;
