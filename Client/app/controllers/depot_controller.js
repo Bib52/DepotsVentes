@@ -172,17 +172,17 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             facture.text(20, 28, "Date : " + date);
             facture.text(120, 40, $scope.depot.nom + " " + $scope.depot.prenom);
             facture.text(120, 48, $scope.depot.adresse);
-            facture.text(120, 64, $scope.depot.telephone);
+            facture.text(120, 56, $scope.depot.telephone);
             facture.setFontSize(22);
             facture.setFontStyle("bold");
-            facture.text(20, 80, "Récapitulatif : ");
+            facture.text(20, 70, "Récapitulatif : ");
             facture.setFontSize(16);
             facture.setFontStyle("normal");
-            facture.text(20, 95, "Référence");
-            facture.text(60, 95, "Description");
-            facture.text(170, 95, "Prix");
+            facture.text(20, 85, "Référence");
+            facture.text(60, 85, "Description");
+            facture.text(170, 85, "Prix");
             for(i in $scope.products){
-                hauteur = 105+5*i;
+                hauteur = 95+5*i;
                 if($scope.products[i].reference != undefined){
                     facture.text(20, hauteur, $scope.products[i].reference.toString());
                     facture.text(60, hauteur, $scope.products[i].description);
