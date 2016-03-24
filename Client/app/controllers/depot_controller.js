@@ -45,10 +45,8 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                     description: $scope.objet.description, 
                                     idDepot: $scope.depot.id});
             product.$save(function(data) {
-                    if (data.description.length > 30){
-                        data.description = data.description.substr(0,30) + '..';
-                    }else{
-                        data.description = data.description;
+                    if (data.description.length > 20){
+                        data.description = data.description.substr(0,20) + '..';
                     }
                     $scope.products.push(data);
                     $scope.objet=""; 
@@ -88,8 +86,6 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 }
                 if (objet.description.length > 20){
                     objet.description = objet.description.substr(0,20) + '..';
-                }else{
-                    objet.description = objet.description;
                 }
             },
             function(err) {
@@ -109,6 +105,10 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                                 if($scope.products[i].etat === "Vendu" 
                                                     || $scope.products[i].etat === "Perdu"){
                                                     $scope.totalRembourser+=$scope.products[i].prix;
+                                                }
+                                                if ($scope.products[i].description != undefined 
+                                                    && $scope.products[i].description.length > 20){
+                                                    $scope.products[i].description = $scope.products[i].description.substr(0,20) +'..';
                                                 }
                                             }
                                         });
