@@ -25,6 +25,11 @@ angular.module("DepotVente").controller('VenteController',
 			$scope.addObject = function(){
 				new VenteProducts().$update({id_sale: $scope.venteid, ref: $scope.objet.reference},
 					                function(data){
+					                	if (data.description.length > 15){
+					                		data.description = data.description.substr(0,15) + '..';
+					                	}else{
+					                		data.description = data.description;
+					                	}
 					                    $scope.listObjet.objet.push(data);
 										$scope.objet="";
 										$scope.prixtotale+=parseFloat(data.prix);
@@ -108,7 +113,11 @@ angular.module("DepotVente").controller('VenteController',
 						var p = parseFloat($scope.listObjet.objet[i].prix);
 						prix = (p+(5*p/100)).toFixed(2).toString();
 						facture.text(20, hauteur, $scope.listObjet.objet[i].reference.toString());
-						facture.text(60, hauteur, $scope.listObjet.objet[i].description);
+						if ($scope.listObjet.objet[i].description.length > 30){
+							facture.text(60, hauteur, $scope.listObjet.objet[i].description.substr(0,30)+"...");
+						}else{
+							facture.text(60, hauteur, $scope.listObjet.objet[i].description);
+						}
 						facture.text(140, hauteur, $scope.listObjet.objet[i].prix.toFixed(2).toString() + ' €');
 						facture.text(170, hauteur, prix + ' €');
 					}
@@ -146,5 +155,6 @@ angular.module("DepotVente").controller('VenteController',
 				$scope.listObjet = {
 					objet : []
 				};
+				$scope.prixtotale=0;
 			}
 }]);

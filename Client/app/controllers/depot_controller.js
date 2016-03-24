@@ -45,6 +45,11 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                     description: $scope.objet.description, 
                                     idDepot: $scope.depot.id});
             product.$save(function(data) {
+                    if (data.description.length > 30){
+                        data.description = data.description.substr(0,30) + '..';
+                    }else{
+                        data.description = data.description;
+                    }
                     $scope.products.push(data);
                     $scope.objet=""; 
                 }, 
@@ -81,7 +86,11 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 if(data.etat === "En stock" && $scope.temp === "Perdu"){
                     $scope.totalRembourser-=data.prix;
                 }
-                console.log(data.etat);
+                if (objet.description.length > 20){
+                    objet.description = objet.description.substr(0,20) + '..';
+                }else{
+                    objet.description = objet.description;
+                }
             },
             function(err) {
                 $scope.error = err;
@@ -95,7 +104,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                 function(err) {
                                     $scope.error = err;
                                 });
-            $scope.products = DepotProducts.query({idDepot: $scope.id}, function() {
+            $scope.products = DepotProducts.query({idDepot: $scope.id}, function(data) {
                                             for(i in $scope.products){
                                                 if($scope.products[i].etat === "Vendu" 
                                                     || $scope.products[i].etat === "Perdu"){
