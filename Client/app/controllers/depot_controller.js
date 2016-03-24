@@ -5,6 +5,11 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         $scope.products = [];
         $scope.totalRembourser=0;
         $scope.temp = "";
+        Depot.query(function(data) {
+                        $scope.recherche = data;
+                    });  
+        $scope.nomR = null;
+        $scope.emailR = null;
 
         $scope.EditCoord = function () {
             $scope.editCoord = true;

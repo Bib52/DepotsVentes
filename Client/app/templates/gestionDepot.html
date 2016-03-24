@@ -24,6 +24,19 @@
             <p class="text-danger text-right">* : <i>Champs obligatoire</i></p>
         </div>
     </form>
+    <form class="col-md-12">
+        <!-- zone de saisie déclenchant l'autocomplétion : Par NOM-->
+        <input type="text" placeholder="Recherche par Nom" list="noms" data-ng-model="nomR" />
+        <datalist id="noms">
+            <option data-ng-repeat="item in recherche" value="{{item.nom}}" />
+        </datalist>
+    
+        <!-- zone de saisie déclenchant l'autocomplétion : Par EMAIL-->
+        <input type="text" placeholder="Recherche par Email" list="mails" data-ng-model="emailR" />
+        <datalist id="mails">
+            <option data-ng-repeat="item in recherche" value="{{item.email}}" />
+        </datalist>
+    </form>
 </div>
 
 <div class="col-md-8 col-sm-6 col-xs-6" ng-show="isplay">

@@ -130,6 +130,7 @@ angular.module("DepotVente").controller('VenteController',
 				                    $scope.error = err;
 				                });
 			}
+			
 			$scope.annuleVente = function(){
 				Vente.delete({id: $scope.venteid});
 				$scope.playVente=false;
