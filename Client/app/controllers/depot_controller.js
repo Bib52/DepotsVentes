@@ -5,20 +5,27 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         $scope.products = [];
         $scope.totalRembourser=0;
         $scope.temp = "";
-
+        $scope.nomR = null;
+        $scope.emailR = null;
+        $scope.nbrProduits=0;
+        $scope.nbrDepots=0;
+        $scope.produit=[];
+        $scope.depotId=[];
         Depot.query(function(data) {
                         $scope.recherche = data;
                         for(i in data){
-                            $scope.nbrProduits=0;
                             DepotProducts.query({idDepot: data[i].id},
                                                 function(data){
                                                     $scope.produits=data;
-                                                    console.log($scope.produits);
                                                     for(i in data){
-                                                    //     $scope.produits=data[i];
-                                                    //     console.log($scope.produits);
                                                         if(data[i].etat === "Vendu" 
-                                                            || data[i].etat === "Perdu"){
+                                                            || data[i].etat === "Perdu")
+                                                        {
+                                                            if ($scope.depotId.indexOf(data[i].id_depot) == -1) {
+                                                                $scope.depotId.push(data[i].id_depot);
+                                                                $scope.nbrDepots=$scope.depotId.length;
+                                                            }
+                                                            $scope.produit.push(data[i]);
                                                             $scope.nbrProduits+=1;
                                                             $scope.totalRembourser+=data[i].prix;
                                                         }
@@ -26,8 +33,6 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                                 }); 
                         }
                     });  
-        $scope.nomR = null;
-        $scope.emailR = null;
 
         $scope.Search = function () {
             if($scope.emailR != null && $scope.emailR != ""){
