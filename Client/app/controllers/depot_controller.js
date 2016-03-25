@@ -11,6 +11,36 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         $scope.nomR = null;
         $scope.emailR = null;
 
+        $scope.Search = function () {
+            if($scope.emailR != null && $scope.emailR != ""){
+                Depot.query(function(data) {
+                                for (i in data){
+                                    if(data[i].email === $scope.emailR){
+                                        $scope.id=data[i].id;
+                                        $scope.findDepot();
+                                    }
+                                }
+                            },
+                            function(err) {
+                                $scope.error = err;
+                            });
+            }
+            else if($scope.nomR != null && $scope.nomR != ""){
+                Depot.query(function(data) {
+                                for (i in data){
+                                    var nomPrenom = data[i].nom + " " + data[i].prenom;
+                                    if( nomPrenom === $scope.nomR){
+                                        $scope.id=data[i].id;
+                                        $scope.findDepot();
+                                    }
+                                }
+                            },
+                            function(err) {
+                                $scope.error = err;
+                            });
+            }
+        }
+
         $scope.EditCoord = function () {
             $scope.editCoord = true;
         };

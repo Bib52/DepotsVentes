@@ -25,17 +25,19 @@
         </div>
     </form>
     <form class="col-md-12">
+        <strong class="text-info col-md-4 text-center">Recherche par Nom et Prénom :</strong>
+        <strong class="text-info col-md-4 col-md-offset-1 text-center">Recherche par Email :</strong>
         <!-- zone de saisie déclenchant l'autocomplétion : Par NOM-->
-        <input type="text" placeholder="Recherche par Nom" list="noms" data-ng-model="nomR" />
+        <input type="text" class="col-md-4" placeholder="Recherche par Nom Prénom" list="noms" data-ng-model="nomR" />
         <datalist id="noms">
-            <option data-ng-repeat="item in recherche" value="{{item.nom}}" />
+            <option data-ng-repeat="item in recherche" value="{{item.nom}} {{item.prenom}}" />
         </datalist>
-    
         <!-- zone de saisie déclenchant l'autocomplétion : Par EMAIL-->
-        <input type="text" placeholder="Recherche par Email" list="mails" data-ng-model="emailR" />
+        <input type="text" class="col-md-4 col-md-offset-1" placeholder="Recherche par Email" list="mails" data-ng-model="emailR" />
         <datalist id="mails">
             <option data-ng-repeat="item in recherche" value="{{item.email}}" />
         </datalist>
+        <button class="btn btn-sm btn-info col-md-2 col-md-offset-1" ng-click="Search()"><strong>Rechercher</strong></button>
     </form>
 </div>
 
