@@ -1,6 +1,12 @@
 angular.module("DepotVente").controller('TabBordController',['$scope', 'Products', 'Depot', 'Vente', 'Paiement', 'Config',
 	function($scope, Products, Depot, Vente, Paiement, Config){
         
+        // Valeur commission en %
+        $scope.commission=0;
+        Config.get({id:1}, function(data){
+            $scope.commission = data.valeur;
+        });
+
         var semaine = [];
         var calculDate = function(){
             for (var i=0; i<7; i++){
@@ -48,7 +54,7 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                         $scope.nbrPaye+=1;
                                     }
                                 }
-                                //Graphique pie : nombre produits en fonction de son etat
+                                // Graphique pie : nombre produits en fonction de son etat
                                 $scope.labelspie=["En stock","En cours de vente","Vendu","Rendu","Perdu","Payé"];
                                 $scope.datapie=[$scope.nbrEnStock,$scope.nbrCoursVente,$scope.nbrVendu,
                                                 $scope.nbrRendu,$scope.nbrPerdu,$scope.nbrPaye];
@@ -68,85 +74,70 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                 console.log(err);
                             });
         
-        // Nombre de vente
+        // Nombre de vente finie et en cours
+        // Total des vente avec commission pour les ventes finie
+        // Total des vente sans commission pour les ventes finie
         $scope.ventes = Vente.query(
                             function(data) {
                                 $scope.nbrVenteFini = 0;
                                 $scope.nbrVenteEnCours = 0;
+                                $scope.totalAC=0;
+                                $scope.totalSC=0;
+                                $scope.ventej6=0;
+                                $scope.ventej5=0;
+                                $scope.ventej4=0;
+                                $scope.ventej3=0;
+                                $scope.ventej2=0;
+                                $scope.ventej1=0;
+                                $scope.ventej0=0;
                                 for (i in data){
                                     if(data[i].etat === 'Finie'){
                                         $scope.nbrVenteFini+=1;
+                                        Paiement.get({id_sale : data[i].id},function(data){
+                                            $scope.totalAC+=data.prix;
+                                            $scope.totalSC = (100 * $scope.totalAC) / (100 + $scope.commission);
+                                        });
                                     }
                                     if(data[i].etat === 'En cours'){
                                         $scope.nbrVenteEnCours+=1;  
                                     }
+                                    if(data[i].etat === 'Finie' && data[i].date === calculDate()[6]){
+                                        $scope.ventej6+=1;
+                                    }
+                                    if(data[i].etat === 'Finie' && data[i].date === calculDate()[5]){
+                                        $scope.ventej5+=1;
+                                    }
+                                    if(data[i].etat === 'Finie' && data[i].date === calculDate()[4]){
+                                        $scope.ventej4+=1;
+                                    }
+                                    if(data[i].etat === 'Finie' && data[i].date === calculDate()[3]){
+                                        $scope.ventej3+=1;
+                                    }
+                                    if(data[i].etat === 'Finie' && data[i].date === calculDate()[2]){
+                                        $scope.ventej2+=1;
+                                    }
+                                    if(data[i].etat === 'Finie' && data[i].date === calculDate()[1]){
+                                        $scope.ventej1+=1;
+                                    }
+                                    if(data[i].etat === 'Finie' && data[i].date === calculDate()[0]){
+                                        $scope.ventej0+=1;
+                                    }
                                 }
+
+                                // Graphique line : Nombre de vente chaque jour de le semaine
+                                $scope.labelsline = [calculDate()[6], calculDate()[5], calculDate()[4], 
+                                                    calculDate()[3], calculDate()[2], calculDate()[1], calculDate()[0]];
+                                $scope.dataline = [
+                                    [$scope.ventej6, $scope.ventej5, $scope.ventej4, $scope.ventej3, 
+                                    $scope.ventej2, $scope.ventej1, $scope.ventej0]                        
+                                ];
                             },
                             function(err) {
                                 $scope.nbrVenteFini=0;
                                 $scope.nbrVenteEnCours = 0;
+                                $scope.totalAC=0;
+                                $scope.totalSC=0;
+                                $scope.commission=0;
                                 console.log(err);
                             });
-
-        //Total des vente avec commission
-        //Total des vente sans commission
-        //valeur commission en %
-        $scope.ventes = Vente.query(
-                    function(data) {
-                        $scope.totalAC=0;
-                        $scope.totalSC=0;
-                        $scope.commission=0;
-                        $scope.ventej6=0;
-                        $scope.ventej5=0;
-                        $scope.ventej4=0;
-                        $scope.ventej3=0;
-                        $scope.ventej2=0;
-                        $scope.ventej1=0;
-                        $scope.ventej0=0;
-                        for (i in data){
-                            if(data[i].etat === 'Finie'){
-                                Paiement.get({id_sale : data[i].id},function(data){
-                                    $scope.totalAC+=data.prix;
-                                    Config.get({id:1}, function(data){
-                                        $scope.commission = data.valeur;
-                                        $scope.totalSC = (100 * $scope.totalAC) / (100 + $scope.commission);
-                                    });
-                                });
-                            }
-                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[6]){
-                                $scope.ventej6+=1;
-                            }
-                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[5]){
-                                $scope.ventej5+=1;
-                            }
-                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[4]){
-                                $scope.ventej4+=1;
-                            }
-                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[3]){
-                                $scope.ventej3+=1;
-                            }
-                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[2]){
-                                $scope.ventej2+=1;
-                            }
-                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[1]){
-                                $scope.ventej1+=1;
-                            }
-                            if(data[i].etat === 'Finie' && data[i].date === calculDate()[0]){
-                                $scope.ventej0+=1;
-                            }
-                        }
-                        //Graphique line : Nombre de vente chaque jour de le semaine
-                        $scope.labelsline = [calculDate()[6], calculDate()[5], calculDate()[4], 
-                                            calculDate()[3], calculDate()[2], calculDate()[1], calculDate()[0]];
-                        $scope.dataline = [
-                            [$scope.ventej6, $scope.ventej5, $scope.ventej4, $scope.ventej3, 
-                            $scope.ventej2, $scope.ventej1, $scope.ventej0]                        
-                        ];
-                    },
-                    function(err) {
-                        $scope.totalAC=0;
-                        $scope.totalSC=0;
-                        $scope.commission=0;
-                        console.log(err);
-                    });
 }]);

@@ -29,7 +29,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 Depot.query(function(data) {
                                 for (i in data){
                                     var nomPrenom = data[i].nom + " " + data[i].prenom;
-                                    if( nomPrenom === $scope.nomR){
+                                    if(nomPrenom === $scope.nomR){
                                         $scope.id=data[i].id;
                                         $scope.findDepot();
                                     }

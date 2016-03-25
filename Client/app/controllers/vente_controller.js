@@ -10,6 +10,7 @@ angular.module("DepotVente").controller('VenteController',
 			var hauteur = 0;
 			var prix = "";
 			$scope.type = "";
+			Config.get({id:1},function(data){$scope.commission=data.valeur});
 
 			$scope.createVente = function(){
 			$scope.vente = new Vente();
@@ -32,7 +33,8 @@ angular.module("DepotVente").controller('VenteController',
 										$scope.objet="";
 										$scope.prixtotale+=parseFloat(data.prix);
 										$scope.error="";
-					                },
+										$scope.prixtotaleAC = $scope.prixtotale + ($scope.commission * $scope.prixtotale / 100);
+									},
 					                function(err) {
 					                    $scope.error = err;
 					                });	
@@ -44,6 +46,7 @@ angular.module("DepotVente").controller('VenteController',
 			    	if($scope.listObjet.objet[i] === obj){
 			        	$scope.listObjet.objet.splice(i, 1);
 			        	$scope.prixtotale-=obj.prix;
+			        	$scope.prixtotaleAC = $scope.prixtotale + ($scope.commission * $scope.prixtotale / 100);
 			        	break;
 			    	}
 				}
@@ -52,9 +55,7 @@ angular.module("DepotVente").controller('VenteController',
 			$scope.validVente = function(){
 				if($scope.listObjet.objet.length > 0){
 					$scope.payment=true;
-					Config.get({id:1},function(data){
-						$scope.prixtotaleAC = $scope.prixtotale + (data.valeur * $scope.prixtotale / 100);
-					});
+					$scope.prixtotaleAC = $scope.prixtotale + ($scope.commission * $scope.prixtotale / 100);
 					$scope.mdpaiement = ModePaiement.query();
 				}
 			}
