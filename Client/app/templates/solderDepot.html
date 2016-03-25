@@ -1,8 +1,24 @@
 <div class="well well-sm col-md-offset-1 col-md-10">
-	<strong>Solder dépôts : </strong>
-	<ul>
-		<li>totot</li>
-		<li>tatat</li>
-		<li>titi</li>
+	<div class="col-md-12 alert alert-info" ng-if="totalRembourser != 0">
+		<ul class="col-md-10 list-unstyled">
+			<li class="col-md-4"><strong>Total à rembourser : {{totalRembourser}} €</strong></li>
+			<li class="col-md-4"><strong>Nombre de produits : {{nbrProduits}}</strong></li>
+			<li class="col-md-4"><strong>Nombre de dépots concernés : {{nbrDepots}}</strong></li>
+		</ul>
+		<button class="btn btn-sm btn-success col-md-2"><strong>Tous Solder</strong></button>
+	</div>
+	<ul class="col-md-12 well well-sm list-unstyled" ng-repeat="item in recherche" ng-if="item.id">
+		<strong class="col-md-11">Dépôts {{item.id}}</strong>
+		<button class="btn btn-xs btn-success col-md-1"><strong>Solder</strong></button>
+		<li class="col-md-12">
+			<span class="col-md-3">Référence</span>
+			<span class="col-md-3">Description</span>
+			<span class="col-md-3">Prix</span>
+		</li>
+		<li class="col-md-12" ng-repeat="i in produits" ng-show="i.id_depot===item.id">
+			<span class="col-md-3">{{i.reference}}</span>
+			<span class="col-md-3">{{i.description}}</span>
+			<span class="col-md-3">{{i.prix}} €</span>
+		</li>
 	</ul>
 </div>

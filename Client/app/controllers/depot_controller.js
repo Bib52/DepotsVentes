@@ -5,8 +5,26 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         $scope.products = [];
         $scope.totalRembourser=0;
         $scope.temp = "";
+
         Depot.query(function(data) {
                         $scope.recherche = data;
+                        for(i in data){
+                            $scope.nbrProduits=0;
+                            DepotProducts.query({idDepot: data[i].id},
+                                                function(data){
+                                                    $scope.produits=data;
+                                                    console.log($scope.produits);
+                                                    for(i in data){
+                                                    //     $scope.produits=data[i];
+                                                    //     console.log($scope.produits);
+                                                        if(data[i].etat === "Vendu" 
+                                                            || data[i].etat === "Perdu"){
+                                                            $scope.nbrProduits+=1;
+                                                            $scope.totalRembourser+=data[i].prix;
+                                                        }
+                                                    }   
+                                                }); 
+                        }
                     });  
         $scope.nomR = null;
         $scope.emailR = null;
