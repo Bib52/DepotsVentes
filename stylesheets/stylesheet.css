@@ -345,6 +345,11 @@ a {
   border-radius: 0.3rem;
 }
 
+.nav-pills > li > a:hover,
+.nav-pills > li > a:focus{
+    color: #fff;
+}
+
 .nav-pills > li + li {
   margin-left: 2px; }
 
