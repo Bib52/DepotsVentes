@@ -31,13 +31,41 @@
       </p>
       <p>
         Ensuite il est possible de créer une vente qui peut contenir ou non les coordonnées de l'acheteur.
-        Cette vente contient les objets acheter. Une vente une fois validée est considérée comme finie et ne peut donc plus être modifiée.
+        Cette vente contient les objets acheter. Une vente une fois validée le paiement est enregistrée, la vente est donc considérée comme finie et ne peut plus être modifiée.
       </p>
       <p>
-        Chacune des deux fonctionnalités présentées précédemment génère des documents. 
-        Lors de la création ou la modification d'un dépôt il est possible de généré un récépissé qui contient toutes les informations du déposant et des objets qu'il a mis en vente.
+        Chacunes des deux fonctionnalités présentées précédemment génère des documents. 
+        Lors de la création ou la modification d'un dépôt il est possible de généré un récépissé qui contient toutes les informations du déposant et des objets qu'il a mis en vente ainsi que la somme reçue si des objets ont été vendus.
         Dans le cas d'une vente une facture est générée lors de la validation (paiement) de celle-ci. Cette facture contient les coordonnées de l'acheteur (si renseignés) et les objets achetés.
       </p>
+      <p>
+        L'application n'étant utilisée que par les organisateurs de la vente, elle est utilisée sur un intranet privé et doit être utilisable avec des ordinateurs et tablettes tactiles.
+      </p>
+      
+      <h3>Périmètre du projet</h3>
+      <p>
+        Ce projet est fait pour des dépôts-ventes temporaire et qui ne se déroule qu'une à deux fois par an.
+        C'est pourquoi à la fin de l'évènement, une fois que tous les invendus rendus à leurs propriétaires, les sommes dues payées aux déposants,
+        la base de données est remise à zéro. La prochaine vente commencera donc sur une base propre.
+      </p>
+      <p>
+        Les codes barres ne sont pas générés par l'application, ils doivent être générés à l'avance. 
+        C'est à dire que lorsqu'un déposant apporte ces objets pour les mettre en vente, un code barre unique est attribué à chacun d'entre eux.
+        Ce dernier est scanné afin d'ajouter l'article à la base de données (avec une description et un prix en plus).
+      </p>
+      <p>
+        Un objet déposé peut être retiré de la vente à tout moment ou être modifié (notamment son prix). 
+        En effet, le déposant peut venir récupérer un objet s'il ne se vend pas ou baisser le prix pour essayer de le vendre.
+        C'est pourquoi il est obligatoire de connaître l'état d'un objet à tout moment.
+      </p>
+      <p>
+        Pour finir, l'application doit être intuitive et rapide d'utilisation.
+        L'application est utilisée dans le cadre de la vente, il faut donc que les actions soient effectuées rapidement.
+        Le nombre de clics par actions (création de dépôts/ventes) doit être limité au maximum.
+        Le passage d'une fonctionnalités à l'autre ne doit pas nécessité trop de clic non plus.
+        L'application doit être utilisés sur des tablettes et ordinateurs tactiles, il faut donc adapter l'interface à ces outils.
+      </p>
+      <h3>Les différents acteurs</h3>
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/fbergeret/DepotsVentes">Depotsventes</a> is maintained by <a href="https://github.com/fbergeret">fbergeret</a> & <a href="http://github.com/mbounajra">mbounajra</a>.</span>
 
