@@ -112,6 +112,12 @@
           <td> / </td>
           <td>Récupérer le produit reference</td>
         </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/api/products/{reference}</td>
+          <td> / </td>
+          <td>Supprimer le produit reference</td>
+        </tr>
       </table>
       
       <h4>Ventes</h4>
@@ -142,9 +148,9 @@
         </tr>
         <tr>
           <td>GET</td>
-          <td>/api/sales/{id_sale}</td>
+          <td>/api/sales/{id_sale}/payments</td>
           <td> / </td>
-          <td>Recuperer les informations de l'acheteur</td>
+          <td>Récupérer le paiement de la vente</td>
         </tr>
         <tr>
           <td>POST</td>
@@ -154,21 +160,21 @@
         </tr>
         <tr>
           <td>POST</td>
-          <td>/api/sales/{id_sale}/products</td>
-          <td>code barre, description, prix</td>
-          <td>Ajouter des produits dans une vente</td>
+          <td>/api/sales/{id_sale}/payments</td>
+          <td>mode de paiement, prix</td>
+          <td>Ajouter un paiement à la vente</td>
         </tr>
         <tr>
-          <td>POST</td>
-          <td>/api/sales/{id_sale}</td>
-          <td>coordonnées acheteur</td>
-          <td>Ajouter un acheteur à la vente</td>
+          <td>PUT</td>
+          <td>/api/sales/{id_sale}/products/{id}</td>
+          <td>code barre, description, prix</td>
+          <td>Ajouter un produit (id) dans une vente (id_sale)</td>
         </tr>
         <tr>
           <td>PUT</td>
           <td>/api/sales/{id_sale}</td>
           <td>coordonnées acheteur</td>
-          <td>Mettre à jour les informations sur l'acheteur</td>
+          <td>Ajouter un acheteur à la vente</td>
         </tr>
         <tr>
           <td>DELETE</td>
@@ -181,6 +187,12 @@
           <td>/api/sales/{id_sale}/products/{id}</td>
           <td> / </td>
           <td>Supprimer un produit de la vente</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/api/sales/{id_sale}/payments</td>
+          <td> / </td>
+          <td>Supprimer le paiement de la vente</td>
         </tr>
       </table>
       
