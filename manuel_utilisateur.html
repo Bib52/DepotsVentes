@@ -27,6 +27,142 @@
       </ul>
     </section>
     <section class="main-content">
+      <h1 id="haut">Manuel d'utilisation</h1>
+      <p>Ce manuel va se diviser en 4 parties : <a href="#depot">dépôt</a>, <a href="#vente">vente</a>, <a href="#solde">solder les dépôts</a> et <a href="#admin">administration</a>. Celles ci correspondent aux différents menus de l'application que vous pouvez voir sur l'image ci-dessous. </p>
+      <figure class="centre">
+        <img src="images/menu.png" alt="menu"/>
+        <figcaption>Menu</figcaption>
+      </figure>
+
+
+      <h2 id="depot">Dépôt</h2>
+      <p>
+        Cette partie va se diviser en deux sous-parties : <a href="#creation">la création</a> et <a href="#gestion">la gestion</a> des dépôts. Pour accéder à chacune de ses fonctionnalités il suffit de cliquer sur le nom de la fonctionnalités souhaitées du menu à gauche de la page que vous pouvez voir ci-dessous :
+      </p>
+      <figure class="centre">
+        <img src="images/menu_depot.png" alt="menu dépôt">
+        <figcaption>Menu dépôt</figcaption>
+      </figure>
+
+      <h3 id="creation">Création de dépôts</h3>
+      <figure class="centre">
+        <img src="images/form_depot.png" alt="formulaire dépôt"/>
+        <figcaption>Formulaire de création de dépôts</figcaption>
+      </figure>
+      <p>
+        Une fois dans le menu de création de dépôts vous arrivez sur une page contenant le formulaire ci-dessus. Celui-ci permet de renseigner toutes les informations du déposant. Il est obligatoire de remplir tous les champs avec des valeurs conforme (adresse mail correcte, numéro de téléphone valide, ...) pour valider le formulaire.
+      </p>
+      <figure class="centre">
+        <img src="images/creation_depot.png" alt="Accueil dépôt"/>
+        <figcaption>Accueil dépôt</figcaption>
+      </figure>
+      <p>
+        Après avoir validé le formulaire vous arriverez sur une nouvelle page celle-ci se divise pour le moment en deux partie (image ci-dessus). La partie supérieure contient les informations du déposant ainsi que l'identifiant unique du dépôt et un boutton pour supprimer le dépôt. Tout à droite des informations du déposant il y a un boutton modifier losque vous cliquez sur celui-ci un formulaire pour modifier les coordonnées apparaît (image ci-dessous), les mêmes vérifications que le formulaire précédent sont appliqués les informations entrées doivent donc être encore une fois valide. 
+      </p>
+      <figure class="centre">
+        <img src="images/modif_coord.png" alt="Formulaire modification coordonnées"/>
+        <figcaption>Formulaire de modification des coordonnées</figcaption>
+      </figure>
+      <p>
+        Ensuite la partie inférieure de la page permet d'ajouter des objets au dépôt, tous les champs du formulaires sont ici aussi obligatoire. Lorsque vous ajoutez un ou plusieurs objet une nouvelle partie viens s'ajouter à la page (image ci-dessous) ainsi qu'un boutton au dessus des coordonnées du déposant qui permet d'imprimer un récépissé du dépôt (<a download="recepisse.pdf" href="recepisse.pdf">exemple de pdf</a>). Pour finir il est possible de modifier ou supprimer directement les objets depuis ce récapitulatif en cas d'erreur en cliquant simplement sur les icones à droite de chacun d'entre eux (stylo pour modifier et poubelle pour supprimer).
+      </p>
+      <figure class="centre">
+        <img src="images/recap_depot.png" alt="récapitulatif objet"/>
+        <figcaption>Récapitulatif des objets du dépôt</figcaption>
+      </figure>
+
+      <h3 id="gestion">Gestion de dépôts</h3>
+      <p>
+        Cette fois-ci une fois que vous êtes dans le menu de gestion de dépôts plusieurs choix s'offre à vous pour trouver le dépôt que vous souhaitez modifier.
+      </p>
+      <figure class="centre">
+        <img src="images/form_edit.png" alt="Formulaire edition dépôts"/>
+        <figcaption>Formulaire de recherche de dépôts</figcaption>
+      </figure>
+      <p>
+        Si vous connaissez l'identifiant du dépôt alors vous pouvez l'entrer dans le premier champs et valider sinon vous pouvez soit accéder au dépôt grâce aux nom/prénom ou à l'adresse mail du déposant.
+      </p>
+      <p>
+        La partie haute de la page n'a pas changée par rapport à la <a href="#creation">création de dépôt</a>, cependant le récapitulatif contient désormais plus d'informations :
+      </p>
+      <figure class="centre">
+        <img src="images/recap_edit.png" alt="Récapitulatif objet edition dépôts"/>
+        <figcaption>Récapitulatif des objets du dépôts</figcaption>
+      </figure>
+      <p>
+        Nous avons désormais l'état actuelle de chacun des objets (en stock, vendu, perdu, en cours de vente, payé ou rendu) et un bouton qui permet de payer la somme due au déposant s'il a vendu des objets.
+      </p>
+      <a href="#top">Retour en haut</a>
+
+
+      <h2 id="vente">Vente</h2>
+      <p>
+        Lorsque vous arrivez dans le menu de vente, vous devez cliquer sur le bouton pour créer une vente. Un formulaire apparaît (image ci-dessous), celui-ci vous permet d'ajouter des objets à la vente grâce aux code barres qui leur a été attribué lors de leur ajout dans la base de données. 
+      </p>
+      <figure class="centre">
+        <img src="images/creation_vente.png" alt="Ajout objet à la vente"/>
+        <figcaption>Formulaire ajout d'objet à la vente</figcaption>
+      </figure>
+      <p>
+        Une fois tous les objets ajoutés il suffit de cliquer sur le bouton valider pour passer au paiement. Il faut selectionner un mode de paiement parmis ceux ajouté dans la partie <a href="#admin">administration</a>. Ensuite il est possible d'ajouter les coordonnées de l'acheteur s'il le souhaite, pour cela il suffit de cocher la case à côté de "Coordonnées de l'acheteur ?". Nous pouvons aussi voir qu'il y a deux prix affichés ici un "sans commission" et l'autre "avec commission" ces prix correspondent aux prix avec ou sans la commission définie par les organisateurs.
+      </p>
+      <figure class="centre">
+        <img src="images/valid_vente.png" alt="Paiement vente"/>
+        <figcaption>Paiement de la vente</figcaption>
+      </figure>
+      <figure class="centre">
+        <img src="images/coord_acheteur.png" alt="Formulaire coordonnées acheteur"/>
+        <figcaption>Formulaire de renseignement des coordonnées de l'acheteur</figcaption>
+      </figure>
+      <p>
+        Une fois que le paiement effectué (clic sur "imprimer") la vente est considérée comme finie et une facture est alors générée avec les coordonnées de l'acheteur ou non (<a href="facture.pdf" download="facture.pdf">exemple de facture</a>).
+      </p>
+      <a href="#top">Retour en haut</a>
+
+      <h2 id="solde">Solder les dépôts</h2>
+      <p>
+        Cette fonctionnalité est surtout utile à la fin de la bourse puisqu'elle sert à solder tous les dépôts, en une fois ou un par un. Pour cela il suffit de cliquer sur le bouton "Tous solder" ou "Solder" en face du dépôt que vous souhaitez solder.
+      </p>
+      <figure class="centre">
+        <img src="images/solder_depot.png" alt="Solder les dépôts"/>
+        <figcaption>Interface pour solder les dépôts</figcaption>
+      </figure>
+      <a href="#top">Retour en haut</a>
+
+
+      <h2 id="admin">Administration</h2>
+      <p>
+        La dernière partie de ce site concerne l'administration et celle-ci est divisé en trois sous-parties : <a href="#config">configuration</a>, <a href="#tab">tableau de bord</a> et <a href="#gerer">gérer le staff</a>. L'accès à ces différentes fonctionnalités se fait grâce au menu à gauche de la page (image ci-dessous).
+      </p>
+      <figure class="centre">
+        <img src="images/menu_admin.png" alt="Menu administration"/>
+        <figcaption>Menu administration</figcaption>
+      </figure>
+      <h3 id="config">Configuration</h3>
+      <p>
+        Cette fonctionnalités permet de configurer la commission (en %) ajouter aux prix des objets lors de la vente. Celle-ci peut être modifiée à tout moment. Ensuite il est possible d'ajouter, modifier, supprimer les modes de paiement acceptés ou encore de les supprimer temporairement en décochant simplement la case à côté du nom.
+      </p>
+      <figure class="centre">
+        <img src="images/config.png" alt="Configuration vente"/>
+        <figcaption>Configuration de la vente</figcaption>
+      </figure>
+      <h3 id="tab">Tableau de bord</h3>
+      <p>
+        Ici il n'y a que des statistiques concernant la vente, celle ci sont soit écrites ou alors représentées sous forme de graphique.
+      </p>
+      <figure class="centre">
+        <img src="images/tab.png" alt="Tableau de bord"/>
+        <figcaption>Tableau de bord de la vente</figcaption>
+      </figure>
+      <h3 id="gerer">Gérer le staff</h3>
+      <p>
+        Ici il est possible d'ajouter, modifier et supprimer les membres du staff. Un formulaire d'ajout est disponible, tous les champs sont obligatoires. Le niveau d'autorisation (admin ou staff) permet à la personne d'accéder ou non à la partie administration.
+      </p>
+      <figure class="centre">
+        <img src="images/staff.png" alt="Gestion staff"/>
+        <figcaption>Gestion du staff de la vente</figcaption>
+      </figure>
+      <a href="#top">Retour en haut</a>
     <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/fbergeret/DepotsVentes">Depotsventes</a> est développé par <a href="https://github.com/fbergeret">Florian Bergeret</a> & <a href="http://github.com/mbounajra">Mourad Bounajra</a>.</span>
 
