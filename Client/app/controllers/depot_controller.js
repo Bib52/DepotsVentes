@@ -152,6 +152,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         }
 
         $scope.findDepot = function(){
+            $scope.totalRembourser=0;
             $scope.depot = Depot.get({id: $scope.id}, function() {
                                     $scope.isplay = true;
                                 },
