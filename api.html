@@ -28,6 +28,7 @@
     </section>
     <section class="main-content">
       <h2>API</h2>
+      
       <table>
         <tr>
           <td>Méthode</td>
@@ -53,6 +54,44 @@
           <td> / </td>
           <td>Récupérer les produits d'un dépot</td>
         </tr>
+        <td>POST</td>
+          <td>/api/depots</td>
+          <td>coordonnées deposant</td>
+          <td>Ajouter un dépot</td>
+        </tr>
+        <tr>
+        <td>POST</td>
+          <td>/api/depots/{id_depot}/products</td>
+          <td>code barre, description, prix</td>
+          <td>Ajouter des produits dans un dépot</td>
+        </tr>        
+        <tr>
+          <td>PUT</td>
+          <td>/api/depots/{id}</td>
+          <td>coordonnées deposant</td>
+          <td>Mettre à jour les informations sur le depot</td>
+        </tr>
+        <tr>
+          <td>PUT</td>
+          <td>/api/depots/{id_depot}/products/{id}</td>
+          <td>description, prix</td>
+          <td>Modifier un produit d'un depot</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/api/depots/{id}</td>
+          <td> / </td>
+          <td>Supprimer un depot</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/api/depots/{id_depot}/products/{id}</td>
+          <td> / </td>
+          <td>Supprimer le produit id du depot (id_depot)</td>
+        </tr>
+      </table>
+      
+      <table>
         <tr>
           <td>GET</td>
           <td>/api/products</td>
@@ -65,6 +104,9 @@
           <td> / </td>
           <td>Récupérer le produit reference</td>
         </tr>
+      </table>
+      
+      <table>
         <tr>
           <td>GET</td>
           <td>/api/sales</td>
@@ -89,6 +131,37 @@
           <td> / </td>
           <td>Recuperer les informations de l'acheteur</td>
         </tr>
+        <td>POST</td>
+          <td>/api/depots/{id}</td>
+          <td> / </td>
+          <td>Récupérer la vente id</td>
+        </tr>
+        <td>POST</td>
+          <td>/api/depots/{id}</td>
+          <td> / </td>
+          <td>Récupérer la vente id</td>
+        </tr>
+        <td>PUT</td>
+          <td>/api/depots/{id}</td>
+          <td> / </td>
+          <td>Récupérer la vente id</td>
+        </tr>
+        <tr>
+        <td>DELETE</td>
+          <td>/api/depots/{id}</td>
+          <td> / </td>
+          <td>Récupérer la vente id</td>
+        </tr>
+        <tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/api/depots/{id}</td>
+          <td> / </td>
+          <td>Récupérer la vente id</td>
+        </tr>
+      </table>
+      
+      <table>
         <tr>
           <td>GET</td>
           <td>/api/staffs</td>
@@ -114,23 +187,6 @@
           <td>Récupérer la vente id</td>
         </tr>
         <tr>
-        <td>POST</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <tr>
-        <td>POST</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>        
-        <tr>
-          <td>POST</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
         <tr>
           <td>POST</td>
           <td>/api/depots/{id}</td>
@@ -150,26 +206,6 @@
           <td>Récupérer la vente id</td>
         </tr>
         <tr>
-        <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
         <td>PUT</td>
           <td>/api/depots/{id}</td>
           <td> / </td>
