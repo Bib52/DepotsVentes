@@ -92,34 +92,6 @@
         </tr>
       </table>
       
-      <h4>Produits</h4>
-      <table>
-        <tr>
-          <td>Méthode</td>
-          <td>URL</td>
-          <td>Paramètres</td>
-          <td>Description</td>
-        </tr>
-        <tr>
-          <td>GET</td>
-          <td>/api/products</td>
-          <td> / </td>
-          <td>Récupérer tous les produits</td>
-        </tr>
-        <tr>
-          <td>GET</td>
-          <td>/api/products/{reference}</td>
-          <td> / </td>
-          <td>Récupérer le produit reference</td>
-        </tr>
-        <tr>
-          <td>DELETE</td>
-          <td>/api/products/{reference}</td>
-          <td> / </td>
-          <td>Supprimer le produit reference</td>
-        </tr>
-      </table>
-      
       <h4>Ventes</h4>
       <table>
         <tr>
@@ -196,6 +168,62 @@
         </tr>
       </table>
       
+      <h4>Produits</h4>
+      <table>
+        <tr>
+          <td>Méthode</td>
+          <td>URL</td>
+          <td>Paramètres</td>
+          <td>Description</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/api/products</td>
+          <td> / </td>
+          <td>Récupérer tous les produits</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/api/products/{reference}</td>
+          <td> / </td>
+          <td>Récupérer le produit reference</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/api/products/{reference}</td>
+          <td> / </td>
+          <td>Supprimer le produit reference</td>
+        </tr>
+      </table>
+      
+      <h4>Mode de paiement</h4>
+      <table>
+        <tr>
+          <td>GET</td>
+          <td>/api/payments</td>
+          <td> / </td>
+          <td>Récupérer les modes de paiements</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td>/api/payments</td>
+          <td>mode de paiement : nom</td>
+          <td>Ajouter un mode de paiement</td>
+        </tr>
+        <tr>
+          <td>PUT</td>
+          <td>/api/payments/{id}</td>
+          <td>mode de paiement : nom</td>
+          <td>Modifier un mode de paiement</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/api/payments/{id}</td>
+          <td> / </td>
+          <td>Supprimer un mode de paiement</td>
+        </tr>
+      </table>
+      
       <h4>Staffs</h4>
       <table>
         <tr>
@@ -228,50 +256,30 @@
           <td> / </td>
           <td>Supprimer un membre du staff</td>
         </tr>
-        
-      <h4>Configuration</h4>
-      <table>
-        <tr>
-          <td>POST</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <tr>
-          <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <tr>
-          <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
       </table>
       
-      <h4>Mode de paiement</h4>
+      <h4>Configuration de la commission</h4>
       <table>
         <tr>
-          <td>POST</td>
+          <td>GET</td>
           <td>/api/depots/{id}</td>
           <td> / </td>
-          <td>Récupérer la vente id</td>
+          <td>Recuperer toutes les configurations</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>/api/configurations/{id}</td>
+          <td> / </td>
+          <td>Recuperer la configuration id</td>
         </tr>
         <tr>
           <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <tr>
-          <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
+          <td>/api/configurations/{id}</td>
+          <td>valeur</td>
+          <td>Modifier la configuration id</td>
         </tr>
       </table>
+    
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/fbergeret/DepotsVentes">Depotsventes</a> est développé par <a href="https://github.com/fbergeret">Florian Bergeret</a> & <a href="http://github.com/mbounajra">Mourad Bounajra</a>.</span>
 
