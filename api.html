@@ -33,7 +33,14 @@
         Une API (Application Programming Interface) est un ensemble de fonctionnalités, mise à disposition des programmes informatiques afin de récupérer des données à l'aide d'URI. 
       </p>
       <p>
-        Notre application contient un certains nombre d'URI que nous avons regroupé en six  catégories : <a href="#depot">dépôts</a>, <a href="#vente">ventes</a>, <a href="#produit">produits</a>, <a href="#mode">mode de paiement</a>, <a href="#staff">staff</a> et <a href="#config">configuration de la commission</a>. Pour chacune d'entre elles vous trouverez ici la méthode HTTP utilisé, l'URI, les paramètres et une description rapide pour mieux comprendre l'usage de celle-ci.
+        Notre API est donc reliée à la base de données MySQL qui contient toutes les données envoyées par l'application. Cette base de données est composées de 7 tables (image ci-dessous).
+      </p>
+      <figure class="centre">
+        <img src="images/model_donnees.png" alt="Modèle de données"/>
+        <figcaption>Modèle de données utilisé</figcaption>
+      </figure>
+      <p>
+        Notre application contient un certains nombre d'URI que nous avons regroupé en six  catégories : <a href="#depot">dépôts</a>, <a href="#vente">ventes</a>, <a href="#produit">produits</a>, <a href="#mode">mode de paiement</a>, <a href="#staff">staff</a> et <a href="#config">configuration de la commission</a>. Ces catégories comme vous pouvez le voir sont liés au modèle de données utilisé par la base de données. Pour chacune des routes vous trouverez ici la méthode HTTP utilisé, l'URI, les paramètres et une description rapide pour mieux comprendre l'usage de celle-ci.
       </p>
       
       <h4 id="depot">Dépôts</h4>
