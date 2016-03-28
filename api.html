@@ -159,25 +159,32 @@
           <td>Ajouter des produits dans une vente</td>
         </tr>
         <tr>
-          <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
+          <td>POST</td>
+          <td>/api/sales/{id_sale}</td>
+          <td>coordonnées acheteur</td>
           <td>Ajouter un acheteur à la vente</td>
         </tr>
         <tr>
-          <td>DELETE</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
+          <td>PUT</td>
+          <td>/api/sales/{id_sale}</td>
+          <td>coordonnées acheteur</td>
+          <td>Mettre à jour les informations sur l'acheteur</td>
         </tr>
         <tr>
           <td>DELETE</td>
-          <td>/api/depots/{id}</td>
+          <td>/api/sales/{id}</td>
           <td> / </td>
-          <td>Récupérer la vente id</td>
+          <td>Supprimer une vente</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/api/sales/{id_sale}/products/{id}</td>
+          <td> / </td>
+          <td>Supprimer un produit de la vente</td>
         </tr>
       </table>
       
+      <h4>Staffs</h4>
       <table>
         <tr>
           <td>Méthode</td>
@@ -193,10 +200,25 @@
         </tr>
         <tr>
           <td>POST</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
+          <td>/api/staffs</td>
+          <td>staff, name, login, pass, permission</td>
+          <td>Ajouter un membre du staff</td>
         </tr>
+        <tr>
+          <td>PUT</td>
+          <td>/api/staffs/{id}</td>
+          <td>staff, name, login, pass, permission</td>
+          <td>Mettre à jour les informations d'un staff</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>/api/staffs/{id}</td>
+          <td> / </td>
+          <td>Supprimer un membre du staff</td>
+        </tr>
+        
+      <h4>Configuration</h4>
+      <table>
         <tr>
           <td>POST</td>
           <td>/api/depots/{id}</td>
@@ -204,11 +226,21 @@
           <td>Récupérer la vente id</td>
         </tr>
         <tr>
-          <td>POST</td>
+          <td>PUT</td>
           <td>/api/depots/{id}</td>
           <td> / </td>
           <td>Récupérer la vente id</td>
         </tr>
+        <tr>
+          <td>PUT</td>
+          <td>/api/depots/{id}</td>
+          <td> / </td>
+          <td>Récupérer la vente id</td>
+        </tr>
+      </table>
+      
+      <h4>Mode de paiement</h4>
+      <table>
         <tr>
           <td>POST</td>
           <td>/api/depots/{id}</td>
