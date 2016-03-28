@@ -1,4 +1,10 @@
 <div class="well well-sm col-md-offset-1 col-md-10">
+	<div class="col-md-12 alert alert-info text-center" ng-show="solde">
+		<strong>Recherche en cours ...</strong>
+		<div class="progress progress-striped active">
+	  		<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+	  	</div>
+	</div>
 	<div class="col-md-12 alert alert-info" ng-if="totalRembourser != 0">
 		<ul class="col-md-10 list-unstyled">
 			<li class="col-md-4"><strong>Total à rembourser : {{totalRembourser}} €</strong></li>
@@ -7,12 +13,12 @@
 		</ul>
 		<button class="btn btn-sm btn-success col-md-2" ng-click="solderAll()"><strong>Tous Solder</strong></button>
 	</div>
-	<div class="col-md-12 alert alert-info text-center" ng-if="message">
-		<strong>{{message}}</strong>
+	<div class="col-md-12 alert alert-info text-center" ng-if="totalRembourser === 0 && produit.length === 0 && depotId.length === 0" ng-show="message">
+		<strong>Aucun dépôt à solder !</strong>
 	</div>
 	<ul class="col-md-12 well well-sm list-unstyled" ng-repeat="item in depotId | orderBy : item" ng-if="produit.length > 0">
 		<strong class="col-md-11">Dépôts {{item}}</strong>
-		<button class="btn btn-xs btn-success col-md-1" ng-click="solder(item)"><strong>Solder</strong></button>
+		<button class="btn btn-xs btn-success col-md-1" ng-click="solder(item)" ng-show="soldeD"><strong>Solder</strong></button>
 		<li class="col-md-12">
 			<span class="col-md-1"><i>Référence</i></span>
 			<span class="col-md-5"><i>Description</i></span>
