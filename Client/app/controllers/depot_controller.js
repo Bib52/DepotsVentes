@@ -12,11 +12,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         $scope.produit=[];
         $scope.depotId=[];
         Depot.query(function(data) {
-                        $scope.recherche = data;
                         for(i in data){
                             DepotProducts.query({idDepot: data[i].id},
                                                 function(data){
-                                                    $scope.produits=data;
                                                     for(i in data){
                                                         if(data[i].etat === "Vendu" 
                                                             || data[i].etat === "Perdu")
@@ -28,11 +26,60 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                                             $scope.produit.push(data[i]);
                                                             $scope.nbrProduits+=1;
                                                             $scope.totalRembourser+=data[i].prix;
-                                                        }
-                                                    }   
+                                                        } 
+                                                    } 
+                                                    // console.log($scope.produit.length);
+                                                    //  if ($scope.produit.length === 0){
+                                                    //         $scope.message="Aucun dépôt à solder !";
+                                                    //     }  
                                                 }); 
                         }
-                    });  
+                });  
+        
+        $scope.solder = function(id){
+            DepotProducts.query({idDepot: id}, function(data) {
+                for(i in data){
+                    if(data[i].etat === "Vendu" || data[i].etat === "Perdu"){
+                        new DepotProducts({prix: data[i].prix,
+                            description: data[i].description,
+                            etat: "Payé"})
+                            .$update({idDepot: data[i].id_depot, ref: data[i].reference},
+                            function(data){
+                                $scope.totalRembourser-=data.prix;
+                                for(i in $scope.produit){
+                                    if ($scope.produit[i].reference === data.reference){
+                                        $scope.produit[i].etat = "Payé";
+                                        $scope.nbrProduits-=1;
+                                    }
+                                }
+                            });
+                    }
+                }
+                $scope.nbrDepots-=1;
+            });
+        }
+
+        $scope.solderAll = function(){
+        //     for (i in $scope.produit){
+        //         DepotProducts.query({idDepot: $scope.produit[i].id_depot},
+        //             function(data) {
+        //                 if(data[i].etat === "Vendu" || data[i].etat === "Perdu"){
+        //                     new DepotProducts({prix: data[i].prix,
+        //                         description: data[i].description,
+        //                         etat: "Payé"})
+        //                         .$update({idDepot: data[i].id_depot, ref: data[i].reference},
+        //                         function(data){
+        //                             $scope.totalRembourser-=data.prix;
+        //                             // for(i in $scope.products){
+        //                                 if ($scope.produit[i].reference === data.reference){
+        //                                     $scope.produit[i].etat = "Payé";
+        //                                 }
+        //                             // }
+        //                         });
+        //                 }    
+        //         });
+        //     }
+        }
 
         $scope.Search = function () {
             if($scope.emailR != null && $scope.emailR != ""){

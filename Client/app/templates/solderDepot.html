@@ -5,11 +5,14 @@
 			<li class="col-md-4"><strong>Nombre de produits : {{nbrProduits}}</strong></li>
 			<li class="col-md-4"><strong>Nombre de dépots concernés : {{nbrDepots}}</strong></li>
 		</ul>
-		<button class="btn btn-sm btn-success col-md-2"><strong>Tous Solder</strong></button>
+		<button class="btn btn-sm btn-success col-md-2" ng-click="solderAll()"><strong>Tous Solder</strong></button>
+	</div>
+	<div class="col-md-12 alert alert-info text-center" ng-if="message">
+		<strong>{{message}}</strong>
 	</div>
 	<ul class="col-md-12 well well-sm list-unstyled" ng-repeat="item in depotId | orderBy : item" ng-if="produit.length > 0">
 		<strong class="col-md-11">Dépôts {{item}}</strong>
-		<button class="btn btn-xs btn-success col-md-1"><strong>Solder</strong></button>
+		<button class="btn btn-xs btn-success col-md-1" ng-click="solder(item)"><strong>Solder</strong></button>
 		<li class="col-md-12">
 			<span class="col-md-1"><i>Référence</i></span>
 			<span class="col-md-5"><i>Description</i></span>
