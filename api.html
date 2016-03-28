@@ -29,6 +29,7 @@
     <section class="main-content">
       <h2>API</h2>
       
+      <h4>Dépôts</h4>
       <table>
         <tr>
           <td>Méthode</td>
@@ -91,7 +92,14 @@
         </tr>
       </table>
       
+      <h4>Produits</h4>
       <table>
+        <tr>
+          <td>Méthode</td>
+          <td>URL</td>
+          <td>Paramètres</td>
+          <td>Description</td>
+        </tr>
         <tr>
           <td>GET</td>
           <td>/api/products</td>
@@ -106,7 +114,14 @@
         </tr>
       </table>
       
+      <h4>Ventes</h4>
       <table>
+        <tr>
+          <td>Méthode</td>
+          <td>URL</td>
+          <td>Paramètres</td>
+          <td>Description</td>
+        </tr>
         <tr>
           <td>GET</td>
           <td>/api/sales</td>
@@ -131,28 +146,30 @@
           <td> / </td>
           <td>Recuperer les informations de l'acheteur</td>
         </tr>
-        <td>POST</td>
-          <td>/api/depots/{id}</td>
+        <tr>
+          <td>POST</td>
+          <td>/api/sales</td>
           <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <td>POST</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
+          <td>Créer une vente</td>
         </tr>
         <tr>
-        <td>DELETE</td>
+          <td>POST</td>
+          <td>/api/sales/{id_sale}/products</td>
+          <td>code barre, description, prix</td>
+          <td>Ajouter des produits dans une vente</td>
+        </tr>
+        <tr>
+          <td>PUT</td>
+          <td>/api/depots/{id}</td>
+          <td> / </td>
+          <td>Ajouter un acheteur à la vente</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
           <td>/api/depots/{id}</td>
           <td> / </td>
           <td>Récupérer la vente id</td>
         </tr>
-        <tr>
         <tr>
           <td>DELETE</td>
           <td>/api/depots/{id}</td>
@@ -162,6 +179,12 @@
       </table>
       
       <table>
+        <tr>
+          <td>Méthode</td>
+          <td>URL</td>
+          <td>Paramètres</td>
+          <td>Description</td>
+        </tr>
         <tr>
           <td>GET</td>
           <td>/api/staffs</td>
@@ -187,7 +210,6 @@
           <td>Récupérer la vente id</td>
         </tr>
         <tr>
-        <tr>
           <td>POST</td>
           <td>/api/depots/{id}</td>
           <td> / </td>
@@ -200,18 +222,7 @@
           <td>Récupérer la vente id</td>
         </tr>
         <tr>
-        <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <tr>
-        <td>PUT</td>
-          <td>/api/depots/{id}</td>
-          <td> / </td>
-          <td>Récupérer la vente id</td>
-        </tr>
-        <td>PUT</td>
+          <td>PUT</td>
           <td>/api/depots/{id}</td>
           <td> / </td>
           <td>Récupérer la vente id</td>
