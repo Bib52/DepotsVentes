@@ -40,11 +40,10 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                                     } 
                                                 }); 
                         }
-                });  
-        
+                });
+
         $scope.solder = function(id){
             DepotProducts.query({idDepot: id}, function(data) {
-                $scope.soldeD=false;
                 for(i in data){
                     if(data[i].etat === "Vendu" || data[i].etat === "Perdu"){
                         new DepotProducts({prix: data[i].prix,
