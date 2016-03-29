@@ -63,6 +63,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 }
                 $scope.nbrDepots-=1;
             });
+            return soldeD = false;
         }
 
         $scope.solderAll = function(){

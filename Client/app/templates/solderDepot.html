@@ -18,7 +18,7 @@
 	</div>
 	<ul class="col-md-12 well well-sm list-unstyled" ng-repeat="item in depotId | orderBy : item" ng-if="produit.length > 0">
 		<strong class="col-md-11">Dépôts {{item}}</strong>
-		<button class="btn btn-xs btn-success col-md-1" ng-click="solder(item)" ng-show="soldeD"><strong>Solder</strong></button>
+		<button class="btn btn-xs btn-success col-md-1" ng-click="soldeD = solder(item)" ng-show="soldeD"><strong>Solder</strong></button>
 		<li class="col-md-12">
 			<span class="col-md-1"><i>Référence</i></span>
 			<span class="col-md-5"><i>Description</i></span>
