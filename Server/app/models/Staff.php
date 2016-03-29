@@ -1,4 +1,7 @@
 <?php
+/*
+*	Classe Staff : représente la table staff de la base de données
+*/
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Staff extends Eloquent{
@@ -6,6 +9,11 @@ class Staff extends Eloquent{
 	protected $key = 'id';
  	public $timestamps = false;
 
+ 	/*
+    *   function addStaff : permet d'ajouter un membre du staff
+    *   @param $donnees : données à enregistrer
+    *   @return $staff : staff enregistré  
+    */
  	public static function addStaff($donnees){
 		$staff = new Staff();
 		$staff->nom = $donnees['nom'];
@@ -20,16 +28,20 @@ class Staff extends Eloquent{
 		}
 	}
 
-   public static function connexion($donnees){
-      $staff = Staff::where("login","=",$donnees['login'])->first();
-      $hash = $staff->password;
-      if (password_verify($donnees['password'], $hash)) {
-         return $staff;
-      } else {
-         return false;
-      }
-   }
-
+	/*
+    *   function connexion : permet de se connecter
+    *   @param $donnees : données de connexion (login, password)
+    *   @return $staff : membre du staff à connecter  
+    */
+   	public static function connexion($donnees){
+		$staff = Staff::where("login","=",$donnees['login'])->first();
+		$hash = $staff->password;
+		if (password_verify($donnees['password'], $hash)) {
+			return $staff;
+		} else {
+			return false;
+		}
+   	}
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* ------------------------------DEPOT------------------------------ */
-//Recuperer le depot id ------>  OK
+//Recuperer le depot id
 $app->get('/api/depots/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -15,7 +15,7 @@ $app->get('/api/depots/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Recuperer tous les depots ------>  OK
+//Recuperer tous les depots
 $app->get('/api/depots', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -29,7 +29,7 @@ $app->get('/api/depots', function ($request, $response) {
     return $response;
 });
 
-//Creer un depot ------>  OK
+//Creer un depot
 $app->post('/api/depots', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -58,7 +58,7 @@ $app->post('/api/depots', function ($request, $response) {
     return $response;
 });
 
-//Modifier les information du deposant du dépot id ------>  OK
+//Modifier les information du deposant du dépot id
 $app->put('/api/depots/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -107,7 +107,7 @@ $app->put('/api/depots/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Supprimer le depot id (supprimer depot et produits du depot) ------>  OK
+//Supprimer le depot id (supprimer depot et produits du depot)
 $app->delete('/api/depots/{id}', function ($request, $response, $args) {
     $idDepot = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -123,7 +123,7 @@ $app->delete('/api/depots/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Ajouter des produits dans un depots ------>  OK
+//Ajouter des produits dans un depots
 $app->post('/api/depots/{id_depot}/products', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
     $params = $request->getParsedBody();
@@ -160,7 +160,7 @@ $app->post('/api/depots/{id_depot}/products', function ($request, $response, $ar
     return $response;
 });
 
-//Supprimer le produit id du depot id_depot ------>  OK
+//Supprimer le produit id du depot id_depot
 $app->delete('/api/depots/{id_depot}/products/{reference}', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
     $refProduct = $args['reference'];
@@ -181,7 +181,7 @@ $app->delete('/api/depots/{id_depot}/products/{reference}', function ($request, 
     return $response;
 });
 
-//Modifier le produit id du depot id_depot ------>  OK
+//Modifier le produit id du depot id_depot
 $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
     $refProduct = $args['reference'];
@@ -222,7 +222,7 @@ $app->put('/api/depots/{id_depot}/products/{reference}', function ($request, $re
     return $response;
 });
 
-//Recuperer les produits d un depots -----> OK
+//Recuperer les produits d un depots
 $app->get('/api/depots/{id_depot}/products', function ($request, $response, $args) {
     $idDepot = $args['id_depot'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -246,7 +246,7 @@ $app->get('/api/depots/{id_depot}/products', function ($request, $response, $arg
 });
 
 /* ------------------------------VENTE------------------------------ */
-//Creer une vente ------>  OK
+//Creer une vente
 $app->post('/api/sales', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -260,7 +260,7 @@ $app->post('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Ajouter un produits dans une vente : produit (ref) dans la vente (id) ------>  OK
+//Ajouter un produits dans une vente : produit (ref) dans la vente (id)
 $app->put('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $idSale = $args['id_sale'];
     $ref = $args['ref'];
@@ -310,7 +310,7 @@ $app->get('/api/sales/{id_sale}/products', function ($request, $response, $args)
     return $response;
 });
 
-//Supprimer un produit dans une vente : produit (ref) de la vente (id) ------>  OK
+//Supprimer un produit dans une vente : produit (ref) de la vente (id)
 $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $response, $args) {
     $id_vente = $args['id_sale'];
     $ref = $args['ref'];
@@ -328,7 +328,7 @@ $app->delete('/api/sales/{id_sale}/products/{ref}', function ($request, $respons
     return $response;
 });
 
-//Recuperer la vente id : information acheteur ------>  OK
+//Recuperer la vente id : information acheteur
 $app->get('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -343,7 +343,7 @@ $app->get('/api/sales/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Ajouter les informations de l'acheteur à la vente id ------>  OK
+//Ajouter les informations de l'acheteur à la vente id
 $app->put('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -378,7 +378,7 @@ $app->put('/api/sales/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Recuperer toute les ventes ------>  OK 
+//Recuperer toute les ventes 
 $app->get('/api/sales', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -392,7 +392,7 @@ $app->get('/api/sales', function ($request, $response) {
     return $response;
 });
 
-//Supprimer la vente id ------>  OK
+//Supprimer la vente id
 $app->delete('/api/sales/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -412,7 +412,7 @@ $app->delete('/api/sales/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------PAIEMENT VENTE------------------------------ */
-//Ajouter un paiement à une vente ------> OK
+//Ajouter un paiement à une vente
 $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $params = $request->getParsedBody();
@@ -446,7 +446,7 @@ $app->post('/api/sales/{id_sale}/payments', function ($request, $response, $args
     return $response;
 });
 
-//Recuperer paiement effectuer sur la vente id ------>  OK
+//Recuperer paiement effectuer sur la vente id
 $app->get('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -466,7 +466,7 @@ $app->get('/api/sales/{id_sale}/payments', function ($request, $response, $args)
     return $response;
 });
 
-//Supprimer un paiement ------>  OK
+//Supprimer un paiement
 $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $args) {
     $id = $args['id_sale'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -488,7 +488,7 @@ $app->delete('/api/sales/{id_sale}/payments', function ($request, $response, $ar
 
 
 /* ------------------------------MODE DE PAIEMENT------------------------------ */
-//Recuperer les modes de paiements ------>  OK
+//Recuperer les modes de paiements
 $app->get('/api/payments', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -502,7 +502,7 @@ $app->get('/api/payments', function ($request, $response) {
     return $response;
 });
 
-//Ajouter un mode de paiement ------> OK
+//Ajouter un mode de paiement
 $app->post('/api/payments', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -524,7 +524,7 @@ $app->post('/api/payments', function ($request, $response) {
     return $response;
 });
 
-//Modifier un mode de paiement ------> OK
+//Modifier un mode de paiement
 $app->put('/api/payments/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -553,7 +553,7 @@ $app->put('/api/payments/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Supprimer un mode de paiement ------> OK
+//Supprimer un mode de paiement
 $app->delete('/api/payments/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -569,7 +569,7 @@ $app->delete('/api/payments/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------PRODUITS------------------------------ */
-//Recuperer tous les produits ------>  OK
+//Recuperer tous les produits
 $app->get('/api/products', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -583,7 +583,7 @@ $app->get('/api/products', function ($request, $response) {
     return $response;
 });
 
-//Recuperer le produit ref ------>  OK
+//Recuperer le produit ref
 $app->get('/api/products/{reference}', function ($request, $response, $args) {
     $reference = $args['reference'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -598,7 +598,7 @@ $app->get('/api/products/{reference}', function ($request, $response, $args) {
     return $response;
 });
 
-//Supprimer le produit ref ------>  OK
+//Supprimer le produit ref
 $app->delete('/api/products/{reference}', function ($request, $response, $args) {
     $reference = $args['reference'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -614,7 +614,7 @@ $app->delete('/api/products/{reference}', function ($request, $response, $args) 
 });
 
 /* ------------------------------STAFFS------------------------------ */
-//Recuperer les membres du staff ------>  OK
+//Recuperer les membres du staff
 $app->get('/api/staffs', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -628,7 +628,7 @@ $app->get('/api/staffs', function ($request, $response) {
     return $response;
 });
 
-//Ajouter un membre du staff ------>  OK
+//Ajouter un membre du staff
 $app->post('/api/staffs', function ($request, $response) {
     $params = $request->getParsedBody();
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -659,7 +659,7 @@ $app->post('/api/staffs', function ($request, $response) {
     return $response;
 });
 
-//Supprimer un membre du staff ------>  OK
+//Supprimer un membre du staff
 $app->delete('/api/staffs/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -674,7 +674,7 @@ $app->delete('/api/staffs/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Modifier un membre du staff --> OK
+//Modifier un membre du staff
 $app->put('/api/staffs/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();
@@ -722,7 +722,7 @@ $app->put('/api/staffs/{id}', function ($request, $response, $args) {
 });
 
 /* ------------------------------COMMISSIONS------------------------------ */
-//Recuperer toutes les configurations ------>  OK
+//Recuperer toutes les configurations
 $app->get('/api/configurations', function ($request, $response) {
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
     $response = $response->withHeader("Access-Control-Allow-Methods", "GET");
@@ -736,7 +736,7 @@ $app->get('/api/configurations', function ($request, $response) {
     return $response;
 });
 
-//Recuperer la configuration id ------>  OK
+//Recuperer la configuration id
 $app->get('/api/configurations/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $response = $response->withHeader("Access-Control-Allow-Origin", "*");
@@ -751,7 +751,7 @@ $app->get('/api/configurations/{id}', function ($request, $response, $args) {
     return $response;
 });
 
-//Modifier la configuration id ------>  OK
+//Modifier la configuration id
 $app->put('/api/configurations/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $params = $request->getParsedBody();

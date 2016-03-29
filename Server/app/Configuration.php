@@ -1,4 +1,7 @@
 <?php
+/*
+*   Classe Configuration : permet la configuration des informations pour la connexion à la base de données
+*/
 use Illuminate\Database\Capsule\Manager as DB;
 
 class Configuration{
