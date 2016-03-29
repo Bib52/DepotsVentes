@@ -14,6 +14,9 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 
 		$scope.alert = "";
 
+		/*
+		*  Met à jour la commission
+		*/
 		$scope.updateCommission = function(){
 			new Config({valeur: $scope.commission})
 							.$update({id : 1},
@@ -23,11 +26,17 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 							});
 		}
 
+		/*
+		*  Affiche le formulaire de mise à jour de la commission 
+		*/
 		$scope.editCommission = function(){
 			$scope.alert = "";
 			$scope.Comisediting = true;
 		}
 
+		/*
+		*  Ajoute un nouveau mode de paiement 
+		*/
 		$scope.addModePaiement = function(){
 			$scope.modePaiement = new ModePaiement({nom: $scope.paiement.nom});
 			$scope.modePaiement.$save(function(data) {
@@ -38,11 +47,18 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
                                 });
 		}
 
+		/*
+		*  Affiche le formulaire d'ajout de mode de paiement
+		*/
 		$scope.viewAdd = function(){
 			$scope.alert = "";
 			$scope.viewadd = true;
 		}
 
+		/*
+		*  Met à jour le mode de paiement sélectionné
+		*  @param md : mode de paiement à mettre à jour 
+		*/
 		$scope.upModePaiement = function(md){
 			new ModePaiement({nom: md.nom, etat: md.etat})
 							.$update({id : md.id},
@@ -55,6 +71,10 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 							});
 		}
 
+		/*
+		*  Supprime le mode de paiement sélectionné
+		*  @param md : mode de paiement à supprimer
+		*/
 		$scope.deleteModePaiement = function(md){
 			if(confirm("Voulez-vous supprimer le mode de paiement : "+md.nom)){
 				ModePaiement.delete({id: md.id});
@@ -70,11 +90,19 @@ angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'Mod
 			}
 		}
 		
+		/*
+		* Affiche le formulaire d'édition du mode de paiement sélectionné
+		* @param md : mode de paiement selectionné 
+		*/
 		$scope.editModePaiement = function(md){
 			$scope.alert = "";
             md.isediting = true;
         }
 
+        /*
+		*  Met à jour le mode de paiement sélectionné 
+		*  @param md : mode de paiement à mettre à jour
+		*/
         $scope.updateModePaiement = function(md){
         	new ModePaiement({nom: md.nom, etat: md.etat})
 							.$update({id : md.id},

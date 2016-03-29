@@ -1,6 +1,9 @@
 angular.module("DepotVente").controller('DepotController', ['$scope', '$location', 'Depot', 'DepotProducts',
     function ($scope, $location, Depot, DepotProducts) {
         
+        /*
+        * Initialisation de variables utilisées dans le contrôleur
+        */
         $scope.editCoord = false;
         $scope.products = [];
         $scope.totalRembourser=0;
@@ -13,6 +16,10 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         $scope.depotId=[];
         $scope.solde=true;
         $scope.message=false;
+
+        /*
+        *  Récupère tous les dépôts pour les solder
+        */
         Depot.query(function(data) {
                         $scope.recherche = data;
                         for(i in data){
@@ -42,6 +49,10 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                         }
                 });
 
+        /*
+        *   Solde le dépôt
+        *   @param id : id du dépôt à solder
+        */
         $scope.solder = function(id){
             DepotProducts.query({idDepot: id}, function(data) {
                 for(i in data){
@@ -65,6 +76,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             });
         }
 
+        /*
+        *  Solde tous les dépôts
+        */
         $scope.solderAll = function(){
             for (i in $scope.produit){
                 DepotProducts.query({idDepot: $scope.produit[i].id_depot},
@@ -90,6 +104,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             }
         }
 
+        /*
+        * Recherche un dépôt avec un email ou un nom
+        */
         $scope.Search = function () {
             if($scope.emailR != null && $scope.emailR != ""){
                 Depot.query(function(data) {
@@ -120,10 +137,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             }
         }
 
-        $scope.EditCoord = function () {
-            $scope.editCoord = true;
-        };
-
+        /*
+        * Crée un dépôt
+        */
         $scope.createDepot = function () {
             $scope.depot = new Depot({nom: $scope.depot.nom, 
                             prenom: $scope.depot.prenom, 
@@ -138,6 +154,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                 });
         };
 
+        /*
+        * Met à jour un dépôt
+        */
         $scope.updateCoord = function () {
             new Depot({nom: $scope.depot.nom, 
                         prenom: $scope.depot.prenom, 
@@ -153,6 +172,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 });
         }
 
+        /*
+        *  Ajoute un objet au dépôt
+        */
         $scope.addObject = function(){
             var product = new DepotProducts({reference: $scope.objet.reference,
                                     prix: $scope.objet.prix,
@@ -170,6 +192,10 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 });
         }
 
+        /*
+        *  Supprime un objet du dépôt
+        *  @param obj : objet à supprimer
+        */
         $scope.deleteObject = function(obj){
             DepotProducts.delete({ref: obj.reference, idDepot: obj.id_depot});
             for(i in $scope.products){
@@ -180,11 +206,19 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             }
         } 
 
+        /*
+        *  Affiche le formulaire de mise à jour d'objet
+        *  @param objet : objet sur lequel il faut afficher le formulaire
+        */
         $scope.editObject = function(objet){
             objet.isediting=true;
             $scope.temp = objet.etat;
         }
 
+        /*
+        *  Met à jour un objet
+        *  @param objet : objet à mettre à jour
+        */
         $scope.updObject = function(objet){
             new DepotProducts({prix: objet.prix,
                             description: objet.description,
@@ -207,6 +241,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             });
         }
 
+        /*
+        *  Recherche un dépôt avec un id
+        */
         $scope.findDepot = function(){
             $scope.totalRembourser=0;
             $scope.depot = Depot.get({id: $scope.id}, function() {
@@ -229,6 +266,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                                         });
         }
 
+        /*
+        *  Supprime le dépôt
+        */
         $scope.deleteDepot = function(){
             if(confirm("Voulez-vous supprimer le dépôt ainsi que ces poduits ?"))
             {
@@ -244,6 +284,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             }
         }
 
+        /*
+        *  Change l'état de tous les objets vendus du dépôt à "payé"
+        */
         $scope.payer = function(){
             DepotProducts.query({idDepot: $scope.depot.id}, function(data) {
                 for(i in data){
@@ -265,6 +308,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             });
         }
 
+        /*
+        *  Calcul la date du jour
+        */
         var calculDate = function(){
             var m = [
                 "Janvier", "Février", "Mars",
@@ -279,6 +325,9 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             return date;
         }
 
+        /*
+        *  Edite le récépissé du dépôt
+        */
         $scope.recepisseDepot = function(){
             var date = calculDate();
             var facture = new jsPDF();

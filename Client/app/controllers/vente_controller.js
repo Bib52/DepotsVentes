@@ -2,6 +2,9 @@ angular.module("DepotVente").controller('VenteController',
 		['$scope', 'Vente', 'VenteProducts', 'ModePaiement', 'Config', 'Paiement', '$route',
 		function($scope, Vente, VenteProducts, ModePaiement, Config, Paiement, $route){
 
+			/*
+			*  Initialisation de variables utilisées dans le contrôleur
+			*/
 			$scope.objet="";
 			$scope.listObjet = {
 				objet : []
@@ -10,11 +13,18 @@ angular.module("DepotVente").controller('VenteController',
 			var hauteur = 0;
 			var prix = "";
 			$scope.type = "";
+
+			/*
+			*  Récupère la commission de la vente
+			*/
 			Config.get({id:1},function(data){$scope.commission=data.valeur});
 
+			/*
+			*  Crée une vente
+			*/
 			$scope.createVente = function(){
-			$scope.vente = new Vente();
-        	$scope.vente.$save(function(data) {
+				$scope.vente = new Vente();
+        		$scope.vente.$save(function(data) {
                                 $scope.venteid = data.id;
                                 $scope.playVente = true;
                             },
@@ -23,6 +33,9 @@ angular.module("DepotVente").controller('VenteController',
                             });
 			}
 
+			/*
+			*  Ajoute un objet à la vente
+			*/
 			$scope.addObject = function(){
 				new VenteProducts().$update({id_sale: $scope.venteid, ref: $scope.objet.reference},
 					                function(data){
@@ -40,6 +53,9 @@ angular.module("DepotVente").controller('VenteController',
 					                });	
 			}
 
+			/*
+			*  Supprime un objet de la vente 
+			*/
 			$scope.deleteObject = function(obj){
 				VenteProducts.delete({id_sale: $scope.venteid, ref: obj.reference});
 				for(i in $scope.listObjet.objet){
@@ -52,6 +68,9 @@ angular.module("DepotVente").controller('VenteController',
 				}
 			}
 
+			/*
+			*  Affiche le formulaire de validation de la vente 
+			*/
 			$scope.validVente = function(){
 				if($scope.listObjet.objet.length > 0){
 					$scope.payment=true;
@@ -60,6 +79,9 @@ angular.module("DepotVente").controller('VenteController',
 				}
 			}
 
+			/*
+			*  Calcul la date du jour
+			*/
 			var calculDate = function(){
 				var m = [
 					"Janvier", "Février", "Mars",
@@ -74,6 +96,9 @@ angular.module("DepotVente").controller('VenteController',
 				return date;
 			}
 
+			/*
+			*  Edite la facture de la vente 
+			*/
 			$scope.generatePDF = function(){
 				new Paiement({prix : $scope.prixtotaleAC, mode_paiements : $scope.modepaiement})
 				.$save({id_sale : $scope.venteid},
@@ -118,6 +143,9 @@ angular.module("DepotVente").controller('VenteController',
                 });
 			}
 
+			/*
+			*  Ajoute les coordonnées de l'acheteur à la vente 
+			*/
 			$scope.addAcheteur = function(){
 				new Vente({nom: $scope.vente.nom,
 						prenom: $scope.vente.prenom,
@@ -134,6 +162,9 @@ angular.module("DepotVente").controller('VenteController',
 				                });
 			}
 			
+			/*
+			*  Annule la vente 
+			*/
 			$scope.annuleVente = function(){
 				Vente.delete({id: $scope.venteid});
 				$scope.playVente=false;
