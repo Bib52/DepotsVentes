@@ -6,6 +6,7 @@
 #### Groupe : ####
 * Bergeret Florian
 * Bounajra Mourad
+
 ---------------------------------------
 
 #### Lien : ####
@@ -28,4 +29,4 @@
  	* créer une base de données de nom : `depotsventes`;
  	* importer le script "DepotsVentes/Server/depotsventes.sql" dans la base de données créé;
 * Configurez : mettre vos informations dans le fichier "DepotsVentes/Server/app/Configuration.php".
-* Testez : >"http://server/DepotsVentes/Client"
+* Testez : "http://server/DepotsVentes/Client"
