@@ -1,6 +1,6 @@
 angular.module("DepotVente").controller('VenteController',
-		['$scope', 'Vente', 'VenteProducts', 'ModePaiement', 'Config', 'Paiement',
-		function($scope, Vente, VenteProducts, ModePaiement, Config, Paiement){
+		['$scope', 'Vente', 'VenteProducts', 'ModePaiement', 'Config', 'Paiement', '$route',
+		function($scope, Vente, VenteProducts, ModePaiement, Config, Paiement, $route){
 
 			$scope.objet="";
 			$scope.listObjet = {
@@ -110,6 +110,7 @@ angular.module("DepotVente").controller('VenteController',
 					facture.text(100, hauteur+20, "Total (sans commission) : " + $scope.prixtotale + " €");
 					facture.text(100, hauteur+25, "Total à payer : " + $scope.prixtotaleAC + " €");
 					facture.text(100, hauteur+30, "Réglé par : " + $scope.modepaiement);
+					$route.reload();
 					facture.save('facture.pdf');
                 },
                 function(err) {
