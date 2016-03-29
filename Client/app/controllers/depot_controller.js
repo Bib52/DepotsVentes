@@ -63,7 +63,6 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 }
                 $scope.nbrDepots-=1;
             });
-            return soldeD = false;
         }
 
         $scope.solderAll = function(){
@@ -306,5 +305,27 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
                 }
             }
             facture.save('recepisse.pdf');
+        }
+
+        /* 
+        *  Vide les champs du formulaire de création de 
+        *  dépôt lors du clic sur le menu "Créer dépôt".
+        */
+        $scope.clearCreation = function(){
+            $scope.depot.nom = "";
+            $scope.depot.prenom = "";
+            $scope.depot.adresse = "";
+            $scope.depot.email = "";
+            $scope.depot.telephone = "";
+        }
+
+        /*
+        *  Vide les champ du formulaire de recherche de
+        *  dépôt lors du clc sur le menu "Gérer dépôt".
+        */
+        $scope.clearEdition = function(){
+            $scope.id = "";
+            $scope.nomR = "";
+            $scope.emailR = "";
         }
 }]);
