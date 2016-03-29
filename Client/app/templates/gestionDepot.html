@@ -13,8 +13,9 @@
     <form class="col-md-12" name="formfind" novalidate>
         <div class="form-group col-md-10" ng-class="{ 'has-error': formfind.id.$touched && formfind.id.$invalid }">
             <label class="col-md-4">Identifiant <span class="text-danger" ng-if="!formfind.id.$valid">*</span> : </label>
-            <input class="col-md-8" type="text" ng-model="id" name="id" placeholder="Identifiant déposant" required/>
+            <input class="col-md-8" type="number" ng-model="id" name="id" placeholder="Identifiant déposant" required/>
             <div class="help-block" ng-messages="formfind.id.$error" ng-if="formfind.id.$touched">
+                <p ng-message="number">Vous devez entrer un nombre.</p>
                 <p ng-message="required">Vous devez entrer l'identifiant.</p>
                 <p class="error" ng-if="error">Identifiant inexistant : Dépôt inexistant.</p>
             </div>
