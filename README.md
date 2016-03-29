@@ -14,10 +14,12 @@
 * Composer sur le serveur (https://getcomposer.org/);
 
 #### Installation : ####
-* Télécharger le projet et le placer dans la racine de votre serveur web;
-* Commande : composer install (dans DepotsVentes/Server/);
+* Téléchargez le projet;
+* Dézippez-le dans la racine de votre serveur web;
+* Renommez le dossier en "DepotsVentes";
+* Commande : ``composer install`` dans "DepotsVentes/Server/";
 * Base de données : 
-  * créer une base de données depotsventes;
-  * importer le script "DepotsVentes/Server/depotsventes.sql" dans la base de données créé;
-* Configurer : mettre vos informations dans le fichier "DepotsVentes/Server/app/Configuration.php".
-* Tester : http://server/DepotsVentes/Client
+ 	* créer une base de données `depotsventes`;
+ 	* importer le script "DepotsVentes/Server/depotsventes.sql" dans la base de données créé;
+* Configurez : mettre vos informations dans le fichier "DepotsVentes/Server/app/Configuration.php".
+* Testez : http://server/DepotsVentes/Client
