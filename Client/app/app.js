@@ -2,7 +2,7 @@ window.urlAPI = "http://localhost/DepotsVentes/Server/api/";
 var app = angular.module("DepotVente", ['ngResource', 'ngRoute', 'ngSanitize', 'ngMessages', 'chart.js']);
 
 /*
-*	config : utilisation de $routeProvider pour le système de routing avec angularJS
+*	Config : utilisation de $routeProvider pour le système de routing avec angularJS
 */
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/', {template: "", controller: "firstController"});
@@ -16,7 +16,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 }]);
 
 /*
-*	controller firstController : est appelé sur la route "/" et elle permet une redirection vers la route "/vente"
+*	Controller firstController : est appelé sur la route "/" et elle permet une redirection vers la route "/vente"
 */
 app.controller('firstController', ['$location', function($location){
 	$location.path('/vente');

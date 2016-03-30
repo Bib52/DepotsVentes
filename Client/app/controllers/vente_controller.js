@@ -1,3 +1,8 @@
+/*
+*   Controller VenteController : 
+*       - appelé sur la route "/vente"
+*       - injection des ressources "Vente", "VenteProducts", "ModePaiement", "Config" et "Paiement"
+*/
 angular.module("DepotVente").controller('VenteController',
 		['$scope', 'Vente', 'VenteProducts', 'ModePaiement', 'Config', 'Paiement', '$route',
 		function($scope, Vente, VenteProducts, ModePaiement, Config, Paiement, $route){
@@ -154,7 +159,6 @@ angular.module("DepotVente").controller('VenteController',
 						email: $scope.vente.email,
 						telephone: $scope.vente.telephone}).$update({id: $scope.venteid},
 				                function(data){
-				                    console.log(data);
 				                    $scope.generatePDF();
 				                },
 				                function(err) {

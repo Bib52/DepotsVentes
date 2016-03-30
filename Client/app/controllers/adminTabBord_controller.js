@@ -1,12 +1,22 @@
+/*
+*   Controller TabBordController : 
+*       - appelé sur la route "/admin/tableauBord"
+*       - injection des ressources "Products", "Depot", "Vente", "Paiement" et "Config"
+*/
 angular.module("DepotVente").controller('TabBordController',['$scope', 'Products', 'Depot', 'Vente', 'Paiement', 'Config',
 	function($scope, Products, Depot, Vente, Paiement, Config){
         
-        // Valeur commission en %
+        /*
+        * Valeur commission en %
+        */
         $scope.commission=0;
         Config.get({id:1}, function(data){
             $scope.commission = data.valeur;
         });
 
+        /*
+        * Retourne la semaine précédent le jours actuel
+        */
         var semaine = [];
         var calculDate = function(){
             for (var i=0; i<7; i++){
@@ -24,7 +34,9 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
             return semaine;
         }
 
-		// Nombre de produits
+        /*
+        * Nombre de produits
+        */
         $scope.products = Products.query(
 							function(data) {
                                 $scope.nbrProducts = data.length;
@@ -61,22 +73,24 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                             },
                             function(err) {
                                 $scope.nbrProducts=0;
-                                console.log(err);
                             });
 		
-        // Nombre de depot
+        /*
+        * Nombre de depot
+        */
         $scope.depots = Depot.query(
 							function(data) {
                                 $scope.nbrDepots=data.length;
                             },
                             function(err) {
                                 $scope.nbrDepots=0;
-                                console.log(err);
                             });
         
-        // Nombre de vente finie et en cours
-        // Total des vente avec commission pour les ventes finie
-        // Total des vente sans commission pour les ventes finie
+        /*
+        * Nombre de vente finie et en cours
+        * Total des vente avec commission pour les ventes finie
+        * Total des vente sans commission pour les ventes finie
+        */
         $scope.ventes = Vente.query(
                             function(data) {
                                 $scope.nbrVenteFini = 0;
@@ -138,6 +152,5 @@ angular.module("DepotVente").controller('TabBordController',['$scope', 'Products
                                 $scope.totalAC=0;
                                 $scope.totalSC=0;
                                 $scope.commission=0;
-                                console.log(err);
                             });
 }]);

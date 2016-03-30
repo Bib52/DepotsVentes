@@ -1,3 +1,8 @@
+/*
+*   Controller DepotController : 
+*       - appelé sur les routes "/depot/new", "/depot/gestion" et "/solderDepot"
+*       - injection des ressources "Depot" et "DepotProducts"
+*/
 angular.module("DepotVente").controller('DepotController', ['$scope', '$location', 'Depot', 'DepotProducts',
     function ($scope, $location, Depot, DepotProducts) {
         

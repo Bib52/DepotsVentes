@@ -1,10 +1,19 @@
+/*
+*	Controller AdminConfigController : 
+*		- appelé sur la route "/admin/config"
+*		- injection des ressources "ModePaiement" et "Config"
+*/
 angular.module("DepotVente").controller('AdminConfigController', ['$scope', 'ModePaiement', 'Config',
 	function($scope, ModePaiement, Config){
 
-		//Recuperer les modes de paiements
+		/*
+		*  Recuperer les modes de paiements
+		*/
 		$scope.mdpaiement = ModePaiement.query();
 
-		//Recuperer commission
+		/*
+		*  Recuperer commission
+		*/
 		Config.get({id:1},function(data){
 							$scope.commission = data.valeur;
 						},

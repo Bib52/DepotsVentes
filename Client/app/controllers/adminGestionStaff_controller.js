@@ -1,3 +1,8 @@
+/*
+*	Controller GestStaffController : 
+*		- appelé sur la route "/admin/gestionStaff"
+*		- injection de la ressource "Staff"
+*/
 angular.module("DepotVente").controller('GestStaffController',['$scope', 'Staff', '$route',
 	function($scope, Staff, $route){
 
@@ -49,8 +54,21 @@ angular.module("DepotVente").controller('GestStaffController',['$scope', 'Staff'
             staff.isediting = true;
         }
 
+        /*
+		*  Met à jour un membre du staff
+		*  @param staff : le membre à modifier  
+		*/
         $scope.updateStaff = function(staff){
-            //faire requete modif staff
-            staff.isediting = false;
+        	new Staff({nom: staff.nom,  
+	                    login: staff.login, 
+	                    password: staff.password, 
+	                    permission: staff.permission})
+                .$update({id: staff.id},
+                function(data){
+            		staff.isediting = false;
+                },
+                function(err) {
+                	console.log(err);
+                });
         }
 }]);
