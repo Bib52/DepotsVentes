@@ -146,7 +146,6 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
         * Crée un dépôt
         */
         $scope.createDepot = function () {
-            $scope.products = [];
             $scope.depot = new Depot({nom: $scope.depot.nom, 
                             prenom: $scope.depot.prenom, 
                             email: $scope.depot.email, 
