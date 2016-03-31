@@ -371,6 +371,7 @@ angular.module("DepotVente").controller('DepotController', ['$scope', '$location
             $scope.depot.adresse = "";
             $scope.depot.email = "";
             $scope.depot.telephone = "";
+            $scope.products=[];
         }
 
         /*
